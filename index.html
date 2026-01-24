@@ -7,9 +7,6 @@
   <meta name="description" content="Mods-T-N — Modificações e personalizações para jogos de PS4 e PS5." />
 
   <style>
-    /* =========================================================
-       ===== CORES / TEMA DO SITE (VOCÊ PODE MUDAR AQUI) =====
-       ========================================================= */
     :root{
       --bg:#0b1220;
       --text:#e6eefc;
@@ -60,9 +57,6 @@
       font-weight:900;
     }
 
-    /* =========================================================
-       ===== MENU / ABAS =====
-       ========================================================= */
     .links{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
 
     .links a{
@@ -102,9 +96,6 @@
       border-color: rgba(34,197,94,.45);
     }
 
-    /* =========================================================
-       ===== HERO (TOPO DO SITE) =====
-       ========================================================= */
     .hero{
       padding:44px 0 24px;
       display:grid;
@@ -212,25 +203,33 @@
       .formGrid{grid-template-columns:1fr}
     }
 
+    .page{display:none;}
+    .page.active{display:block;}
+
     /* =========================================================
-       ===== CATALOGO DE JOGOS =====
+       ===== CATÁLOGO (CARDS MESMO TAMANHO) =====
        ========================================================= */
     .catalogo{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap:14px;
       margin-top:14px;
+      align-items: stretch;
     }
 
     @media (max-width: 900px){
-      .catalogo{grid-template-columns:1fr}
+      .catalogo{grid-template-columns:1fr;}
     }
 
     .gameCard{
-      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      width:100%;
       border-radius:18px;
       border:1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.04);
+      overflow:hidden;
+      height:560px; /* <<< todos iguais */
     }
 
     .gameImg{
@@ -239,9 +238,29 @@
       object-fit:cover;
       display:block;
       filter: contrast(1.05) saturate(1.05);
+      flex-shrink:0;
     }
 
-    .gameBody{padding:14px}
+    .gameBody{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
+      min-height:0;
+    }
+
+    .gameScroll{
+      margin-top:10px;
+      overflow:auto;
+      padding-right:6px;
+      flex:1;
+    }
+
+    .gameScroll::-webkit-scrollbar{width:8px;}
+    .gameScroll::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.12);
+      border-radius:999px;
+    }
 
     .gameTitle{
       margin:0 0 6px;
@@ -259,7 +278,7 @@
       display:flex;
       gap:6px;
       flex-wrap:wrap;
-      margin:8px 0 12px;
+      margin:8px 0 0;
     }
 
     .tag{
@@ -271,9 +290,6 @@
       color:#cfe2ff;
     }
 
-    /* =========================================================
-       ===== TAG DE PROMOÇÃO (AUTOMÁTICA) =====
-       ========================================================= */
     .saleTag{
       display:none;
       font-size:11px;
@@ -285,20 +301,52 @@
       font-weight:900;
     }
 
-    /* =========================================================
-       ===== PIX (PAGAMENTO) =====
-       ========================================================= */
-    .pixKey{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:13px;
-      color:rgba(233,245,255,.9);
-      word-break:break-all;
-      margin-top:6px;
+    .priceRow{
+      display:flex;
+      align-items:baseline;
+      justify-content:flex-end;
+      gap:10px;
+      text-align:right;
+      white-space:nowrap;
     }
 
-    /* =========================================================
-       ===== PROMOÇÃO (BANNER GRANDE) =====
-       ========================================================= */
+    .oldPrice{
+      font-size:12px;
+      opacity:.75;
+      text-decoration: line-through;
+    }
+
+    .newPrice{
+      font-size:14px;
+      font-weight:900;
+    }
+
+    .catFilters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .filterBtn{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      transition:.15s;
+    }
+
+    .filterBtn:hover{transform: translateY(-1px);}
+
+    .filterBtn.active{
+      border-color: rgba(59,130,246,.45);
+      background: rgba(59,130,246,.18);
+    }
+
     .promoBanner{
       margin-top:18px;
       padding:16px 16px;
@@ -326,15 +374,14 @@
       margin-top:8px;
     }
 
-    /* =========================================================
-       ===== PÁGINAS (ABAS INDIVIDUAIS) =====
-       ========================================================= */
-    .page{display:none;}
-    .page.active{display:block;}
+    .pixKey{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:13px;
+      color:rgba(233,245,255,.9);
+      word-break:break-all;
+      margin-top:6px;
+    }
 
-    /* =========================================================
-       ===== AVALIAÇÕES (FEEDBACK VISÍVEL) =====
-       ========================================================= */
     .reviews{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -362,23 +409,9 @@
     }
 
     .reviewName{font-weight:900}
-
-    .reviewStars{
-      font-size:13px;
-      opacity:.9;
-    }
-
-    .reviewText{
-      font-size:13px;
-      color:rgba(169,183,208,.95);
-      line-height:1.5;
-    }
-
-    .reviewDate{
-      margin-top:10px;
-      font-size:12px;
-      opacity:.7;
-    }
+    .reviewStars{font-size:13px; opacity:.9;}
+    .reviewText{font-size:13px; color:rgba(169,183,208,.95); line-height:1.5;}
+    .reviewDate{margin-top:10px; font-size:12px; opacity:.7;}
   </style>
 </head>
 
@@ -408,9 +441,6 @@
 
 <main class="container">
 
-  <!-- =========================================================
-       ===== HERO (TOPO DO SITE) - SEMPRE APARECE =====
-       ========================================================= -->
   <section class="hero">
     <div class="card">
       <h1>Mods e personalizações para jogos de <span style="color:#cfe2ff">PS4</span> e <span style="color:#d8ffe7">PS5</span>.</h1>
@@ -430,10 +460,6 @@
         ⚠️ <b>Aviso:</b> não trabalhamos com cheats online, vantagens competitivas ou qualquer conteúdo que viole regras/leis.
       </div>
 
-      <!-- =========================================================
-           ===== PROMOÇÃO ATUAL (EDITA AQUI QUANDO QUISER) =====
-           ===== DEIXEI UM ESPAÇO GRANDE PRA VOCÊ MUDAR FÁCIL =====
-           ========================================================= -->
       <div class="promoBanner" id="promo">
         <div class="promoTitle">🎉 Promoção de Carnaval — 30% OFF</div>
         <div class="promoText">
@@ -448,16 +474,9 @@
           <button class="btn primary" onclick="showPage('pix')">Pagar no Pix</button>
         </div>
       </div>
-
-      <!-- =========================================================
-           ===== FIM DA PROMOÇÃO ATUAL =====
-           ========================================================= -->
     </div>
   </section>
 
-  <!-- =========================================================
-       ===== ABA: SERVIÇOS =====
-       ========================================================= -->
   <section id="page-servicos" class="page active section">
     <h2>Serviços</h2>
     <p>Escolha o tipo de modificação que você quer. Se não souber, chama no WhatsApp que eu te ajudo.</p>
@@ -477,36 +496,37 @@
     </div>
   </section>
 
-  <!-- =========================================================
-       ===== ABA: CATÁLOGO =====
-       ========================================================= -->
+  <!-- ========================= CATÁLOGO ========================= -->
   <section id="page-catalogo" class="page section">
     <h2>Catálogo de Jogos</h2>
     <p>Confira os jogos disponíveis e as modificações.</p>
 
+    <div class="catFilters" id="catFilters">
+      <button class="filterBtn active" onclick="filtrarCategoria('todos', this)">Todos</button>
+      <button class="filterBtn" onclick="filtrarCategoria('corrida', this)">Corrida</button>
+      <button class="filterBtn" onclick="filtrarCategoria('rpg', this)">RPG</button>
+      <button class="filterBtn" onclick="filtrarCategoria('souls', this)">Souls Like</button>
+      <button class="filterBtn" onclick="filtrarCategoria('acao', this)">Ação</button>
+      <button class="filterBtn" onclick="filtrarCategoria('exploracao', this)">Exploração</button>
+    </div>
+
     <div class="catalogo">
 
-      <!-- =========================================================
-           ===== JOGO: SEKIRO =====
-           ========================================================= -->
-      <div class="gameCard">
+      <!-- SEKIRO -->
+      <div class="gameCard" data-cat="souls">
         <img class="gameImg" src="img/sekiro.png" alt="Sekiro: Shadows Die Twice">
         <div class="gameBody">
           <h3 class="gameTitle">Sekiro: Shadows Die Twice</h3>
           <div class="gameMeta">PS4 • PS5</div>
 
           <div class="tags">
+            <span class="tag">Souls Like</span>
             <span class="tag">Offline</span>
-            <span class="tag">Mods</span>
-            <span class="tag">Recursos</span>
-            <span class="tag">Habilidades</span>
             <span class="saleTag js-saleTag"></span>
           </div>
 
-          <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
-            <div style="font-weight:800; margin-bottom:10px;">Modificações disponíveis</div>
-
-            <div style="padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.02);margin-bottom:10px;">
+          <div class="gameScroll">
+            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
               <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
                 <div>
                   <div style="font-weight:900;">PACOTE COMPLETO</div>
@@ -518,16 +538,20 @@
                     • DINHEIRO
                   </div>
                 </div>
-                <div style="font-weight:900; font-size:14px;">R$100,00</div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="100"></span>
+                  <span class="newPrice js-newPrice" data-preco="100"></span>
+                </div>
               </div>
 
               <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
                 <a class="btn primary" target="_blank"
-                   href="https://wa.me/5581994706810?text=Quero%20comprar%20SEKIRO%20-%20PACOTE%20COMPLETO%20(R%24100%2C00).">
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20SEKIRO%20-%20PACOTE%20COMPLETO.">
                   Comprar com Naildo
                 </a>
                 <a class="btn" target="_blank"
-                   href="https://wa.me/5511966633925?text=Quero%20comprar%20SEKIRO%20-%20PACOTE%20COMPLETO%20(R%24100%2C00).">
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20SEKIRO%20-%20PACOTE%20COMPLETO.">
                   Comprar com Geovane
                 </a>
               </div>
@@ -536,150 +560,173 @@
         </div>
       </div>
 
-      <!-- =========================================================
-           ===== JOGO: REMNANT (CORRIGIDO) =====
-           ========================================================= -->
-      <div class="gameCard">
+      <!-- REMNANT -->
+      <div class="gameCard" data-cat="acao">
         <img class="gameImg" src="img/remnant.png" alt="Remnant: From the Ashes">
         <div class="gameBody">
           <h3 class="gameTitle">Remnant: From the Ashes</h3>
           <div class="gameMeta">PS4 • PS5</div>
 
           <div class="tags">
+            <span class="tag">Ação</span>
             <span class="tag">Offline</span>
-            <span class="tag">Recursos</span>
-            <span class="tag">Moedas</span>
-            <span class="tag">Características</span>
             <span class="saleTag js-saleTag"></span>
           </div>
 
-          <div style="
-            margin-top:10px;
-            padding:12px 14px;
-            border-radius:16px;
-            border:1px solid rgba(255,255,255,.08);
-            background: rgba(255,255,255,.03);
-          ">
-            <div style="font-weight:800; margin-bottom:10px;">Modificações disponíveis</div>
+          <div class="gameScroll">
 
-            <!-- PACOTE COMPLETO -->
-            <div style="
-              padding:12px 12px;
-              border-radius:16px;
-              border:1px solid rgba(255,255,255,.10);
-              background: rgba(255,255,255,.02);
-              margin-bottom:12px;
-            ">
+            <!-- COMPLETO -->
+            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+                <div>
+                  <div style="font-weight:900;">MODIFICAÇÃO COMPLETA</div>
+                  <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.35;">
+                    <b>Inclui:</b><br>
+                    • Recursos e moedas<br>
+                    • Fragmento brilhante (9999)<br>
+                    • Modificações nas características<br>
+                    <span style="opacity:.9;">
+                      (OBS: tem que ter pelo menos 1 item de cada no inventário para poder alterar valores)
+                    </span>
+                  </div>
+                </div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="200"></span>
+                  <span class="newPrice js-newPrice" data-preco="200"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20REMNANT%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%24200).">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20REMNANT%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%24200).">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+            <!-- INDIVIDUAL 80 -->
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                <div style="font-weight:900; font-size:15px;">PACOTE COMPLETO</div>
-                <div style="font-weight:900; font-size:14px;">R$200,00</div>
+                <div style="font-weight:900;">RECURSOS E MOEDAS</div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="80"></span>
+                  <span class="newPrice js-newPrice" data-preco="80"></span>
+                </div>
               </div>
 
-              <div style="margin-top:10px; font-size:12px; color:rgba(169,183,208,.95); line-height:1.55;">
-                • RECURSOS E MOEDAS<br>
-                • FRAGMENTO BRILHANTE (9999)<br>
-                • TODAS AS CARACTERÍSTICAS EDITADAS<br>
-                <span style="opacity:.95;">
+              <div style="margin-top:8px; font-size:12px; color:rgba(169,183,208,.95); line-height:1.45;">
+                <span style="opacity:.9;">
                   (OBS: tem que ter pelo menos 1 item de cada no inventário para poder fazer alteração de valores)
                 </span>
               </div>
 
-              <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
                 <a class="btn primary" target="_blank"
-                   href="https://wa.me/5581994706810?text=Quero%20comprar%20REMNANT%20-%20PACOTE%20COMPLETO%20(R%24200%2C00).">
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20REMNANT%20-%20RECURSOS%20E%20MOEDAS%20(R%2480).">
                   Comprar com Naildo
                 </a>
 
                 <a class="btn" target="_blank"
-                   href="https://wa.me/5511966633925?text=Quero%20comprar%20REMNANT%20-%20PACOTE%20COMPLETO%20(R%24200%2C00).">
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20REMNANT%20-%20RECURSOS%20E%20MOEDAS%20(R%2480).">
                   Comprar com Geovane
                 </a>
               </div>
             </div>
 
-            <!-- INDIVIDUAL -->
-            <div style="
-              padding:12px 12px;
-              border-radius:16px;
-              border:1px solid rgba(255,255,255,.10);
-              background: rgba(255,255,255,.02);
-            ">
-              <div style="font-weight:900; font-size:15px; margin-bottom:10px;">INDIVIDUAL</div>
+            <!-- INDIVIDUAL 40 -->
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">FRAGMENTO BRILHANTE (9999)</div>
 
-              <div style="font-size:13px; color:rgba(169,183,208,.95); line-height:1.8;">
-                <b>RECURSOS E MOEDAS</b> — <b style="color:#e6eefc;">R$80,00</b><br>
-                <span style="font-size:12px; opacity:.9;">
-                  (OBS: tem que ter pelo menos 1 item de cada no inventário para poder fazer alteração de valores)
-                </span><br><br>
-
-                <b>FRAGMENTO BRILHANTE (9999)</b> — <b style="color:#e6eefc;">R$40,00</b><br><br>
-
-                <b>MODIFICAÇÕES NA (CARACTERÍSTICA)</b> — <b style="color:#e6eefc;">R$40,00</b><br>
-                <span style="font-size:12px; opacity:.9;">
-                  Preço por (unidade).
-                </span>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="40"></span>
+                  <span class="newPrice js-newPrice" data-preco="40"></span>
+                </div>
               </div>
 
-              <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
                 <a class="btn primary" target="_blank"
-                   href="https://wa.me/5581994706810?text=Quero%20comprar%20REMNANT%20-%20INDIVIDUAL%3A%20Recursos%20e%20Moedas%20(R%2480)%2C%20Fragmento%20Brilhante%20(9999)%20(R%2440)%20ou%20Caracter%C3%ADsticas%20(R%2440).">
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20REMNANT%20-%20FRAGMENTO%20BRILHANTE%209999%20(R%2440).">
                   Comprar com Naildo
                 </a>
 
                 <a class="btn" target="_blank"
-                   href="https://wa.me/5511966633925?text=Quero%20comprar%20REMNANT%20-%20INDIVIDUAL%3A%20Recursos%20e%20Moedas%20(R%2480)%2C%20Fragmento%20Brilhante%20(9999)%20(R%2440)%20ou%20Caracter%C3%ADsticas%20(R%2440).">
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20REMNANT%20-%20FRAGMENTO%20BRILHANTE%209999%20(R%2440).">
                   Comprar com Geovane
                 </a>
               </div>
             </div>
+
+            <!-- INDIVIDUAL 40 -->
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">MODIFICAÇÃO NA CARACTERÍSTICA (UNIDADE)</div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="40"></span>
+                  <span class="newPrice js-newPrice" data-preco="40"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:8px; font-size:12px; color:rgba(169,183,208,.95); line-height:1.45;">
+                • Preço por unidade (1 característica)
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20REMNANT%20-%20MODIFICA%C3%87%C3%83O%20NA%20CARACTER%C3%8DSTICA%20(UNIDADE)%20(R%2440).">
+                  Comprar com Naildo
+                </a>
+
+                <a class="btn" target="_blank"
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20REMNANT%20-%20MODIFICA%C3%87%C3%83O%20NA%20CARACTER%C3%8DSTICA%20(UNIDADE)%20(R%2440).">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      <!-- =========================================================
-           ===== JOGO: NEED FOR SPEED HEAT =====
-           ========================================================= -->
-      <div class="gameCard">
+      <!-- NFS HEAT -->
+      <div class="gameCard" data-cat="corrida">
         <img class="gameImg" src="img/nfsheat.png" alt="Need for Speed Heat">
         <div class="gameBody">
           <h3 class="gameTitle">Need for Speed Heat</h3>
           <div class="gameMeta">PS4 • PS5</div>
 
           <div class="tags">
+            <span class="tag">Corrida</span>
             <span class="tag">Offline</span>
-            <span class="tag">Mods</span>
-            <span class="tag">Dinheiro</span>
             <span class="saleTag js-saleTag"></span>
           </div>
 
-          <div style="
-            margin-top:10px;
-            padding:12px 14px;
-            border-radius:16px;
-            border:1px solid rgba(255,255,255,.08);
-            background: rgba(255,255,255,.03);
-          ">
-            <div style="font-weight:800; margin-bottom:10px;">Modificações disponíveis</div>
-
-            <div style="
-              padding:12px 12px;
-              border-radius:16px;
-              border:1px solid rgba(255,255,255,.10);
-              background: rgba(255,255,255,.02);
-            ">
+          <div class="gameScroll">
+            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
                 <div style="font-weight:900; font-size:15px;">DINHEIRO (999999999)</div>
-                <div style="font-weight:900; font-size:14px;">R$70,00</div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="70"></span>
+                  <span class="newPrice js-newPrice" data-preco="70"></span>
+                </div>
               </div>
 
               <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
                 <a class="btn primary" target="_blank"
-                   href="https://wa.me/5581994706810?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999%20(R%2470%2C00).">
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999.">
                   Comprar com Naildo
                 </a>
 
                 <a class="btn" target="_blank"
-                   href="https://wa.me/5511966633925?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999%20(R%2470%2C00).">
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999.">
                   Comprar com Geovane
                 </a>
               </div>
@@ -688,41 +735,28 @@
         </div>
       </div>
 
-      <!-- =========================================================
-           ===== JOGO: RESIDENT EVIL VILLAGE (RE8) =====
-           ========================================================= -->
-      <div class="gameCard">
+      <!-- RE8 -->
+      <div class="gameCard" data-cat="acao">
         <img class="gameImg" src="img/re8village.png" alt="Resident Evil Village (RE8)">
         <div class="gameBody">
           <h3 class="gameTitle">Resident Evil Village (RE8)</h3>
           <div class="gameMeta">PS4 • PS5</div>
 
           <div class="tags">
+            <span class="tag">Ação</span>
             <span class="tag">Offline</span>
-            <span class="tag">Pacote completo</span>
-            <span class="tag">Recursos</span>
-            <span class="tag">Fases</span>
             <span class="saleTag js-saleTag"></span>
           </div>
 
-          <div style="
-            margin-top:10px;
-            padding:12px 14px;
-            border-radius:16px;
-            border:1px solid rgba(255,255,255,.08);
-            background: rgba(255,255,255,.03);
-          ">
-            <div style="font-weight:800; margin-bottom:10px;">Modificações disponíveis</div>
-
-            <div style="
-              padding:12px 12px;
-              border-radius:16px;
-              border:1px solid rgba(255,255,255,.10);
-              background: rgba(255,255,255,.02);
-            ">
+          <div class="gameScroll">
+            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
                 <div style="font-weight:900; font-size:15px;">PACOTE COMPLETO</div>
-                <div style="font-weight:900; font-size:14px;">R$100,00</div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="100"></span>
+                  <span class="newPrice js-newPrice" data-preco="100"></span>
+                </div>
               </div>
 
               <div style="margin-top:10px; font-size:12px; color:rgba(169,183,208,.95); line-height:1.55;">
@@ -736,7 +770,6 @@
                 • Max Current Lock Picks<br>
                 • Bombas de cano de corrente máxima<br>
                 • CP máximo<br>
-                • Save 03<br>
                 • Desbloqueie todas as fases<br>
                 • Pontuação máxima
               </div>
@@ -757,38 +790,216 @@
         </div>
       </div>
 
+      <!-- XENOVERSE 2 -->
+      <div class="gameCard" data-cat="rpg">
+        <img class="gameImg" src="img/xenoverse2.png" alt="Dragon Ball Xenoverse 2">
+        <div class="gameBody">
+          <h3 class="gameTitle">Dragon Ball Xenoverse 2</h3>
+          <div class="gameMeta">PS4 • PS5</div>
+
+          <div class="tags">
+            <span class="tag">RPG</span>
+            <span class="tag">Offline</span>
+            <span class="saleTag js-saleTag"></span>
+          </div>
+
+          <div class="gameScroll">
+
+            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">MISSÕES PARALELAS (Z) + PONTUAÇÃO 999999</div>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="100"></span>
+                  <span class="newPrice js-newPrice" data-preco="100"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:8px; font-size:12px; color:rgba(169,183,208,.95); line-height:1.45;">
+                • Missões Paralelas em (Z) máximo<br>
+                • Pontuação 999999 nas missões<br>
+                • (Cada CAC)
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                  href="https://wa.me/5581994706810?text=Quero%20comprar%20XENOVERSE%202%20-%20MISS%C3%95ES%20PARALELAS%20(Z)%20+%20PONTUA%C3%87%C3%83O%20999999%20(CADA%20CAC).">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                  href="https://wa.me/5511966633925?text=Quero%20comprar%20XENOVERSE%202%20-%20MISS%C3%95ES%20PARALELAS%20(Z)%20+%20PONTUA%C3%87%C3%83O%20999999%20(CADA%20CAC).">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">LIBERAÇÃO MISSÕES MODO HISTÓRIA</div>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="100"></span>
+                  <span class="newPrice js-newPrice" data-preco="100"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:8px; font-size:12px; color:rgba(169,183,208,.95); line-height:1.45;">
+                • Liberação missões do modo história<br>
+                • (Cada CAC)
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                  href="https://wa.me/5581994706810?text=Quero%20comprar%20XENOVERSE%202%20-%20LIBERA%C3%87%C3%83O%20MISS%C3%95ES%20MODO%20HIST%C3%93RIA%20(CADA%20CAC).">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                  href="https://wa.me/5511966633925?text=Quero%20comprar%20XENOVERSE%202%20-%20LIBERA%C3%87%C3%83O%20MISS%C3%95ES%20MODO%20HIST%C3%93RIA%20(CADA%20CAC).">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">MEDALHAS PT (50.000)</div>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="20"></span>
+                  <span class="newPrice js-newPrice" data-preco="20"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                  href="https://wa.me/5581994706810?text=Quero%20comprar%20XENOVERSE%202%20-%2050.000%20MEDALHAS%20PT.">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                  href="https://wa.me/5511966633925?text=Quero%20comprar%20XENOVERSE%202%20-%2050.000%20MEDALHAS%20PT.">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">MEDALHAS PT (100.000)</div>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="40"></span>
+                  <span class="newPrice js-newPrice" data-preco="40"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                  href="https://wa.me/5581994706810?text=Quero%20comprar%20XENOVERSE%202%20-%20100.000%20MEDALHAS%20PT.">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                  href="https://wa.me/5511966633925?text=Quero%20comprar%20XENOVERSE%202%20-%20100.000%20MEDALHAS%20PT.">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">MEDALHAS PT (500.000)</div>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="50"></span>
+                  <span class="newPrice js-newPrice" data-preco="50"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                  href="https://wa.me/5581994706810?text=Quero%20comprar%20XENOVERSE%202%20-%20500.000%20MEDALHAS%20PT.">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                  href="https://wa.me/5511966633925?text=Quero%20comprar%20XENOVERSE%202%20-%20500.000%20MEDALHAS%20PT.">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="font-weight:900;">ADICIONAR QUALQUER SUPER ALMA (UNIDADE)</div>
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="20"></span>
+                  <span class="newPrice js-newPrice" data-preco="20"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                  href="https://wa.me/5581994706810?text=Quero%20comprar%20XENOVERSE%202%20-%20ADICIONAR%20QUALQUER%20SUPER%20ALMA%20(UNIDADE).">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                  href="https://wa.me/5511966633925?text=Quero%20comprar%20XENOVERSE%202%20-%20ADICIONAR%20QUALQUER%20SUPER%20ALMA%20(UNIDADE).">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- SILKSONG -->
+      <div class="gameCard" data-cat="acao">
+        <img class="gameImg" src="img/silksong.png" alt="Hollow Knight: Silksong">
+        <div class="gameBody">
+          <h3 class="gameTitle">Hollow Knight: Silksong</h3>
+          <div class="gameMeta">PS4 • PS5</div>
+
+          <div class="tags">
+            <span class="tag">Ação</span>
+            <span class="tag">Offline</span>
+            <span class="saleTag js-saleTag"></span>
+          </div>
+
+          <div class="gameScroll">
+            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+              <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+                <div>
+                  <div style="font-weight:900;">PACOTE COMPLETO</div>
+                  <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:4px; line-height:1.4;">
+                    • MAX ROSÁRIOS<br>
+                    • MAX SHELL SHARDS<br>
+                    • SAÚDE MÁXIMA<br>
+                    • SALTO INFINITO
+                  </div>
+                </div>
+
+                <div class="priceRow">
+                  <span class="oldPrice js-oldPrice" data-preco="100"></span>
+                  <span class="newPrice js-newPrice" data-preco="100"></span>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn primary" target="_blank"
+                   href="https://wa.me/5581994706810?text=Quero%20comprar%20SILKSONG%20-%20PACOTE%20COMPLETO.">
+                  Comprar com Naildo
+                </a>
+                <a class="btn" target="_blank"
+                   href="https://wa.me/5511966633925?text=Quero%20comprar%20SILKSONG%20-%20PACOTE%20COMPLETO.">
+                  Comprar com Geovane
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- =========================================================
-================================================================
-================================================================
-================================================================
-====================  🚨 ATENÇÃO IMPORTANTE 🚨  =================
-================================================================
-================================================================
-================================================================
-
-✅ AQUI É O FINAL DO CATÁLOGO DE JOGOS!
-
-➡️ PARA ADICIONAR UM NOVO JOGO:
-1) Copie um bloco <div class="gameCard">...</div>
-2) Cole ACIMA desta linha
-3) Troque o nome, preço e imagem
-
-📌 IMAGENS:
-- Coloque dentro da pasta: img/
-- Exemplo: img/nomedojogo.png
-
-================================================================
-=================  ✅ COLE NOVOS JOGOS AQUI EM CIMA  =============
-================================================================
-================================================================
-================================================================
-=============================================================== -->
+           🚨 FINAL DO CATÁLOGO (NÃO APAGAR)
+           ========================================================= -->
     </div>
   </section>
 
-  <!-- =========================================================
-       ===== ABA: PAGAMENTO PIX =====
-       ========================================================= -->
+  <!-- ========================= PIX ========================= -->
   <section id="page-pix" class="page section">
     <h2>Pagamento via Pix</h2>
     <p>Copie o código Pix abaixo e cole no app do seu banco.</p>
@@ -815,9 +1026,7 @@
     </div>
   </section>
 
-  <!-- =========================================================
-       ===== ABA: SUPORTE =====
-       ========================================================= -->
+  <!-- ========================= SUPORTE ========================= -->
   <section id="page-suporte" class="page section">
     <h2>Suporte</h2>
     <p>Precisa de ajuda? Fale com a gente e resolvemos o mais rápido possível.</p>
@@ -854,9 +1063,7 @@
     </div>
   </section>
 
-  <!-- =========================================================
-       ===== ABA: FEEDBACK =====
-       ========================================================= -->
+  <!-- ========================= FEEDBACK ========================= -->
   <section id="page-feedback" class="page section">
     <h2>Feedback</h2>
     <p>Deixe sua opinião! As avaliações abaixo ficam visíveis para outros clientes.</p>
@@ -896,7 +1103,6 @@
     <p>Veja o que os clientes estão falando do nosso serviço.</p>
 
     <div class="reviews">
-
       <div class="reviewCard">
         <div class="reviewTop">
           <div class="reviewName">Cliente Exemplo</div>
@@ -929,13 +1135,10 @@
         </div>
         <div class="reviewDate">📅 18/01/2026</div>
       </div>
-
     </div>
   </section>
 
-  <!-- =========================================================
-       ===== ABA: CONTATO =====
-       ========================================================= -->
+  <!-- ========================= CONTATO ========================= -->
   <section id="page-contato" class="page section">
     <h2>Contato</h2>
     <p>Preencha e mande sua mensagem (ou use o WhatsApp).</p>
@@ -975,14 +1178,8 @@
 </main>
 
 <script>
-  /* =========================================================
-     ===== ANO AUTOMÁTICO =====
-     ========================================================= */
   document.getElementById("ano").textContent = new Date().getFullYear();
 
-  /* =========================================================
-     ===== FUNÇÃO DAS ABAS =====
-     ========================================================= */
   function showPage(page){
     const pages = document.querySelectorAll(".page");
     pages.forEach(p => p.classList.remove("active"));
@@ -993,9 +1190,23 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  /* =========================================================
-     ===== CONTATO → WHATSAPP NAILDO =====
-     ========================================================= */
+  function filtrarCategoria(cat, btn){
+    const cards = document.querySelectorAll(".gameCard");
+
+    cards.forEach(card => {
+      const c = card.getAttribute("data-cat");
+      if(cat === "todos" || c === cat){
+        card.style.display = "flex";
+      }else{
+        card.style.display = "none";
+      }
+    });
+
+    const allBtns = document.querySelectorAll(".filterBtn");
+    allBtns.forEach(b => b.classList.remove("active"));
+    if(btn) btn.classList.add("active");
+  }
+
   function enviarWhats(){
     const nome = document.getElementById("nome").value.trim();
     const jogo = document.getElementById("jogo").value.trim();
@@ -1007,18 +1218,12 @@
     window.open(url, "_blank");
   }
 
-  /* =========================================================
-     ===== COPIAR PIX =====
-     ========================================================= */
   function copiarPix(){
     const chave = document.getElementById("pixKey").textContent.trim();
     navigator.clipboard.writeText(chave);
     alert("Pix copiado! Agora é só colar no app do banco.");
   }
 
-  /* =========================================================
-     ===== FEEDBACK → WHATSAPP =====
-     ========================================================= */
   function enviarFeedback(){
     const nome = document.getElementById("fbNome").value.trim();
     const nota = document.getElementById("fbNota").value.trim();
@@ -1030,28 +1235,49 @@
     window.open(url, "_blank");
   }
 
-  /* =========================================================
-     ===== CONTROLE GLOBAL DO DESCONTO (MUDA SÓ AQUI) =====
-     COMO USAR:
-     - "30%" / "50%" etc → aparece em todos jogos
-     - "" (vazio) → some de todos jogos
-     ========================================================= */
-  const DESCONTO_ATUAL = "30%"; // MUDE AQUI EX: "50%" ou ""
+  const DESCONTO_ATUAL = "30";
+
+  function formatarBRL(valor){
+    return valor.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+  }
 
   function aplicarDescontoGlobal(){
     const tags = document.querySelectorAll(".js-saleTag");
+    const oldPrices = document.querySelectorAll(".js-oldPrice");
+    const newPrices = document.querySelectorAll(".js-newPrice");
 
-    if(!DESCONTO_ATUAL || DESCONTO_ATUAL.trim() === ""){
+    const temDesconto = DESCONTO_ATUAL && DESCONTO_ATUAL.trim() !== "";
+    const descontoNum = temDesconto ? parseFloat(DESCONTO_ATUAL.replace("%","")) : 0;
+
+    if(!temDesconto){
       tags.forEach(t => {
         t.style.display = "none";
         t.textContent = "";
       });
-      return;
+    }else{
+      tags.forEach(t => {
+        t.style.display = "inline-block";
+        t.textContent = `🔥 -${descontoNum}% OFF`;
+      });
     }
 
-    tags.forEach(t => {
-      t.style.display = "inline-block";
-      t.textContent = `🔥 -${DESCONTO_ATUAL} OFF`;
+    oldPrices.forEach(el => {
+      const preco = parseFloat(el.getAttribute("data-preco") || "0");
+      if(!temDesconto){
+        el.textContent = "";
+      }else{
+        el.textContent = formatarBRL(preco);
+      }
+    });
+
+    newPrices.forEach(el => {
+      const preco = parseFloat(el.getAttribute("data-preco") || "0");
+      if(!temDesconto){
+        el.textContent = formatarBRL(preco);
+      }else{
+        const final = preco * (1 - (descontoNum / 100));
+        el.textContent = formatarBRL(final);
+      }
     });
   }
 
