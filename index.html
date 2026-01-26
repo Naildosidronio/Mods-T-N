@@ -508,6 +508,7 @@
     <p>Confira os jogos disponíveis e as modificações.</p>
 
     <div class="catFilters" id="catFilters">
+      <button class="filterBtn" onclick="filtrarCategoria('terror', this)">Terror</button>
       <button class="filterBtn active" onclick="filtrarCategoria('todos', this)">Todos</button>
       <button class="filterBtn" onclick="filtrarCategoria('corrida', this)">Corrida</button>
       <button class="filterBtn" onclick="filtrarCategoria('rpg', this)">RPG</button>
@@ -701,45 +702,79 @@
         </div>
       </div>
 
-      <!-- NFS HEAT -->
-      <div class="gameCard" data-cat="corrida">
-        <img class="gameImg" src="img/nfsheat.png" alt="Need for Speed Heat">
-        <div class="gameBody">
-          <h3 class="gameTitle">Need for Speed Heat</h3>
-          <div class="gameMeta">PS4 • PS5</div>
+      <!-- NEED FOR SPEED HEAT -->
+<div class="gameCard" data-cat="corrida">
+  <img class="gameImg" src="img/nfsheat.png" alt="Need for Speed Heat">
+  <div class="gameBody">
+    <h3 class="gameTitle">Need for Speed Heat</h3>
+    <div class="gameMeta">PS4 • PS5</div>
 
-          <div class="tags">
-            <span class="tag">Corrida</span>
-            <span class="tag">Offline</span>
-            <span class="saleTag js-saleTag"></span>
-          </div>
+    <div class="tags">
+      <span class="tag">Corrida</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
 
-          <div class="gameScroll">
-            <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                <div style="font-weight:900; font-size:15px;">DINHEIRO (999999999)</div>
+    <div class="gameScroll">
 
-                <div class="priceRow">
-                  <span class="oldPrice js-oldPrice" data-preco="70"></span>
-                  <span class="newPrice js-newPrice" data-preco="70"></span>
-                </div>
-              </div>
+      <!-- PACOTE COMPLETO -->
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">MODIFICAÇOES DISPONIVEL</div>
 
-              <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
-                <a class="btn primary" target="_blank"
-                   href="https://wa.me/5581994706810?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999.">
-                  Comprar com Naildo
-                </a>
-
-                <a class="btn" target="_blank"
-                   href="https://wa.me/5511966633925?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999.">
-                  Comprar com Geovane
-                </a>
-              </div>
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Dinheiro 999999999
             </div>
           </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="70"></span>
+            <span class="newPrice js-newPrice" data-preco="70"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999%20(R%2470).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20DINHEIRO%20999999999%20(R%2470).">
+            Comprar com Geovane
+          </a>
         </div>
       </div>
+
+      <!-- INDIVIDUAL: LIBERAR QUALQUER CARRO (UNIDADE) -->
+      <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <div style="font-weight:900;">LIBERAR QUALQUER CARRO (UNIDADE)</div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="25"></span>
+            <span class="newPrice js-newPrice" data-preco="25"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20LIBERAR%20QUALQUER%20CARRO%20(UNIDADE)%20(R%2425).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20NEED%20FOR%20SPEED%20HEAT%20-%20LIBERAR%20QUALQUER%20CARRO%20(UNIDADE)%20(R%2425).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
       <!-- RE8 -->
       <div class="gameCard" data-cat="acao">
@@ -2991,6 +3026,651 @@
 
           <a class="btn" target="_blank"
              href="https://wa.me/5511966633925?text=Quero%20comprar%20NIOH%202%20-%20CONSUM%C3%8DVEIS%209999%20(R%2440).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- =========================================================
+     ===== JOGO: RESIDENT EVIL 5 (AÇÃO) =====
+     ========================================================= -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/re5.png" alt="Resident Evil 5">
+  <div class="gameBody">
+    <h3 class="gameTitle">Resident Evil 5</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <!-- TAGS CERTAS -->
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <!-- ✅ SCROLL AQUI -->
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">ECONOMIZE 01</div>
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.4;">
+              • Dinheiro máximo<br>
+              • Pontuação máxima<br>
+              <br>
+              <b>Campanha:</b><br>
+              • Chris com bastante munição e itens no inventário<br>
+              • Sheva com muitos itens e munições no inventário<br>
+              • Desbloqueia todos os capítulos + Modo Profissional<br>
+              • Todos os emblemas da BSAA<br>
+              • Todos os itens e melhorias em Gerenciamento de Itens<br>
+              • Configuração especial: desbloqueio de munição infinita
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="100"></span>
+            <span class="newPrice js-newPrice" data-preco="100"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20RESIDENT%20EVIL%205%20-%20ECONOMIZE%2001%20(R%24100).">
+            Comprar com Naildo
+          </a>
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20RESIDENT%20EVIL%205%20-%20ECONOMIZE%2001%20(R%24100).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!-- ✅ FIM SCROLL -->
+
+  </div>
+</div>
+
+
+<!-- ASSASSIN'S CREED ODYSSEY -->
+<div class="gameCard" data-cat="rpg">
+  <img class="gameImg" src="img/acodyssey.png" alt="Assassin's Creed Odyssey">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed Odyssey</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">RPG</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">MODIFICAÇÃO COMPLETA</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              <b>Inclui:</b><br>
+              • Dinheiro máximo<br>
+              • Pontos de habilidade máximos<br>
+              • EXP máxima<br><br>
+
+              <b>Personagens:</b><br>
+              • Alexios: Nível 50 / Nível 70 / EXP máxima<br>
+              • Kassandra: Nível 50 / Nível 70 / EXP máxima<br><br>
+
+              <b>Materiais máximos:</b><br>
+              ⚠️ Você precisa ter pelo menos <b>1 unidade</b> de cada material no inventário para funcionar.<br>
+              • Tábuas antigas<br>
+              • Ferro metálico<br>
+              • Vidro de obsidiana<br>
+              • Madeira de oliveira<br>
+              • Gemas preciosas<br>
+              • Couro macio
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="80"></span>
+            <span class="newPrice js-newPrice" data-preco="80"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20ODYSSEY%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%2480).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20ODYSSEY%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%2480).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ASSASSIN'S CREED ORIGINS -->
+<div class="gameCard" data-cat="rpg">
+  <img class="gameImg" src="img/acorigins.png" alt="Assassin's Creed Origins">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed Origins</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">RPG</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">MODIFICAÇÃO COMPLETA</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              <b>Inclui:</b><br>
+              • Dinheiro máximo<br>
+              • Subida de nível rápida<br>
+              • SP máximo<br><br>
+
+              <b>Inventário:</b><br>
+              ⚠️ Você precisa ter pelo menos <b>1 unidade</b> de algum item para o truque funcionar.<br><br>
+
+              <b>Recursos (máx.):</b><br>
+              • Fragmentos de uma estrela<br>
+              • Cadarwood<br>
+              • Bronze<br>
+              • Couro macio<br>
+              • Couro rígido<br>
+              • Pelt / Pele<br>
+              • Ferro<br>
+              • Cristal de carbono<br>
+              • Sílica<br><br>
+
+              <b>Flechas (recarregar):</b><br>
+              • Flechas de caçador<br>
+              • Setas de luz<br>
+              • Flechas do guerreiro<br>
+              • Flechas Predator<br><br>
+
+              <b>Produtos de origem animal (máx.):</b><br>
+              • Chifres de Íbex<br><br>
+
+              <b>Ferramentas (recarregar):</b><br>
+              • Dardos tranquilizantes<br>
+              • Bomba incendiária<br>
+              • Tela de fumaça
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="80"></span>
+            <span class="newPrice js-newPrice" data-preco="80"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20ORIGINS%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%2480).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20ORIGINS%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%2480).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ASSASSIN'S CREED III: REMASTERIZADO -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/ac3remaster.png" alt="Assassin's Creed III: Remasterizado">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed III: Remasterizado</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">ECONOMIZE 01</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Dinheiro máximo
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="50"></span>
+            <span class="newPrice js-newPrice" data-preco="50"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20III%3A%20REMASTERIZADO%20(CUSA11711)%20-%20ECONOMIZE%2001%20-%20DINHEIRO%20M%C3%81XIMO%20(R%2450).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20III%3A%20REMASTERIZADO%20(CUSA11711)%20-%20ECONOMIZE%2001%20-%20DINHEIRO%20M%C3%81XIMO%20(R%2450).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ASSASSIN'S CREED IV: BLACK FLAG -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/ac4blackflag.png" alt="Assassin's Creed IV: Black Flag">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed IV: Black Flag</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">ECONOMIZE 01</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Max Reales<br><br>
+
+              <b>Recursos máximos:</b><br>
+              • Pano<br>
+              • Metal<br>
+              • Rum<br>
+              • Açúcar<br>
+              • Madeira
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="50"></span>
+            <span class="newPrice js-newPrice" data-preco="50"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20IV%3A%20BLACK%20FLAG%20(CUSA00010%20/%20CUSA00206)%20-%20ECONOMIZE%2001%20-%20MAX%20REALES%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2450).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20IV%3A%20BLACK%20FLAG%20(CUSA00010%20/%20CUSA00206)%20-%20ECONOMIZE%2001%20-%20MAX%20REALES%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2450).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ASSASSIN'S CREED IV: FREEDOM CRY (JOGO INDEPENDENTE) -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/ac4freedomcry.png" alt="Assassin's Creed IV: Freedom Cry - Jogo Independente">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed IV: Freedom Cry (Independente)</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">ECONOMIZE 01</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Max Reales
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="40"></span>
+            <span class="newPrice js-newPrice" data-preco="40"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20IV%3A%20FREEDOM%20CRY%20(JOGO%20INDEPENDENTE)%20(CUSA00416%20/%20CUSA00435%20/%20CUSA00441)%20-%20ECONOMIZE%2001%20-%20MAX%20REALES%20(R%2440).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20IV%3A%20FREEDOM%20CRY%20(JOGO%20INDEPENDENTE)%20(CUSA00416%20/%20CUSA00435%20/%20CUSA00441)%20-%20ECONOMIZE%2001%20-%20MAX%20REALES%20(R%2440).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ASSASSIN'S CREED UNITY -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/acunity.png" alt="Assassin's Creed Unity">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed Unity</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">MODIFICAÇÃO</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Dinheiro máximo<br>
+              • Pontos máximos de Creed
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="50"></span>
+            <span class="newPrice js-newPrice" data-preco="50"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20UNITY%20-%20DINHEIRO%20M%C3%81XIMO%20+%20PONTOS%20M%C3%81XIMOS%20DE%20CREED%20(R%2450).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20UNITY%20-%20DINHEIRO%20M%C3%81XIMO%20+%20PONTOS%20M%C3%81XIMOS%20DE%20CREED%20(R%2450).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- RESIDENT EVIL 4 REMAKE -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/re4remake.png" alt="Resident Evil 4 Remake">
+  <div class="gameBody">
+    <h3 class="gameTitle">Resident Evil 4 Remake</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Terror</span>
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">MODIFICAÇÃO COMPLETA</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Imortalidade<br>
+              • Balas infinitas<br>
+              • Dinheiro: 999.999.999<br>
+              • Recursos máximos
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="110"></span>
+            <span class="newPrice js-newPrice" data-preco="110"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20RESIDENT%20EVIL%204%20REMAKE%20-%20IMORTALIDADE%20+%20BALAS%20INFINITAS%20+%20DINHEIRO%20999.999.999%20+%20RECURSOS%20M%C3%81XIMOS%20(R%24110).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20RESIDENT%20EVIL%204%20REMAKE%20-%20IMORTALIDADE%20+%20BALAS%20INFINITAS%20+%20DINHEIRO%20999.999.999%20+%20RECURSOS%20M%C3%81XIMOS%20(R%24110).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ASSASSIN'S CREED MIRAGE -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/acmirage.png" alt="Assassin's Creed Mirage">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed Mirage</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">MODIFICAÇÃO COMPLETA</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              <b>Pontos de Habilidade:</b><br>
+              • Possui 52 pontos de habilidade<br>
+              • Pontos de habilidade máximos<br><br>
+
+              <b>Inventário:</b><br>
+              ⚠️ Deve conter pelo menos <b>1 unidade</b> antes de usar.<br><br>
+
+              <b>Recursos máximos:</b><br>
+              • Dirham<br>
+              • Ficha de Favor do Comerciante<br>
+              • Ficha de Favor Poderoso<br>
+              • Ficha de Favor Acadêmico<br><br>
+
+              <b>Materiais de aprimoramento (máx.):</b><br>
+              • Componentes<br>
+              • Couro<br>
+              • Lingote de aço<br><br>
+
+              <b>Consumíveis máximos:</b><br>
+              🔁 Pode ser reiniciado após atualização.<br>
+              • Elixir<br>
+              • Faca de arremesso
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="100"></span>
+            <span class="newPrice js-newPrice" data-preco="100"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20MIRAGE%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%24100).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%20MIRAGE%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%24100).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- RESIDENT EVIL CODE: VERONICA -->
+<div class="gameCard" data-cat="terror">
+  <img class="gameImg" src="img/recodeveronica.png" alt="Resident Evil Code: Veronica">
+  <div class="gameBody">
+    <h3 class="gameTitle">Resident Evil Code: Veronica</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Terror</span>
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-weight:900;">LIBERAÇÃO COMPLETA</div>
+
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Liberação de todas as armas infinitas no baú
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="80"></span>
+            <span class="newPrice js-newPrice" data-preco="80"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20RESIDENT%20EVIL%20CODE%3A%20VERONICA%20-%20LIBERA%C3%87%C3%83O%20DE%20TODAS%20AS%20ARMAS%20INFINITAS%20NO%20BA%C3%9A%20(R%2480).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20RESIDENT%20EVIL%20CODE%3A%20VERONICA%20-%20LIBERA%C3%87%C3%83O%20DE%20TODAS%20AS%20ARMAS%20INFINITAS%20NO%20BA%C3%9A%20(R%2480).">
+            Comprar com Geovane
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ASSASSIN'S CREED: ROGUE REMASTERIZADO -->
+<div class="gameCard" data-cat="acao">
+  <img class="gameImg" src="img/acrogue.png" alt="Assassin's Creed: Rogue Remasterizado">
+  <div class="gameBody">
+    <h3 class="gameTitle">Assassin's Creed: Rogue Remasterizado</h3>
+    <div class="gameMeta">PS4 • PS5</div>
+
+    <div class="tags">
+      <span class="tag">Ação</span>
+      <span class="tag">Offline</span>
+      <span class="saleTag js-saleTag"></span>
+    </div>
+
+    <div class="gameScroll">
+
+      <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+          <div>
+            <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
+              • Dinheiro máximo<br>
+              • Max Cloth<br>
+              • Max Lumber<br>
+              • Max Metal<br>
+              • Max Stone<br>
+              • Max Tobacco
+            </div>
+          </div>
+
+          <div class="priceRow">
+            <span class="oldPrice js-oldPrice" data-preco="70"></span>
+            <span class="newPrice js-newPrice" data-preco="70"></span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" target="_blank"
+             href="https://wa.me/5581994706810?text=Quero%20comprar%20ASSASSIN%27S%20CREED%3A%20ROGUE%20REMASTERIZADO%20-%20DINHEIRO%20M%C3%81XIMO%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2470).">
+            Comprar com Naildo
+          </a>
+
+          <a class="btn" target="_blank"
+             href="https://wa.me/5511966633925?text=Quero%20comprar%20ASSASSIN%27S%20CREED%3A%20ROGUE%20REMASTERIZADO%20-%20DINHEIRO%20M%C3%81XIMO%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2470).">
             Comprar com Geovane
           </a>
         </div>
