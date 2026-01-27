@@ -6,7 +6,7 @@
   <title>Mods-T-N | Mods PS4 e PS5</title>
   <meta name="description" content="Mods-T-N — Modificações e personalizações para jogos de PS4 e PS5." />
 
- <style>
+  <style>
     :root{
       --bg:#0b1220;
       --text:#e6eefc;
@@ -206,183 +206,219 @@
     .page{display:none;}
     .page.active{display:block;}
 
+    /* =========================================================
+       ===== CATÁLOGO (CARDS MESMO TAMANHO) =====
+       ========================================================= */
+    .catalogo{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      margin-top:14px;
+      align-items: stretch;
+    }
 
-/* ================== CATÁLOGO ================== */
-.catalogo{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+    @media (max-width: 900px){
+      .catalogo{grid-template-columns:1fr;}
+    }
+
+    .gameCard{
+      display:flex;
+      flex-direction:column;
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      overflow:hidden;
+      height:560px; /* <<< todos iguais */
+    }
+
+    .gameImg{
+      width:100%;
+      height:170px;
+      object-fit:cover;
+      display:block;
+      filter: contrast(1.05) saturate(1.05);
+      flex-shrink:0;
+    }
+
+    .gameBody{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
+      min-height:0;
+    }
+
+    .gameScroll{
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
-@media(max-width:900px){
-  .catalogo{grid-template-columns:1fr}
+.gameScroll::-webkit-scrollbar{
+  width: 8px;
+}
+.gameScroll::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border-radius: 10px;
+}
+.gameScroll::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.05);
+  border-radius: 10px;
 }
 
-/* ================== CARD ================== */
-.gameCard{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  border-radius:18px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.04);
-  overflow:hidden;
-  height:560px;
-  transition:transform .25s, box-shadow .25s;
-}
 
-/* hover leve */
-.gameCard:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 45px rgba(0,0,0,.45);
-}
+    .gameTitle{
+      margin:0 0 6px;
+      font-size:16px;
+      font-weight:800;
+    }
 
-/* ================== MARCA D’ÁGUA ================== */
-.gameCard::after{
-  content:"";
-  position:absolute;
-  bottom:12px;
-  right:12px;
-  width:80px;
-  height:80px;
-  background:url("./img/logo-mods-tn.png") no-repeat center / contain;
-  opacity:0.12;
-  pointer-events:none;
-  z-index:0;
-}
+    .gameMeta{
+      font-size:12px;
+      opacity:.85;
+      margin-bottom:10px;
+    }
 
-.gameImg,
-.gameBody{
-  position:relative;
-  z-index:2;
-}
+    .tags{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      margin:8px 0 0;
+    }
 
-/* ================== IMAGEM ================== */
-.gameImg{
-  width:100%;
-  height:170px;
-  object-fit:cover;
-  transition:.3s;
-}
+    .tag{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(59,130,246,.25);
+      background: rgba(59,130,246,.12);
+      color:#cfe2ff;
+    }
 
-.gameCard:hover .gameImg{
-  transform:scale(1.02);
-}
+    .saleTag{
+      display:none;
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(34,197,94,.35);
+      background: rgba(34,197,94,.16);
+      color:#d8ffe7;
+      font-weight:900;
+    }
 
-/* ================== BODY DO CARD ================== */
-.gameBody{
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  flex:1;
-  min-height:0;
-}
+    .priceRow{
+      display:flex;
+      align-items:baseline;
+      justify-content:flex-end;
+      gap:10px;
+      text-align:right;
+      white-space:nowrap;
+    }
 
-/* ================== TÍTULO ================== */
-.gameTitle{
-  font-size:16px;
-  font-weight:800;
-  margin:0 0 6px;
-}
+    .oldPrice{
+      font-size:12px;
+      opacity:.75;
+      text-decoration: line-through;
+    }
 
-/* título clicável */
-.gameTitle a{
-  color:inherit;
-}
+    .newPrice{
+      font-size:14px;
+      font-weight:900;
+    }
 
-.gameTitle a:hover{
-  color:#60a5fa;
-  text-decoration:underline;
-}
+    .catFilters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
 
-.gameMeta{
-  font-size:12px;
-  opacity:.85;
-  margin-bottom:10px;
-}
+    .filterBtn{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      transition:.15s;
+    }
 
-/* ================== TAGS ================== */
-.tags{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
+    .filterBtn:hover{transform: translateY(-1px);}
 
-.tag{
-  font-size:11px;
-  padding:6px 10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-}
+    .filterBtn.active{
+      border-color: rgba(59,130,246,.45);
+      background: rgba(59,130,246,.18);
+    }
 
-/* ================== SCROLL ================== */
-.gameScroll{
-  max-height:320px;
-  overflow-y:auto;
-  padding-right:6px;
-}
+    .promoBanner{
+      margin-top:18px;
+      padding:16px 16px;
+      border-radius:22px;
+      border:1px solid rgba(34,197,94,.35);
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(59,130,246,.14));
+      box-shadow: var(--shadow);
+    }
 
-/* ================== PREÇOS ================== */
-.priceRow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  justify-content:flex-end;
-}
+    .promoTitle{
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:6px;
+    }
 
-.oldPrice{
-  font-size:12px;
-  color:rgba(169,183,208,.65);
-  text-decoration:line-through;
-}
+    .promoText{
+      font-size:13px;
+      color:rgba(233,245,255,.88);
+      line-height:1.5;
+    }
 
-.newPrice{
-  font-size:15px;
-  font-weight:900;
-  color:#fff;
-}
+    .promoSmall{
+      font-size:12px;
+      color:rgba(169,183,208,.9);
+      margin-top:8px;
+    }
 
-/* badge % off */
-.priceRow::before{
-  content:"-" var(--promo-percent) "%";
-  font-size:11px;
-  font-weight:900;
-  padding:4px 8px;
-  border-radius:999px;
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  color:#022c22;
-}
+    .pixKey{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:13px;
+      color:rgba(233,245,255,.9);
+      word-break:break-all;
+      margin-top:6px;
+    }
 
-/* ================== BADGE MAIS VENDIDO ================== */
-.gameCard[data-hot="true"]::before{
-  content:"⭐ MAIS VENDIDO";
-  position:absolute;
-  top:10px;
-  right:10px;
-  padding:6px 12px;
-  font-size:11px;
-  font-weight:900;
-  border-radius:999px;
-  background:linear-gradient(135deg,#facc15,#f59e0b);
-  color:#3b2500;
-  z-index:3;
-}
+    .reviews{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
 
-/* ================== CATEGORIAS ================== */
-.gameCard[data-cat="acao"]{border-color:rgba(59,130,246,.45)}
-.gameCard[data-cat="terror"]{border-color:rgba(239,68,68,.45)}
-.gameCard[data-cat="souls"]{border-color:rgba(249,115,22,.55)}
-.gameCard[data-cat="rpg"]{border-color:rgba(168,85,247,.45)}
-.gameCard[data-cat="corrida"]{border-color:rgba(34,197,94,.45)}
+    @media (max-width: 900px){
+      .reviews{grid-template-columns:1fr}
+    }
 
-/* ================== MOBILE ================== */
-@media(max-width:700px){
-  .gameCard:hover{
-    transform:none;
-    box-shadow:none;
-  }
-}
-</style>
+    .reviewCard{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+
+    .reviewTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .reviewName{font-weight:900}
+    .reviewStars{font-size:13px; opacity:.9;}
+    .reviewText{font-size:13px; color:rgba(169,183,208,.95); line-height:1.5;}
+    .reviewDate{margin-top:10px; font-size:12px; opacity:.7;}
+  </style>
 
 
 
@@ -468,7 +504,7 @@
   </section>
 
   <section id="page-servicos" class="page active section">
-    <h2>Serviços</h2>
+    <h1>Serviços</h1>
     <p>Escolha o tipo de modificação que você quer. Se não souber, chama no WhatsApp que eu te ajudo.</p>
 
     <div class="grid">
@@ -4193,3 +4229,4 @@
 
 </body>
 </html>
+
