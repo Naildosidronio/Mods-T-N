@@ -322,10 +322,25 @@
       text-decoration: line-through;
     }
 
+
+
+
+
+
+
+  /* TROCAR DESTAQUE DOS VALORES */
+
     .newPrice{
-      font-size:14px;
-      font-weight:900;
-    }
+  font-size:16px;
+  font-weight:900;
+  color:#22c55e;
+  background:rgba(34,197,94,.12);
+  padding:4px 8px;
+  border-radius:8px;
+  border:1px solid rgba(34,197,94,.35);
+  box-shadow: 0 0 12px rgba(34,197,94,.35);
+}
+
 
     .catFilters{
       display:flex;
@@ -5540,8 +5555,63 @@
     });
   }
 
-  aplicarGeneroAutomatico();
-  //aplicarDescontoGlobal(); pra ativer so remover as //
+
+
+
+
+function mostrarPrecosSemPromocao() {
+
+  // esconde o preço antigo (riscado)
+  document.querySelectorAll('.js-oldPrice').forEach(el => {
+    el.textContent = '';
+    el.style.display = 'none';
+  });
+
+  // mostra o preço normal no newPrice
+  document.querySelectorAll('.js-newPrice').forEach(el => {
+    const preco = el.getAttribute('data-preco');
+    if(preco){
+      el.textContent = 'R$' + preco;
+    }
+  });
+
+  // esconde a tag de promoção
+  document.querySelectorAll('.js-saleTag').forEach(el => {
+    el.style.display = 'none';
+  });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aplicarGeneroAutomatico();
+
+// promoção desligada
+// aplicarDescontoGlobal();
+
+// mostra os preços normais
+mostrarPrecosSemPromocao();
+
+</script>
+
+
+
+
+
+
+  //aplicarGeneroAutomatico(); voltar a promocao so remover o //
+  //aplicarDescontoGlobal(); 
 </script>
 
 
