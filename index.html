@@ -648,7 +648,7 @@
 
       <div class="promoBanner" id="promo" style="display:none;">
 
-        <div class="promoTitle">🎉 Promoção de Carnaval — 30% OFF</div>
+        <div class="promoTitle">🎉 Promoção de Carnaval — 10% OFF</div>
         <div class="promoText">
           30% de desconto em <b>qualquer modificação</b> 🎮🔥
         </div>
@@ -5672,7 +5672,11 @@
     window.open(url, "_blank");
   }
 
-  const DESCONTO_ATUAL = "30";
+//mudar promocao de desconto
+
+
+
+  const DESCONTO_ATUAL = "15";
 
   function formatarBRL(valor){
     return valor.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
@@ -5821,13 +5825,20 @@ aplicarGeneroAutomatico();
 // aplicarDescontoGlobal();
 
 // mostra os preços normais
-mostrarPrecosSemPromocao();
+//mostrarPrecosSemPromocao();
+
+aplicarDescontoGlobal();
 
 </script>
 
 
 
 
+
+
+
+//aplicarGeneroAutomatico();
+  //aplicarDescontoGlobal(); 
 
 
   //aplicarGeneroAutomatico(); voltar a promocao so remover o //
