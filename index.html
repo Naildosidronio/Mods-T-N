@@ -1,29 +1,26 @@
-# INDEX.HTML COMPLETO
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mods-T-N | Mods PS4 e PS5</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MODS-T-N | Mods Premium PS4 e PS5</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-  --bg:#050816;
-  --card:#0b1228;
-  --card2:#101933;
-  --text:#ffffff;
-  --muted:#9ca8c7;
+  --bg:#020817;
+  --card:#081225;
+  --card2:#0b1730;
   --blue:#2563ff;
   --green:#00d26a;
-  --border:rgba(255,255,255,.08);
-  --shadow:0 0 30px rgba(37,99,255,.25);
+  --text:#ffffff;
+  --muted:#94a3b8;
 }
 
 *{
@@ -32,29 +29,40 @@
   box-sizing:border-box;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:'Poppins',sans-serif;
+
   background:
-  radial-gradient(circle at top left, rgba(37,99,255,.20), transparent 30%),
-  radial-gradient(circle at top right, rgba(0,210,106,.12), transparent 30%),
-  var(--bg);
-  color:var(--text);
+  radial-gradient(circle at top left, rgba(37,99,255,.18), transparent 30%),
+  radial-gradient(circle at top right, rgba(0,210,106,.10), transparent 30%),
+  #020817;
+
+  color:white;
 }
 
 .container{
   width:100%;
-  max-width:1300px;
+  max-width:1450px;
   margin:auto;
   padding:20px;
 }
+
+/* HEADER */
 
 header{
   position:sticky;
   top:0;
   z-index:999;
+
   backdrop-filter:blur(14px);
-  background:rgba(5,8,22,.75);
-  border-bottom:1px solid var(--border);
+
+  background:rgba(2,8,23,.82);
+
+  border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .nav{
@@ -71,489 +79,1122 @@ header{
 }
 
 .logoBox{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#2563ff,#6d28d9);
+  width:55px;
+  height:55px;
+
+  border-radius:18px;
+
+  background:linear-gradient(
+  135deg,
+  #2563ff,
+  #6d28d9);
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   font-family:'Orbitron';
-  font-weight:800;
-  box-shadow:var(--shadow);
+  font-size:24px;
+  font-weight:900;
+
+  box-shadow:
+  0 0 30px rgba(37,99,255,.45);
 }
 
 .logo h1{
-  font-size:18px;
   font-family:'Orbitron';
+  font-size:22px;
 }
 
 .logo span{
+  color:#9ca8c7;
   font-size:12px;
-  color:var(--muted);
 }
 
 .menu{
   display:flex;
   gap:10px;
-  flex-wrap:wrap;
 }
 
 .menu a{
   text-decoration:none;
-  color:var(--muted);
-  padding:10px 16px;
-  border-radius:12px;
-  transition:.2s;
-  font-weight:500;
+  color:#cbd5e1;
+
+  padding:12px 18px;
+
+  border-radius:14px;
+
+  transition:.25s;
 }
 
 .menu a:hover{
-  background:rgba(255,255,255,.06);
-  color:white;
+  background:rgba(255,255,255,.05);
 }
 
-.btn{
-  padding:14px 18px;
-  border-radius:14px;
-  border:none;
-  color:white;
-  cursor:pointer;
-  font-weight:700;
-  text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-}
-
-.btnBlue{
-  background:linear-gradient(135deg,#2563ff,#1d4ed8);
-  box-shadow:0 0 20px rgba(37,99,255,.4);
-}
-
-.btnGreen{
-  background:linear-gradient(135deg,#00d26a,#16a34a);
-  box-shadow:0 0 20px rgba(0,210,106,.35);
-}
+/* HERO */
 
 .hero{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:30px;
-  align-items:center;
   margin-top:40px;
 }
 
 .heroCard{
-  background:linear-gradient(180deg,var(--card),var(--card2));
-  border:1px solid var(--border);
-  border-radius:28px;
-  padding:40px;
-  box-shadow:var(--shadow);
+
+  background:
+  radial-gradient(circle at top left,
+  rgba(37,99,255,.20),
+  transparent 30%),
+
+  linear-gradient(
+  180deg,
+  #071226,
+  #040b18);
+
+  border-radius:36px;
+
+  padding:60px;
+
+  overflow:hidden;
+
+  position:relative;
+
+  border:1px solid rgba(255,255,255,.06);
+
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:40px;
+  align-items:center;
+
+  box-shadow:
+  0 0 50px rgba(37,99,255,.15),
+  inset 0 0 20px rgba(255,255,255,.02);
 }
 
 .hero h2{
-  font-size:58px;
-  line-height:1.05;
-  margin-bottom:18px;
+  font-size:82px;
+  line-height:1;
+
   font-family:'Orbitron';
+  font-weight:900;
 }
 
 .hero h2 span{
-  color:#4ea2ff;
+  display:block;
+  margin-top:12px;
+
+  background:linear-gradient(
+  90deg,
+  #3b82f6,
+  #60a5fa);
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 .hero p{
-  color:var(--muted);
-  font-size:16px;
+  margin-top:30px;
+
+  font-size:24px;
+
+  color:#cbd5e1;
+
   line-height:1.7;
+
+  max-width:700px;
 }
 
 .heroButtons{
+  margin-top:38px;
+
   display:flex;
-  gap:14px;
-  margin-top:25px;
+  gap:18px;
   flex-wrap:wrap;
 }
 
+.btn{
+  border:none;
+  text-decoration:none;
+
+  padding:18px 30px;
+
+  border-radius:20px;
+
+  font-weight:800;
+
+  transition:.25s;
+
+  color:white;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.btn:hover{
+  transform:translateY(-5px) scale(1.02);
+}
+
+.btnBlue{
+  background:linear-gradient(
+  135deg,
+  #2563ff,
+  #1d4ed8);
+
+  box-shadow:
+  0 0 35px rgba(37,99,255,.45);
+}
+
+.btnGreen{
+  background:linear-gradient(
+  135deg,
+  #00d26a,
+  #16a34a);
+
+  box-shadow:
+  0 0 35px rgba(0,210,106,.25);
+}
+
+/* CONTATOS HERO */
+
+.heroAtendentes{
+  margin-top:40px;
+
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.heroLine{
+  flex:1;
+  height:2px;
+
+  background:linear-gradient(
+  90deg,
+  transparent,
+  rgba(37,99,255,.6),
+  transparent);
+}
+
+.heroAtendenteText{
+  color:#a5b4fc;
+  font-size:14px;
+  letter-spacing:2px;
+  font-weight:700;
+}
+
+.heroContacts{
+  margin-top:30px;
+
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.contactHeroCard{
+  min-width:290px;
+
+  display:flex;
+  align-items:center;
+  gap:18px;
+
+  padding:20px 24px;
+
+  border-radius:26px;
+
+  text-decoration:none;
+
+  transition:.25s;
+}
+
+.contactHeroCard:hover{
+  transform:translateY(-5px);
+}
+
+.contactHeroCard.blue{
+  background:
+  linear-gradient(
+  180deg,
+  rgba(37,99,255,.18),
+  rgba(37,99,255,.06));
+
+  border:1px solid rgba(37,99,255,.35);
+
+  box-shadow:
+  0 0 25px rgba(37,99,255,.18);
+}
+
+.contactHeroCard.green{
+  background:
+  linear-gradient(
+  180deg,
+  rgba(0,210,106,.15),
+  rgba(0,210,106,.05));
+
+  border:1px solid rgba(0,210,106,.30);
+
+  box-shadow:
+  0 0 25px rgba(0,210,106,.12);
+}
+
+.contactIcon{
+  width:70px;
+  height:70px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:34px;
+}
+
+.blue .contactIcon{
+  background:linear-gradient(
+  135deg,
+  #2563ff,
+  #1d4ed8);
+}
+
+.green .contactIcon{
+  background:linear-gradient(
+  135deg,
+  #00d26a,
+  #16a34a);
+}
+
+.contactName{
+  font-size:32px;
+  font-weight:900;
+  color:white;
+}
+
+.contactNumber{
+  margin-top:5px;
+  color:#cbd5e1;
+  font-size:18px;
+}
+
+/* IMAGEM PS5 */
+
 .heroImage{
-  background:linear-gradient(180deg,#08101f,#0c1630);
-  border-radius:28px;
-  padding:30px;
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .heroImage img{
   width:100%;
-  display:block;
+  max-width:520px;
+
+  filter:
+  drop-shadow(0 0 35px rgba(37,99,255,.35));
+
+  animation:float 4s ease-in-out infinite;
 }
 
-.benefits{
-  margin-top:30px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
+@keyframes float{
+  0%{
+    transform:translateY(0px);
+  }
+
+  50%{
+    transform:translateY(-15px);
+  }
+
+  100%{
+    transform:translateY(0px);
+  }
 }
 
-.benefit{
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:24px;
-}
+/* TITULO */
 
 .sectionTitle{
-  margin-top:60px;
-  margin-bottom:20px;
+  margin-top:80px;
   text-align:center;
 }
 
 .sectionTitle h2{
   font-family:'Orbitron';
-  font-size:38px;
+  font-size:54px;
 }
+
+.sectionTitle p{
+  margin-top:10px;
+  color:#94a3b8;
+}
+
+/* CATALOGO */
 
 .catalogo{
+  margin-top:40px;
+
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px;
+  grid-template-columns:repeat(2,1fr);
+  gap:30px;
 }
 
-.card{
-  background:linear-gradient(180deg,var(--card),#08111f);
-  border:1px solid var(--border);
-  border-radius:24px;
+/* CARDS PREMIUM */
+
+.gameCard{
+
+  position:relative;
+
   overflow:hidden;
-  transition:.25s;
+
+  border-radius:34px;
+
+  background:
+  linear-gradient(
+  180deg,
+  rgba(8,18,37,.98),
+  rgba(3,8,18,.98));
+
+  border:1px solid rgba(255,255,255,.06);
+
+  transition:.35s;
+
+  box-shadow:
+  0 0 35px rgba(0,0,0,.25);
 }
 
-.card:hover{
-  transform:translateY(-6px);
+.gameCard::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+  135deg,
+  rgba(37,99,255,.12),
+  transparent 40%);
+
+  pointer-events:none;
 }
 
-.card img{
+.gameCard:hover{
+  transform:
+  translateY(-10px)
+  scale(1.01);
+
+  box-shadow:
+  0 0 45px rgba(37,99,255,.20);
+}
+
+.gameImg{
   width:100%;
-  height:220px;
+  height:280px;
   object-fit:cover;
 }
 
-.cardBody{
-  padding:20px;
+.gameBody{
+  padding:26px;
 }
 
-.cardTop{
+.gameTitle{
+  font-size:34px;
+  font-weight:900;
+}
+
+.gameMeta{
+  margin-top:8px;
+  color:#94a3b8;
+}
+
+.tags{
+  margin-top:18px;
+
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.tag{
+  padding:8px 15px;
+
+  border-radius:999px;
+
+  background:rgba(37,99,255,.12);
+
+  border:1px solid rgba(37,99,255,.20);
+
+  color:#93c5fd;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+/* BOX INTERNO PREMIUM */
+
+.modBox{
+  margin-top:22px;
+
+  padding:22px;
+
+  border-radius:28px;
+
+  background:
+  linear-gradient(
+  180deg,
+  rgba(255,255,255,.04),
+  rgba(255,255,255,.02));
+
+  border:1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+  inset 0 0 20px rgba(255,255,255,.02);
+}
+
+.modTop{
   display:flex;
   justify-content:space-between;
-  gap:10px;
-  align-items:center;
+  gap:15px;
+  align-items:flex-start;
 }
 
-.badges{
-  display:flex;
-  gap:6px;
-}
-
-.badge{
-  background:rgba(37,99,255,.18);
-  color:#8dc0ff;
-  border:1px solid rgba(37,99,255,.35);
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:11px;
-}
-
-.card h3{
+.modTitle{
   font-size:22px;
-  margin-bottom:14px;
+  font-weight:900;
 }
 
-.card ul{
-  list-style:none;
-  margin-bottom:20px;
-}
+.modDesc{
+  margin-top:12px;
 
-.card ul li{
-  margin-bottom:10px;
-  color:#d7e1ff;
+  color:#cbd5e1;
+
   font-size:14px;
+
+  line-height:1.7;
 }
 
 .price{
-  font-size:28px;
-  font-weight:800;
+  font-size:38px;
+  font-weight:900;
+
   color:#00d26a;
-  margin-bottom:18px;
+
+  white-space:nowrap;
 }
 
-.contact{
+.buyButtons{
+  margin-top:22px;
+
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+/* AREA NOVOS JOGOS */
+
+.addGames{
   margin-top:70px;
-  background:linear-gradient(180deg,var(--card),#08111f);
-  border-radius:28px;
+
   padding:40px;
-  border:1px solid var(--border);
+
+  border-radius:32px;
+
+  border:2px dashed rgba(37,99,255,.25);
+
+  background:rgba(37,99,255,.03);
 }
 
-.formGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-  margin-top:20px;
+.addGames h3{
+  font-family:'Orbitron';
+  font-size:32px;
 }
 
-input,
-textarea{
-  width:100%;
-  padding:16px;
-  border-radius:16px;
-  background:#0a1326;
-  border:1px solid rgba(255,255,255,.08);
-  color:white;
+.addGames p{
+  margin-top:12px;
+  color:#94a3b8;
+  line-height:1.7;
+}
+
+.codeExample{
+  margin-top:22px;
+
+  background:#020617;
+
+  border-radius:24px;
+
+  padding:25px;
+
+  overflow:auto;
+
+  color:#60a5fa;
+
+  border:1px solid rgba(255,255,255,.06);
 }
 
 footer{
-  margin-top:40px;
+  margin-top:80px;
+
   padding:30px;
+
   text-align:center;
-  color:var(--muted);
+
+  color:#94a3b8;
 }
 
+/* RESPONSIVO */
+
 @media(max-width:1100px){
-.hero{
-grid-template-columns:1fr;
+
+.heroCard{
+  grid-template-columns:1fr;
 }
+
 .catalogo{
-grid-template-columns:1fr 1fr;
+  grid-template-columns:1fr;
 }
+
+.hero h2{
+  font-size:60px;
+}
+
 }
 
 @media(max-width:700px){
-.catalogo{
-grid-template-columns:1fr;
+
+.menu{
+  display:none;
 }
+
+.heroCard{
+  padding:35px 24px;
+}
+
 .hero h2{
-font-size:38px;
+  font-size:42px;
 }
+
+.hero p{
+  font-size:18px;
+}
+
+.contactHeroCard{
+  width:100%;
+}
+
+.gameImg{
+  height:220px;
+}
+
+.gameTitle{
+  font-size:28px;
+}
+
 }
 
 </style>
 </head>
+
 <body>
 
 <header>
+
 <div class="container nav">
 
 <div class="logo">
-<div class="logoBox">M</div>
+
+<div class="logoBox">
+M
+</div>
+
 <div>
 <h1>MODS-T-N</h1>
-<span>MODS PS4 E PS5</span>
+<span>MODS PREMIUM PS4 & PS5</span>
 </div>
+
 </div>
 
 <nav class="menu">
+
 <a href="#">Início</a>
-<a href="#catalogo">Catálogo</a>
+<a href="#catalogo">Jogos</a>
 <a href="#contato">Contato</a>
+
 </nav>
 
-<div style="display:flex; gap:10px;">
-<a class="btn btnBlue" href="https://wa.me/5581994706810">WhatsApp</a>
-<a class="btn btnGreen" href="#catalogo">Ver Catálogo</a>
 </div>
 
-</div>
 </header>
 
 <div class="container">
 
+<!-- HERO -->
+
 <section class="hero">
 
 <div class="heroCard">
+
+<div>
+
 <h2>
-Mods Premium<br>
+Mods Premium
 <span>PS4 e PS5</span>
 </h2>
 
 <p>
-Mods exclusivos, desbloqueios e personalizações para os melhores jogos.
+Mods exclusivos, desbloqueios e personalizações
+para os melhores jogos.
 </p>
 
 <div class="heroButtons">
-<a class="btn btnBlue" href="https://wa.me/5581994706810">WhatsApp Naildo</a>
-<a class="btn btnGreen" href="#catalogo">Ver Jogos</a>
-</div>
+
+<a class="btn btnBlue"
+target="_blank"
+href="https://wa.me/5581994706810">
+
+WhatsApp Naildo
+
+</a>
+
+<a class="btn btnGreen"
+href="#catalogo">
+
+Ver Jogos
+
+</a>
+
 </div>
 
+<div class="heroAtendentes">
+
+<div class="heroLine"></div>
+
+<div class="heroAtendenteText">
+FALE COM NOSSOS ATENDENTES
+</div>
+
+<div class="heroLine"></div>
+
+</div>
+
+<div class="heroContacts">
+
+<!-- NAILDO -->
+
+<a class="contactHeroCard blue"
+target="_blank"
+href="https://wa.me/5581994706810">
+
+<div class="contactIcon">
+📱
+</div>
+
+<div>
+
+<div class="contactName">
+Naildo ✔
+</div>
+
+<div class="contactNumber">
+(81) 99470-6810
+</div>
+
+</div>
+
+</a>
+
+<!-- GEOVANE -->
+
+<a class="contactHeroCard green"
+target="_blank"
+href="https://wa.me/5511966633925">
+
+<div class="contactIcon">
+📱
+</div>
+
+<div>
+
+<div class="contactName">
+Geovane ✔
+</div>
+
+<div class="contactNumber">
+(11) 96663-3925
+</div>
+
+</div>
+
+</a>
+
+</div>
+
+</div>
+
+<!-- IMAGEM PS5 -->
+
 <div class="heroImage">
+
 <img src="img/ps5.png" alt="PS5">
+
+</div>
+
 </div>
 
 </section>
 
+<!-- TITULO -->
+
 <div class="sectionTitle" id="catalogo">
-<h2>Catálogo de Mods</h2>
-<p>Confira os jogos disponíveis</p>
+
+<h2>
+Jogos Disponíveis
+</h2>
+
+<p>
+Mods premium disponíveis para PS4 e PS5
+</p>
+
 </div>
+
+<!-- CATALOGO -->
 
 <section class="catalogo">
 
-<div class="card">
-<img src="img/remnant.png">
-<div class="cardBody">
-<div class="cardTop">
-<h3>Remnant</h3>
-<div class="badges">
-<div class="badge">PS4</div>
-<div class="badge">PS5</div>
-</div>
-</div>
-<ul>
-<li>✔ Recursos infinitos</li>
-<li>✔ Fragmentos 9999</li>
-<li>✔ Características modificadas</li>
-</ul>
-<div class="price">R$ 200</div>
-<a class="btn btnGreen" href="https://wa.me/5581994706810">Comprar</a>
-</div>
+<!-- ================================= -->
+<!-- SEKIRO -->
+<!-- ================================= -->
+
+<div class="gameCard">
+
+<img class="gameImg"
+src="img/sekiro.png"
+alt="Sekiro">
+
+<div class="gameBody">
+
+<h3 class="gameTitle">
+Sekiro: Shadows Die Twice
+</h3>
+
+<div class="gameMeta">
+PS4 • PS5
 </div>
 
-<div class="card">
-<img src="img/sekiro.png">
-<div class="cardBody">
-<div class="cardTop">
-<h3>Sekiro</h3>
-<div class="badges">
-<div class="badge">PS4</div>
-<div class="badge">PS5</div>
-</div>
-</div>
-<ul>
-<li>✔ Imortalidade</li>
-<li>✔ Vigor infinito</li>
-<li>✔ Ataque máximo</li>
-</ul>
-<div class="price">R$ 100</div>
-<a class="btn btnGreen" href="https://wa.me/5581994706810">Comprar</a>
-</div>
+<div class="tags">
+<span class="tag">Souls Like</span>
+<span class="tag">Offline</span>
 </div>
 
-<div class="card">
-<img src="img/nfsheat.png">
-<div class="cardBody">
-<div class="cardTop">
-<h3>NFS Heat</h3>
-<div class="badges">
-<div class="badge">PS4</div>
-<div class="badge">PS5</div>
-</div>
-</div>
-<ul>
-<li>✔ Dinheiro infinito</li>
-<li>✔ Liberar carros</li>
-<li>✔ Conta modificada</li>
-</ul>
-<div class="price">R$ 70</div>
-<a class="btn btnGreen" href="https://wa.me/5581994706810">Comprar</a>
-</div>
+<div class="modBox">
+
+<div class="modTop">
+
+<div>
+
+<div class="modTitle">
+PACOTE COMPLETO
 </div>
 
-<div class="card">
-<img src="img/re8village.png">
-<div class="cardBody">
-<div class="cardTop">
-<h3>Resident Evil Village</h3>
-<div class="badges">
-<div class="badge">PS4</div>
-<div class="badge">PS5</div>
-</div>
-</div>
-<ul>
-<li>✔ Lei máximo</li>
-<li>✔ Itens desbloqueados</li>
-<li>✔ Munição infinita</li>
-</ul>
-<div class="price">R$ 100</div>
-<a class="btn btnGreen" href="https://wa.me/5581994706810">Comprar</a>
-</div>
+<div class="modDesc">
+• Imortalidade<br>
+• Vigor infinito<br>
+• Ataque máximo<br>
+• Pontos de habilidades<br>
+• Dinheiro
 </div>
 
-<div class="card">
-<img src="img/xenoverse2.png">
-<div class="cardBody">
-<div class="cardTop">
-<h3>Xenoverse 2</h3>
-<div class="badges">
-<div class="badge">PS4</div>
-<div class="badge">PS5</div>
-</div>
-</div>
-<ul>
-<li>✔ Level 180</li>
-<li>✔ Medalhas PT</li>
-<li>✔ Técnicas desbloqueadas</li>
-</ul>
-<div class="price">R$ 100</div>
-<a class="btn btnGreen" href="https://wa.me/5581994706810">Comprar</a>
-</div>
 </div>
 
-<div class="card">
-<img src="img/gta5.jpg">
-<div class="cardBody">
-<div class="cardTop">
-<h3>GTA V</h3>
-<div class="badges">
-<div class="badge">PS4</div>
-<div class="badge">PS5</div>
+<div class="price">
+R$100
 </div>
+
 </div>
-<ul>
-<li>✔ Dinheiro ilimitado</li>
-<li>✔ Veículos desbloqueados</li>
-<li>✔ Mod menu offline</li>
-</ul>
-<div class="price">R$ 80</div>
-<a class="btn btnGreen" href="https://wa.me/5581994706810">Comprar</a>
+
+<div class="buyButtons">
+
+<a class="btn btnBlue"
+target="_blank"
+href="https://wa.me/5581994706810">
+Comprar Naildo
+</a>
+
+<a class="btn btnGreen"
+target="_blank"
+href="https://wa.me/5511966633925">
+Comprar Geovane
+</a>
+
 </div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================================= -->
+<!-- REMNANT -->
+<!-- ================================= -->
+
+<div class="gameCard">
+
+<img class="gameImg"
+src="img/remnant.png"
+alt="Remnant">
+
+<div class="gameBody">
+
+<h3 class="gameTitle">
+Remnant
+</h3>
+
+<div class="gameMeta">
+PS4 • PS5
+</div>
+
+<div class="tags">
+<span class="tag">Ação</span>
+<span class="tag">Offline</span>
+</div>
+
+<div class="modBox">
+
+<div class="modTop">
+
+<div>
+
+<div class="modTitle">
+MODIFICAÇÃO COMPLETA
+</div>
+
+<div class="modDesc">
+• Recursos infinitos<br>
+• Fragmentos 9999<br>
+• Características modificadas
+</div>
+
+</div>
+
+<div class="price">
+R$200
+</div>
+
+</div>
+
+<div class="buyButtons">
+
+<a class="btn btnBlue"
+target="_blank"
+href="https://wa.me/5581994706810">
+Comprar Naildo
+</a>
+
+<a class="btn btnGreen"
+target="_blank"
+href="https://wa.me/5511966633925">
+Comprar Geovane
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================================= -->
+<!-- NEED FOR SPEED -->
+<!-- ================================= -->
+
+<div class="gameCard">
+
+<img class="gameImg"
+src="img/nfsheat.png"
+alt="Need for Speed Heat">
+
+<div class="gameBody">
+
+<h3 class="gameTitle">
+Need for Speed Heat
+</h3>
+
+<div class="gameMeta">
+PS4 • PS5
+</div>
+
+<div class="tags">
+<span class="tag">Corrida</span>
+<span class="tag">Offline</span>
+</div>
+
+<div class="modBox">
+
+<div class="modTop">
+
+<div>
+
+<div class="modTitle">
+DINHEIRO + CARROS
+</div>
+
+<div class="modDesc">
+• Dinheiro 999999999<br>
+• Liberar qualquer carro
+</div>
+
+</div>
+
+<div class="price">
+R$70
+</div>
+
+</div>
+
+<div class="buyButtons">
+
+<a class="btn btnBlue"
+target="_blank"
+href="https://wa.me/5581994706810">
+Comprar Naildo
+</a>
+
+<a class="btn btnGreen"
+target="_blank"
+href="https://wa.me/5511966633925">
+Comprar Geovane
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================================= -->
+<!-- RE8 -->
+<!-- ================================= -->
+
+<div class="gameCard">
+
+<img class="gameImg"
+src="img/re8village.png"
+alt="Resident Evil Village">
+
+<div class="gameBody">
+
+<h3 class="gameTitle">
+Resident Evil Village
+</h3>
+
+<div class="gameMeta">
+PS4 • PS5
+</div>
+
+<div class="tags">
+<span class="tag">Ação</span>
+<span class="tag">Offline</span>
+</div>
+
+<div class="modBox">
+
+<div class="modTop">
+
+<div>
+
+<div class="modTitle">
+PACOTE COMPLETO
+</div>
+
+<div class="modDesc">
+• Lei máximo<br>
+• Itens desbloqueados<br>
+• Munição infinita<br>
+• Todas fases liberadas
+</div>
+
+</div>
+
+<div class="price">
+R$100
+</div>
+
+</div>
+
+<div class="buyButtons">
+
+<a class="btn btnBlue"
+target="_blank"
+href="https://wa.me/5581994706810">
+Comprar Naildo
+</a>
+
+<a class="btn btnGreen"
+target="_blank"
+href="https://wa.me/5511966633925">
+Comprar Geovane
+</a>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </section>
 
-<section class="contact" id="contato">
-<h2>Contato</h2>
+<!-- AREA NOVOS JOGOS -->
 
-<div class="formGrid">
-<input type="text" placeholder="Seu nome">
-<input type="email" placeholder="Seu email">
+<section class="addGames">
+
+<h3>
+ÁREA PARA ADICIONAR NOVOS JOGOS
+</h3>
+
+<p>
+
+COLE NOVOS JOGOS ABAIXO DESSA ÁREA.<br><br>
+
+Sempre copie um bloco inteiro de:
+<b>gameCard</b><br><br>
+
+Depois altere:<br><br>
+
+• Nome do jogo<br>
+• Imagem<br>
+• Mods<br>
+• Preço<br>
+• Links do WhatsApp
+
+</p>
+
+<div class="codeExample">
+
+&lt;div class="gameCard"&gt;
+
+&lt;img class="gameImg"
+src="img/novoJogo.png"&gt;
+
+&lt;h3 class="gameTitle"&gt;
+NOVO JOGO
+&lt;/h3&gt;
+
+&lt;div class="price"&gt;
+R$100
+&lt;/div&gt;
+
+&lt;/div&gt;
+
 </div>
 
-<div style="margin-top:18px;">
-<textarea placeholder="Digite sua mensagem"></textarea>
-</div>
-
-<div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
-<a class="btn btnBlue" href="https://wa.me/5581994706810">
-WhatsApp Naildo
-</a>
-
-<a class="btn btnGreen" href="https://wa.me/5511966633925">
-WhatsApp Geovane
-</a>
-</div>
 </section>
 
-<footer>
-© 2026 MODS-T-N — Todos os direitos reservados.
+<footer id="contato">
+
+© 2026 MODS-T-N — TODOS OS DIREITOS RESERVADOS
+
 </footer>
 
 </div>
 
 </body>
 </html>
-```
