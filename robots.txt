@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://naildosidronio.github.io/Mods-T-N/sitemap.xml
