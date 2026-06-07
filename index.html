@@ -120,11 +120,23 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
   "sameAs": []
 }
 </script>
+
+<style>
+/* ===== PESQUISA E ORDEM ALFABÉTICA DO CATÁLOGO ===== */
+.catalogTools{padding:0 28px 10px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.gameSearch{width:min(720px,100%);height:52px;border-radius:14px;border:1px solid rgba(168,85,247,.65);background:rgba(2,6,23,.82);color:#fff;padding:0 18px;font-family:Poppins,Arial,sans-serif;font-size:16px;font-weight:800;outline:none;box-shadow:0 0 22px rgba(168,85,247,.18)}
+.gameSearch::placeholder{color:#cbd5e1}.gameSearch:focus{border-color:#60a5fa;box-shadow:0 0 24px rgba(96,165,250,.35)}
+.gameSearchInfo{font-size:13px;font-weight:800;color:#c4b5fd;text-align:center;min-height:18px}.gameCard.is-hidden{display:none!important}
+.noGamesFound{grid-column:1/-1;text-align:center;border:1px dashed rgba(168,85,247,.6);border-radius:16px;padding:28px;background:rgba(8,3,18,.72);color:#d8b4fe;font-weight:900}
+</style>
 </head>
 <body>
 <header class="topbar"><a class="brand" href="#"><div class="brandIcon">🎮</div><div><h1>MODS-TN</h1><span>MODS PREMIUM PS4 &amp; PS5</span></div></a><nav class="menu"><a href="#">INÍCIO</a><a href="#catalogo">CATÁLOGO</a><a href="#pagamento">PAGAMENTO</a><a href="#contato">CONTATO</a></nav></header>
 <section class="hero"><div class="heroText"><div class="platforms"><span class="pill">PS4</span><span class="pill">PS5</span></div><h2>MODS PREMIUM <b>PS4 &amp; PS5</b></h2><p>Desbloqueie o máximo do seu jogo com nossos mods exclusivos. Segurança, qualidade e suporte que você pode confiar!</p><div class="actions"><a class="btn primary" href="#catalogo">🛒 VER CATÁLOGO</a><a class="btn btnGreen" href="https://wa.me/5581994706810" target="_blank">💬 CHAMAR NO WHATSAPP</a></div><div class="whatsTitle">ATENDIMENTO VIA WHATSAPP</div><div class="contacts"><a class="contact" href="https://wa.me/5581994706810" target="_blank"><i>💬</i><div><strong>Naildo</strong><br/>(81) 99470-6810</div></a><a class="contact" href="https://wa.me/5511966633925" target="_blank"><i>💬</i><div><strong>Geovane</strong><br/>(11) 96663-3925</div></a></div></div><div class="heroVisual"><img alt="PS4 e PS5" class="heroPsImg" src="img/ps4-ps5-banner.png"/></div><div class="features"><div class="feat">🛡️<div><b>100% SEGURO</b><span>Mods testados e seguros</span></div></div><div class="feat">⚡<div><b>ENTREGA RÁPIDA</b><span>Entrega no mesmo dia</span></div></div><div class="feat">🎧<div><b>SUPORTE TOTAL</b><span>Atendimento dedicado</span></div></div><div class="feat">🏆<div><b>QUALIDADE PREMIUM</b><span>Melhores mods do mercado</span></div></div></div></section>
-<section id="catalogo"><div class="sectionTitle"><h3>CATÁLOGO DE JOGOS</h3></div><div class="catalogo">
+<section id="catalogo"><div class="sectionTitle"><h3>CATÁLOGO DE JOGOS</h3></div><div class="catalogTools">
+  <input id="gameSearch" class="gameSearch" type="search" placeholder="🔎 Pesquisar jogos..." autocomplete="off" aria-label="Pesquisar jogos"/>
+  <div id="gameSearchInfo" class="gameSearchInfo">Digite para encontrar um jogo</div>
+</div><div class="catalogo">
 
 
 <!-- ===== INÍCIO DO JOGO: Sekiro: Shadows Die Twice ===== --><div class="gameCard" data-cat="souls">
@@ -4499,4 +4511,66 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
     item.appendChild(box);
   });
 })();
-</script></body></html>
+</script>
+<script>
+/* Mantém os jogos em ordem alfabética e ativa a pesquisa do catálogo */
+(function(){
+  const catalogo = document.querySelector('.catalogo');
+  const busca = document.getElementById('gameSearch');
+  const info = document.getElementById('gameSearchInfo');
+  if(!catalogo) return;
+
+  let ordenando = false;
+  function normalizar(txt){
+    return (txt || '').toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+  }
+  function titulo(card){
+    return (card.querySelector('.gameTitle')?.textContent || card.textContent || '').trim();
+  }
+  function ordenarJogos(){
+    if(ordenando) return;
+    const cards = Array.from(catalogo.querySelectorAll(':scope > .gameCard'));
+    if(cards.length < 2) return;
+    const ordenados = cards.slice().sort((a,b)=>
+      titulo(a).localeCompare(titulo(b),'pt-BR',{sensitivity:'base',numeric:true})
+    );
+    const mudou = ordenados.some((card,i)=>card !== cards[i]);
+    if(!mudou) return;
+    ordenando = true;
+    ordenados.forEach(card=>catalogo.appendChild(card));
+    ordenando = false;
+  }
+  function filtrarJogos(){
+    ordenarJogos();
+    const termo = normalizar(busca?.value || '');
+    const cards = Array.from(catalogo.querySelectorAll(':scope > .gameCard'));
+    let visiveis = 0;
+    cards.forEach(card=>{
+      const texto = normalizar(card.innerText);
+      const mostrar = !termo || texto.includes(termo);
+      card.classList.toggle('is-hidden', !mostrar);
+      if(mostrar) visiveis++;
+    });
+    let vazio = catalogo.querySelector('.noGamesFound');
+    if(!visiveis && termo){
+      if(!vazio){
+        vazio = document.createElement('div');
+        vazio.className = 'noGamesFound';
+        catalogo.appendChild(vazio);
+      }
+      vazio.textContent = 'Nenhum jogo encontrado para: ' + (busca.value || '').trim();
+    }else if(vazio){
+      vazio.remove();
+    }
+    if(info){
+      info.textContent = termo ? `${visiveis} jogo(s) encontrado(s)` : `${cards.length} jogo(s) em ordem alfabética`;
+    }
+  }
+
+  ordenarJogos();
+  filtrarJogos();
+  busca?.addEventListener('input', filtrarJogos);
+  new MutationObserver(()=>{ ordenarJogos(); filtrarJogos(); }).observe(catalogo,{childList:true});
+})();
+</script>
+</body></html>
