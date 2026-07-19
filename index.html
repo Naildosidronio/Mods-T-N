@@ -152,10 +152,429 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 @media(max-width:560px){.gameIntroBox .introText{font-size:12px}.trailerBtn,.previewBtn{font-size:11px}}
 </style>
 <!-- INTRO_TRAILER_PATCH_END -->
+<style id="cyber-interface-v2">
+:root{--cyber-blue:#087cff;--cyber-red:#ff2438;--cyber-bg:#02040a;--cyber-panel:#050913}
+body{background:radial-gradient(circle at 18% 15%,rgba(0,75,255,.12),transparent 27%),radial-gradient(circle at 84% 18%,rgba(255,0,35,.1),transparent 28%),#010206!important}
+.cyberTopbar{height:72px!important;padding:0 4.5vw!important;background:rgba(0,2,8,.97)!important;border-bottom:1px solid rgba(25,108,255,.35)!important;box-shadow:0 4px 22px rgba(0,0,0,.75);gap:24px}
+.cyberBrand{min-width:210px}.brandLogoImg{width:205px;height:58px;object-fit:contain;object-position:left center;filter:drop-shadow(0 0 9px rgba(0,107,255,.45))}
+.cyberMenu{gap:28px!important;font-size:12px!important}.cyberMenu a{position:relative;padding:27px 0;color:#d9e2f2}.cyberMenu a:after{content:"";position:absolute;left:0;right:0;bottom:18px;height:2px;transform:scaleX(0);background:linear-gradient(90deg,#087cff,#ff2438);transition:.2s}.cyberMenu a:hover:after{transform:scaleX(1)}
+.requestTop{padding:12px 20px;border:1px solid #ff3348;border-radius:6px;background:linear-gradient(90deg,#073cae,#b30818);box-shadow:-5px 0 18px rgba(0,95,255,.35),5px 0 18px rgba(255,25,45,.35);font-size:11px;font-weight:900;white-space:nowrap}
+.cyberHero{min-height:420px!important;padding:0!important;display:grid!important;place-items:center!important;background-image:url('img/banner-interface.jpg')!important;background-size:cover!important;background-position:center!important;border-bottom:1px solid rgba(255,37,55,.38)!important;position:relative!important}
+.cyberHero:after{display:none!important}.cyberHeroOverlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,2,10,.54),rgba(0,0,0,.14) 48%,rgba(9,0,3,.52)),linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.62))}.cyberHeroContent{position:relative;z-index:2;text-align:center;padding:70px 20px 38px}.heroEyebrow{font-size:13px;font-weight:800;letter-spacing:6px;color:#d7e6ff;text-shadow:0 0 12px #000}.cyberHero h2{font-family:Orbitron,sans-serif!important;font-size:82px!important;line-height:.95!important;margin:12px 0 4px!important;letter-spacing:-6px;text-transform:uppercase}.cyberHero h2 span{color:#f7f9ff;text-shadow:0 0 8px #fff,0 5px 0 rgba(0,0,0,.45)}.cyberHero h2 b{display:inline!important;font-size:inherit!important;background:linear-gradient(90deg,#0aa4ff 15%,#fff 48%,#ff1e31 72%)!important;-webkit-background-clip:text!important;color:transparent!important}.cyberHero p{font-size:22px!important;letter-spacing:9px!important;margin:12px auto 3px!important;color:#fff!important}.heroPlatforms{font-family:Orbitron,sans-serif;font-size:25px;letter-spacing:5px}.heroPlatforms strong:first-child{color:#0d8cff}.heroPlatforms strong:last-child{color:#ff3346}.heroPlatforms i{font-style:normal;color:#fff;margin:0 9px}.cyberActions{justify-content:center;margin-top:22px}.cyberActions .btn{min-width:210px}
+.cyberServices{margin:0 auto;padding:18px max(28px,6vw);display:grid;grid-template-columns:repeat(6,1fr);gap:0;background:#02040a;border-top:1px solid rgba(0,94,255,.25);border-bottom:1px solid rgba(255,27,43,.25)}.cyberServices article{min-height:88px;padding:13px;display:flex;align-items:center;gap:10px;border-right:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(5,11,24,.9),rgba(2,4,10,.9))}.cyberServices article:first-child{border-left:1px solid rgba(0,111,255,.28);border-radius:9px 0 0 9px}.cyberServices article:last-child{border-right:1px solid rgba(255,31,51,.28);border-radius:0 9px 9px 0}.cyberServices span{font-size:31px;filter:drop-shadow(0 0 8px #086cff)}.cyberServices b{display:block;font-size:12px}.cyberServices small{display:block;margin-top:5px;color:#9eabc0;font-size:10px;line-height:1.3}
+.featuredStrip{padding:24px max(28px,6vw) 30px;background:linear-gradient(90deg,rgba(0,27,79,.18),transparent 48%,rgba(88,0,13,.16)),#010207;border-bottom:1px solid rgba(91,102,144,.2)}.featuredTitle{display:flex;align-items:center;gap:20px;max-width:1000px;margin:0 auto 18px}.featuredTitle span{height:2px;flex:1;background:linear-gradient(90deg,transparent,#087cff)}.featuredTitle span:last-child{background:linear-gradient(90deg,#ff2438,transparent)}.featuredTitle h3{font-family:Orbitron,sans-serif;font-size:20px;background:linear-gradient(90deg,#0c8cff,#ff3145);-webkit-background-clip:text;color:transparent;white-space:nowrap}.featuredGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.featuredGrid a{position:relative;min-height:200px;border:1px solid rgba(26,119,255,.5);border-radius:8px;overflow:hidden;background:#07101d;box-shadow:0 0 14px rgba(0,70,255,.12)}.featuredGrid a:nth-child(n+4){border-color:rgba(255,40,58,.45)}.featuredGrid img{width:100%;height:155px;object-fit:cover;display:block}.featuredGrid b,.featuredGrid small{display:block;padding:0 12px}.featuredGrid b{margin-top:8px;font-size:13px}.featuredGrid small{font-size:11px;color:#9fc6ff;margin-top:4px}.allGamesBtn{display:block;width:max-content;margin:18px auto 0;padding:10px 45px;border:1px solid #ff2438;border-radius:5px;background:linear-gradient(90deg,#0539a0,#9b0714);box-shadow:0 0 18px rgba(16,104,255,.35),0 0 18px rgba(255,29,45,.25);font-weight:900;font-size:12px}
+.sectionTitle h3{background:linear-gradient(90deg,#0b8dff,#fff,#ff263c);-webkit-background-clip:text;color:transparent}.catalogo{background:transparent}.gameCard{border-color:rgba(20,106,255,.42)!important}.gameCard:nth-child(even){border-color:rgba(255,36,56,.36)!important}.gameCard:hover{box-shadow:0 0 25px rgba(0,105,255,.38),0 0 20px rgba(255,24,45,.18)!important}
+@media(max-width:1100px){.requestTop{display:none}.cyberServices{grid-template-columns:repeat(3,1fr)}.featuredGrid{grid-template-columns:repeat(3,1fr)}.featuredGrid a:nth-child(n+4){display:none}.cyberHero h2{font-size:64px!important}}
+@media(max-width:760px){.cyberTopbar{height:64px!important}.cyberBrand{min-width:160px}.brandLogoImg{width:160px}.cyberHero{min-height:350px!important;background-position:center!important}.cyberHero h2{font-size:48px!important;letter-spacing:-3px}.cyberHero p{font-size:14px!important;letter-spacing:5px!important}.heroPlatforms{font-size:19px}.cyberServices{grid-template-columns:repeat(2,1fr);padding:12px}.featuredGrid{grid-template-columns:1fr 1fr}.featuredGrid a:nth-child(3){display:none}.featuredTitle h3{font-size:16px}.featuredStrip{padding-left:14px;padding-right:14px}}
+@media(max-width:480px){.cyberHero h2{font-size:39px!important}.cyberHeroContent{padding-top:55px}.cyberActions .btn{min-width:100%}.cyberServices{grid-template-columns:1fr 1fr}.cyberServices article{min-height:105px;flex-direction:column;text-align:center}.featuredGrid{grid-template-columns:1fr}.featuredGrid a:nth-child(2){display:none}}
+</style>
+<style id="clean-layout-patch">
+/* ===== ORGANIZAÇÃO FINAL DA INTERFACE ===== */
+.cyberHero{min-height:460px!important}
+.cyberHeroContent{padding:92px 20px 56px!important}
+.cyberHeroOverlay{background:linear-gradient(90deg,rgba(0,3,13,.38),rgba(0,0,0,.1) 50%,rgba(12,0,4,.38)),linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.52))!important}
+.cleanTrust{max-width:1180px;margin:-28px auto 34px;position:relative;z-index:8;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 18px}
+.cleanTrust article{display:flex;align-items:center;gap:14px;min-height:88px;padding:16px 20px;border:1px solid rgba(55,128,255,.35);border-radius:12px;background:linear-gradient(145deg,rgba(8,17,35,.96),rgba(3,6,14,.97));box-shadow:0 14px 35px rgba(0,0,0,.42),inset 0 0 24px rgba(0,112,255,.05)}
+.cleanTrust article:nth-child(2){border-color:rgba(153,83,255,.38)}
+.cleanTrust article:nth-child(3){border-color:rgba(255,49,70,.34)}
+.cleanTrust span{font-size:30px;filter:drop-shadow(0 0 10px rgba(35,130,255,.7))}
+.cleanTrust b{display:block;font-size:12px;letter-spacing:.4px}.cleanTrust small{display:block;margin-top:4px;color:#9eabc0;font-size:10px;line-height:1.35}
+#catalogo{padding-top:8px}.sectionTitle{margin:20px auto 14px!important}.sectionTitle h3{font-size:31px!important;letter-spacing:1px}
+.catalogTools{padding:0 28px 24px!important}.gameSearch{max-width:650px!important;background:rgba(4,10,23,.95)!important;border-color:rgba(41,117,255,.45)!important}
+.catalogo{max-width:1500px;margin:0 auto;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:22px!important;padding:0 28px 65px!important}
+.gameCard{border-radius:14px!important;background:linear-gradient(180deg,rgba(8,15,31,.98),rgba(3,6,14,.99))!important;box-shadow:0 10px 30px rgba(0,0,0,.38)!important}
+.gameImgWrap{height:215px!important}.gameBody{padding:16px!important}.gameTitle{font-size:16px!important;min-height:auto!important;margin-bottom:6px}.gameMeta{margin:5px 0 10px!important}.gameIntroBox{margin:8px 0 12px!important}.gameScroll{max-height:320px!important}
+.paymentSection{max-width:1440px;margin:26px auto 34px!important}
+.contactsFooter{margin-top:12px}
+@media(max-width:1200px){.catalogo{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:900px){.catalogo{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cleanTrust{grid-template-columns:1fr;margin-top:18px}.cyberHero{min-height:390px!important}.cyberHeroContent{padding-top:70px!important}}
+@media(max-width:560px){.catalogo{grid-template-columns:1fr!important;padding-left:14px!important;padding-right:14px!important}.cleanTrust{padding:0 14px}.cyberHero{min-height:350px!important}.cyberHeroContent{padding:58px 14px 35px!important}.sectionTitle h3{font-size:24px!important}}
+</style>
+<style id="mods-tn-card-branding">
+/* ===== CARDS PERSONALIZADOS COM AS CORES DA LOGO MODS-TN ===== */
+.catalogo{align-items:start!important;}
+.gameCard{
+  --card-accent:#147cff;
+  --card-accent-2:#00c8ff;
+  position:relative!important;
+  border:1px solid color-mix(in srgb,var(--card-accent) 75%,transparent)!important;
+  border-radius:16px!important;
+  background:
+    linear-gradient(180deg,rgba(6,13,29,.98),rgba(2,5,13,.99))!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 18px color-mix(in srgb,var(--card-accent) 22%,transparent)!important;
+  isolation:isolate;
+}
+.gameCard:nth-child(3n+2){--card-accent:#8b5cf6;--card-accent-2:#e879f9;}
+.gameCard:nth-child(3n){--card-accent:#ef174d;--card-accent-2:#ff5a36;}
+.gameCard::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(135deg,color-mix(in srgb,var(--card-accent) 18%,transparent),transparent 30%),
+    radial-gradient(circle at 100% 100%,color-mix(in srgb,var(--card-accent-2) 14%,transparent),transparent 42%)!important;
+  border-radius:inherit!important;
+}
+.gameCard::after{
+  content:"";
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:56px;
+  height:56px;
+  background:url('img/logo-mods-tn.png') center/contain no-repeat;
+  opacity:.12;
+  filter:drop-shadow(0 0 10px var(--card-accent));
+  pointer-events:none;
+  z-index:1;
+}
+.gameCard:hover{
+  transform:translateY(-8px) scale(1.012)!important;
+  border-color:var(--card-accent)!important;
+  box-shadow:0 16px 36px rgba(0,0,0,.52),0 0 28px color-mix(in srgb,var(--card-accent) 45%,transparent)!important;
+}
+.gameImgWrap{
+  border-bottom:1px solid color-mix(in srgb,var(--card-accent) 60%,transparent)!important;
+  background:#020713!important;
+}
+.gameImgWrap::before{
+  content:"MODS-TN";
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:3;
+  padding:5px 9px 5px 30px;
+  border:1px solid color-mix(in srgb,var(--card-accent) 65%,transparent);
+  border-radius:999px;
+  background:rgba(1,5,14,.82) url('img/logo-mods-tn.png') 6px center/20px 20px no-repeat;
+  color:#fff;
+  font-family:Orbitron,Poppins,sans-serif;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.8px;
+  box-shadow:0 0 14px color-mix(in srgb,var(--card-accent) 30%,transparent);
+}
+.gameImg{transition:transform .45s ease,filter .45s ease!important;}
+.gameCard:hover .gameImg{transform:scale(1.055);filter:saturate(1.08) contrast(1.04);}
+.gameBody{position:relative;z-index:2!important;}
+.gameTitle{
+  color:#fff!important;
+  text-shadow:0 0 12px color-mix(in srgb,var(--card-accent) 55%,transparent)!important;
+}
+.gameMeta{color:var(--card-accent-2)!important;}
+.tag{
+  background:linear-gradient(135deg,var(--card-accent),var(--card-accent-2))!important;
+  color:#fff!important;
+  box-shadow:0 0 10px color-mix(in srgb,var(--card-accent) 28%,transparent)!important;
+}
+.gameIntroBox{
+  border-color:color-mix(in srgb,var(--card-accent) 36%,transparent)!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--card-accent) 8%,#07101f),rgba(3,7,16,.9))!important;
+}
+.gameIntroBox .introLabel{color:var(--card-accent-2)!important;}
+.gameScroll>div,.modItem{border-top-color:color-mix(in srgb,var(--card-accent) 26%,transparent)!important;}
+.newPrice,.js-newPrice{color:var(--card-accent-2)!important;text-shadow:0 0 14px color-mix(in srgb,var(--card-accent) 70%,transparent)!important;}
+.gameCard .btn.primary{background:linear-gradient(135deg,var(--card-accent),#1242a8)!important;box-shadow:0 0 16px color-mix(in srgb,var(--card-accent) 35%,transparent)!important;}
+.gameCard .btn:not(.primary):not(.trailerBtn){background:linear-gradient(135deg,#08d65e,#02a848)!important;}
+.sectionTitle h3{background:linear-gradient(90deg,#1597ff,#9c5cff,#ff174f);-webkit-background-clip:text;background-clip:text;color:transparent!important;}
+@media(max-width:560px){.gameCard::after{width:44px;height:44px;opacity:.1}.gameImgWrap::before{font-size:8px;}}
+</style>
+
+<style id="mods-tn-4k-layout-v2">
+/* ===== ORGANIZAÇÃO PREMIUM / VISUAL 4K ===== */
+:root{
+  --site-max:1760px;
+  --surface:#050914;
+  --surface-2:#090d1b;
+  --line-blue:rgba(24,124,255,.48);
+  --line-red:rgba(255,35,66,.42);
+}
+html{background:#02040a}
+body{
+  background:
+    radial-gradient(circle at 15% 14%,rgba(0,92,255,.13),transparent 28%),
+    radial-gradient(circle at 88% 20%,rgba(255,20,52,.10),transparent 30%),
+    linear-gradient(180deg,#02040a 0%,#070311 54%,#02040a 100%)!important;
+  background-attachment:fixed!important;
+}
+.cyberTopbar{
+  height:78px!important;
+  padding:0 clamp(18px,4vw,72px)!important;
+  background:rgba(1,4,11,.91)!important;
+  border-bottom:1px solid rgba(60,135,255,.28)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.45)!important;
+}
+.cyberTopbar>*{position:relative;z-index:2}
+.cyberBrand{min-width:190px!important}.brandLogoImg{width:190px!important;max-height:62px!important;object-fit:contain!important}
+.cyberMenu{gap:34px!important}.cyberMenu a{font-size:11px!important;letter-spacing:.5px!important}
+.cyberHero{
+  min-height:520px!important;
+  max-width:1920px!important;
+  margin:0 auto!important;
+  background-size:cover!important;
+  background-position:center!important;
+  box-shadow:inset 0 -80px 90px rgba(0,0,0,.58)!important;
+}
+.cyberHeroContent{width:min(1760px,100%);padding:105px clamp(22px,7vw,130px) 70px!important;text-align:left!important}
+.cyberHeroContent>*{max-width:650px}
+.cyberActions{justify-content:flex-start!important}
+.cyberHeroOverlay{background:linear-gradient(90deg,rgba(0,3,13,.78) 0%,rgba(0,3,13,.48) 35%,rgba(0,0,0,.08) 64%,rgba(12,0,4,.20) 100%),linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.48))!important}
+.cleanTrust{max-width:1280px!important;margin:-38px auto 44px!important;gap:16px!important}
+.cleanTrust article{min-height:94px!important;backdrop-filter:blur(16px);background:linear-gradient(145deg,rgba(8,17,35,.96),rgba(3,6,14,.93))!important}
+#catalogo{max-width:var(--site-max);margin:0 auto;padding-top:8px!important}
+.sectionTitle{margin:30px auto 18px!important}.sectionTitle h3{font-size:34px!important;letter-spacing:1.4px!important}
+.catalogTools{padding-bottom:30px!important}.gameSearch{height:56px!important;max-width:720px!important;border-radius:14px!important}
+.catalogo{
+  max-width:var(--site-max)!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:26px!important;
+  padding:0 clamp(18px,2.2vw,38px) 80px!important;
+  align-items:stretch!important;
+}
+.gameCard{
+  height:760px!important;
+  min-height:760px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  backdrop-filter:blur(10px);
+  transform:translateZ(0);
+}
+.gameCard:hover{transform:translateY(-8px) scale(1.008)!important}
+.gameImgWrap{
+  height:245px!important;
+  min-height:245px!important;
+  border-bottom:1px solid color-mix(in srgb,var(--card-accent) 65%,transparent)!important;
+  background:linear-gradient(135deg,#06142d,#13061c)!important;
+}
+.gameImg{object-fit:cover!important;object-position:center!important;filter:saturate(1.08) contrast(1.05)!important;transition:transform .45s ease,filter .45s ease!important}
+.gameCard:hover .gameImg{transform:scale(1.045)!important;filter:saturate(1.16) contrast(1.08)!important}
+.gameBody{padding:18px!important;display:flex!important;flex:1!important;min-height:0!important;flex-direction:column!important}
+.gameTitle{font-size:17px!important;line-height:1.25!important;min-height:43px!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 0 3px!important}
+.gameMeta{margin:2px 0 8px!important}
+.gameIntroBox{padding:10px 11px!important;margin:7px 0 9px!important;flex:0 0 auto!important}
+.gameIntroBox .introText{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:7px!important}
+.trailerButtons{grid-template-columns:1fr!important}.trailerBtn,.previewBtn{min-height:36px!important;padding:8px!important}
+.tags{margin:7px 0 8px!important;flex:0 0 auto!important}
+.gameScroll{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  padding-right:8px!important;
+  margin-top:4px!important;
+  scrollbar-gutter:stable;
+}
+.gameScroll:not(.needsScroll),.gameScroll.needsScroll{max-height:none!important}
+.gameScroll>div,.modItem{border-radius:12px!important;padding:12px!important;margin:0 0 10px!important;background:linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.008))!important;border:1px solid color-mix(in srgb,var(--card-accent) 22%,rgba(255,255,255,.05))!important}
+.buyButtons{gap:8px!important}.buyButtons .btn,.gameCard .buyButtons .btn{min-height:44px!important;border-radius:9px!important;font-size:10.5px!important}
+.paymentSection,.contactsFooter{max-width:calc(var(--site-max) - 50px)!important;margin-left:auto!important;margin-right:auto!important}
+@media(min-width:1900px){
+  .cyberHero{min-height:610px!important}
+  .cyberHeroContent{padding-top:135px!important}
+  .catalogo{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  .gameCard{height:780px!important;min-height:780px!important}
+  .gameImgWrap{height:255px!important;min-height:255px!important}
+}
+@media(max-width:1350px){.catalogo{grid-template-columns:repeat(3,minmax(0,1fr))!important}.gameCard{height:750px!important;min-height:750px!important}}
+@media(max-width:980px){
+  .cyberHeroContent{text-align:center!important;padding-left:24px!important;padding-right:24px!important}.cyberHeroContent>*{margin-left:auto;margin-right:auto}.cyberActions{justify-content:center!important}
+  .catalogo{grid-template-columns:repeat(2,minmax(0,1fr))!important}.gameCard{height:740px!important;min-height:740px!important}
+}
+@media(max-width:620px){
+  .cyberTopbar{height:66px!important}.cyberBrand{min-width:145px!important}.brandLogoImg{width:145px!important}
+  .cyberHero{min-height:390px!important}.cyberHeroContent{padding-top:65px!important}
+  .cleanTrust{margin-top:20px!important;margin-bottom:28px!important}
+  .catalogo{grid-template-columns:1fr!important;gap:20px!important}.gameCard{height:720px!important;min-height:720px!important}.gameImgWrap{height:230px!important;min-height:230px!important}
+}
+</style>
+
+
+<style id="mods-tn-vibrant-premium-v3">
+/* ===== VISUAL MAIS VIVO, REALISTA E ORGANIZADO ===== */
+:root{--neon-blue:#0b8cff;--neon-cyan:#19d7ff;--neon-red:#ff2348;--neon-purple:#9a56ff;--neon-green:#10ed70}
+body{
+  background:
+    radial-gradient(circle at 8% 8%,rgba(0,120,255,.24),transparent 30%),
+    radial-gradient(circle at 92% 12%,rgba(255,20,62,.20),transparent 32%),
+    radial-gradient(circle at 52% 56%,rgba(128,42,255,.13),transparent 42%),
+    linear-gradient(180deg,#020713 0%,#09031a 52%,#030711 100%)!important;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.25;background-image:linear-gradient(rgba(40,115,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,30,72,.06) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent)}
+.cyberTopbar{background:linear-gradient(90deg,rgba(2,10,25,.96),rgba(8,4,20,.95),rgba(24,2,10,.94))!important;border-bottom:1px solid rgba(42,159,255,.60)!important;box-shadow:0 8px 30px rgba(0,0,0,.52),0 0 24px rgba(0,119,255,.17),inset 0 -1px 0 rgba(255,39,72,.25)!important}
+.brandLogoImg{filter:brightness(1.22) saturate(1.38) drop-shadow(0 0 12px rgba(0,142,255,.55)) drop-shadow(0 0 10px rgba(255,32,66,.32))!important}
+.cyberMenu a{color:#f4f8ff!important;text-shadow:0 0 12px rgba(62,141,255,.22);transition:.25s!important}.cyberMenu a:hover{color:#fff!important;text-shadow:0 0 9px #1aa4ff,0 0 20px rgba(255,35,72,.55)!important}
+.requestTop{background:linear-gradient(110deg,#1068ff,#7a36ff 52%,#ff174a)!important;border:1px solid rgba(255,255,255,.46)!important;box-shadow:0 0 18px rgba(0,126,255,.55),0 0 24px rgba(255,23,74,.42),inset 0 1px 0 rgba(255,255,255,.34)!important}
+.cyberHero{min-height:570px!important;background-image:url('img/banner-premium-4k.jpg')!important;background-size:cover!important;background-position:center center!important;border-bottom:1px solid rgba(255,39,72,.55)!important;box-shadow:inset 0 -80px 110px rgba(0,0,0,.42),0 20px 45px rgba(0,0,0,.35)!important}
+.cyberHeroOverlay{background:linear-gradient(90deg,rgba(0,4,18,.66) 0%,rgba(0,4,18,.34) 35%,rgba(0,0,0,.02) 64%,rgba(18,0,5,.20) 100%),linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.28))!important}
+.cyberHeroContent{padding-top:112px!important}
+.heroEyebrow{color:#fff!important;text-shadow:0 0 7px #0a8cff,0 0 18px rgba(0,155,255,.8)!important}
+.cyberHero h2 span{text-shadow:0 0 8px #fff,0 0 24px rgba(18,135,255,.72),0 5px 0 rgba(0,0,0,.4)!important}
+.cyberHero h2 b{filter:drop-shadow(0 0 12px rgba(0,145,255,.75)) drop-shadow(0 0 12px rgba(255,25,67,.65))}
+.cyberHero p,.heroPlatforms{text-shadow:0 2px 5px #000,0 0 16px rgba(255,255,255,.38)!important}
+.cyberActions .btn{border:1px solid rgba(255,255,255,.34)!important;box-shadow:0 0 23px rgba(20,130,255,.48),inset 0 1px 0 rgba(255,255,255,.28)!important}.cyberActions .btnGreen{box-shadow:0 0 26px rgba(12,239,111,.43),inset 0 1px 0 rgba(255,255,255,.35)!important}
+.cleanTrust{margin-top:-42px!important;position:relative;z-index:5!important}
+.cleanTrust article{background:linear-gradient(145deg,rgba(7,20,43,.94),rgba(10,5,24,.95))!important;border:1px solid rgba(68,149,255,.55)!important;box-shadow:0 14px 30px rgba(0,0,0,.38),0 0 24px rgba(0,121,255,.18),inset 0 1px 0 rgba(255,255,255,.10)!important}
+.cleanTrust article:nth-child(2){border-color:rgba(147,79,255,.62)!important;box-shadow:0 14px 30px rgba(0,0,0,.38),0 0 25px rgba(147,79,255,.18)!important}.cleanTrust article:nth-child(3){border-color:rgba(255,43,75,.55)!important;box-shadow:0 14px 30px rgba(0,0,0,.38),0 0 24px rgba(255,43,75,.16)!important}
+.cleanTrust article>span{font-size:29px!important;filter:drop-shadow(0 0 10px rgba(46,153,255,.7))}
+.sectionTitle h3{font-size:39px!important;filter:drop-shadow(0 0 12px rgba(130,68,255,.52));text-shadow:0 0 24px rgba(151,80,255,.30)!important}
+.gameSearch{background:linear-gradient(135deg,rgba(4,16,37,.95),rgba(13,6,30,.95))!important;border:1px solid rgba(41,139,255,.70)!important;box-shadow:0 0 26px rgba(0,122,255,.20),inset 0 0 24px rgba(105,63,255,.08)!important}.gameSearch:focus{border-color:#31c9ff!important;box-shadow:0 0 30px rgba(30,180,255,.38),0 0 18px rgba(255,29,75,.14)!important}
+.catalogo{gap:24px!important;align-items:start!important}
+.gameCard{height:740px!important;min-height:740px!important;background:linear-gradient(160deg,rgba(8,22,47,.98),rgba(12,6,29,.97) 52%,rgba(26,4,15,.96))!important;border:1px solid color-mix(in srgb,var(--card-accent) 82%,#fff 8%)!important;box-shadow:0 14px 32px rgba(0,0,0,.44),0 0 24px color-mix(in srgb,var(--card-accent) 28%,transparent),inset 0 1px 0 rgba(255,255,255,.11)!important}
+.gameCard:before{opacity:.85!important;background:linear-gradient(135deg,color-mix(in srgb,var(--card-accent) 25%,transparent),transparent 34%,rgba(255,255,255,.025) 58%,color-mix(in srgb,var(--card-accent-2) 18%,transparent))!important}
+.gameCard:hover{transform:translateY(-10px) scale(1.012)!important;box-shadow:0 22px 45px rgba(0,0,0,.50),0 0 36px color-mix(in srgb,var(--card-accent) 48%,transparent),0 0 20px color-mix(in srgb,var(--card-accent-2) 25%,transparent)!important}
+.gameImgWrap{height:255px!important;min-height:255px!important;background:#071224!important;box-shadow:inset 0 -25px 40px rgba(0,0,0,.20),0 8px 24px rgba(0,0,0,.28)!important}
+.gameImg{filter:brightness(1.08) saturate(1.22) contrast(1.08)!important}.gameCard:hover .gameImg{filter:brightness(1.15) saturate(1.34) contrast(1.10)!important;transform:scale(1.055)!important}
+.gameImgWrap:after{opacity:.72!important;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.72))!important}
+.gameTitle{font-size:18px!important;color:#fff!important;text-shadow:0 0 10px color-mix(in srgb,var(--card-accent) 45%,transparent)!important}
+.gameMeta{color:#5bd2ff!important;text-shadow:0 0 9px rgba(23,169,255,.45)!important}.tag{background:linear-gradient(135deg,var(--card-accent),var(--card-accent-2))!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 0 12px color-mix(in srgb,var(--card-accent) 35%,transparent)!important}
+.gameIntroBox{background:linear-gradient(145deg,rgba(9,25,52,.92),rgba(18,8,35,.90))!important;border:1px solid color-mix(in srgb,var(--card-accent) 48%,transparent)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 15px color-mix(in srgb,var(--card-accent) 15%,transparent)!important}
+.gameScroll>div,.modItem{background:linear-gradient(145deg,rgba(14,28,55,.72),rgba(17,7,31,.72))!important;border:1px solid color-mix(in srgb,var(--card-accent) 35%,rgba(255,255,255,.08))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.045)!important}
+.newPrice,.js-newPrice{font-size:22px!important;color:var(--card-accent-2)!important;text-shadow:0 0 10px color-mix(in srgb,var(--card-accent) 90%,transparent),0 0 22px color-mix(in srgb,var(--card-accent-2) 55%,transparent)!important}
+.buyButtons .btn{font-weight:900!important;border:1px solid rgba(255,255,255,.24)!important;box-shadow:0 8px 18px rgba(0,0,0,.30),0 0 15px color-mix(in srgb,var(--card-accent) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.25)!important}.buyButtons .btn:hover{filter:brightness(1.18) saturate(1.1)!important;transform:translateY(-2px)!important}
+.gameScroll::-webkit-scrollbar-thumb{background:linear-gradient(#1fb6ff,#8a4dff,#ff2e52)!important;box-shadow:0 0 8px rgba(74,153,255,.5)}
+@media(min-width:1900px){.cyberHero{min-height:650px!important}.catalogo{gap:28px!important}.gameCard{height:780px!important;min-height:780px!important}.gameImgWrap{height:275px!important;min-height:275px!important}}
+@media(max-width:1050px){.cyberHero{min-height:500px!important}.cyberHeroOverlay{background:linear-gradient(90deg,rgba(0,3,14,.72),rgba(0,0,0,.12),rgba(12,0,4,.25))!important}.gameCard{height:730px!important;min-height:730px!important}}
+@media(max-width:560px){.cyberHero{min-height:460px!important;background-position:58% center!important}.cyberHeroContent{padding-top:82px!important}.cleanTrust{margin-top:-22px!important}.gameCard{height:700px!important;min-height:700px!important}.gameImgWrap{height:230px!important;min-height:230px!important}}
+</style>
+
+
+<style id="estilo-final-escolhido">
+:root{--azul:#0589ff;--azul2:#1648ff;--roxo:#8f42ff;--rosa:#ff2b92;--vermelho:#ff2948;--verde:#19e864;--fundo:#020611;--painel:#07111f}
+html{background:#020611}body{background:
+radial-gradient(circle at 12% 16%,rgba(0,116,255,.17),transparent 26%),
+radial-gradient(circle at 88% 18%,rgba(255,21,66,.15),transparent 28%),
+radial-gradient(circle at 50% 72%,rgba(132,40,255,.12),transparent 32%),#020611!important;color:#fff}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(rgba(36,110,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,37,103,.03) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(to bottom,transparent 4%,#000 35%,#000 90%,transparent)}
+.cyberTopbar{height:78px!important;padding:0 max(28px,calc((100vw - 1500px)/2))!important;background:rgba(1,5,14,.9)!important;border:1px solid rgba(53,142,255,.3)!important;border-left:0!important;border-right:0!important;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 24px rgba(0,112,255,.1)!important;backdrop-filter:blur(20px)!important}
+.cyberBrand{height:64px!important;display:flex!important;align-items:center!important}.brandLogoImg{width:190px!important;height:60px!important;object-fit:contain!important;filter:drop-shadow(0 0 9px rgba(18,151,255,.75)) drop-shadow(0 0 12px rgba(255,27,78,.42))}
+.cyberMenu{gap:35px!important}.cyberMenu a{font-size:12px!important;letter-spacing:.3px!important;position:relative!important}.cyberMenu a:after{content:"";position:absolute;left:50%;right:50%;bottom:-13px;height:2px;background:linear-gradient(90deg,var(--azul),var(--rosa));transition:.25s;box-shadow:0 0 12px var(--azul)}.cyberMenu a:hover:after{left:0;right:0}
+.requestTop{padding:13px 22px!important;border-radius:7px!important;border:1px solid #ff315d!important;background:linear-gradient(100deg,#214eff,#c60045)!important;box-shadow:0 0 18px rgba(29,110,255,.65),0 0 22px rgba(255,25,74,.42),inset 0 1px rgba(255,255,255,.25)!important;font-size:11px!important}
+.cyberHero{min-height:560px!important;height:min(63vw,650px)!important;padding:0!important;background-image:url('img/banner-premium-4k.jpg')!important;background-size:cover!important;background-position:center!important;border-bottom:1px solid rgba(255,37,85,.45)!important;box-shadow:inset 0 -70px 70px rgba(2,6,17,.78),0 18px 60px rgba(0,0,0,.45)!important}
+.cyberHeroOverlay{background:linear-gradient(90deg,rgba(0,5,18,.18),rgba(0,0,0,.05) 48%,rgba(15,0,6,.18)),linear-gradient(180deg,rgba(0,0,0,.03),rgba(1,5,15,.3))!important}
+.cyberHeroContent{padding:0!important;position:absolute!important;left:50%!important;bottom:52px!important;transform:translateX(-50%)!important;width:min(720px,90%)!important}.heroEyebrow,.cyberHero h2,.cyberHero p,.heroPlatforms{display:none!important}
+.cyberActions{margin:0!important;gap:22px!important}.cyberActions .btn{min-width:250px!important;min-height:58px!important;border-radius:7px!important;font-size:14px!important;border:1px solid rgba(255,255,255,.4)!important;box-shadow:0 0 25px rgba(0,115,255,.55),inset 0 1px rgba(255,255,255,.27)!important}.cyberActions .btn.primary{background:linear-gradient(180deg,#177dff,#0345d3)!important}.cyberActions .btnGreen{background:linear-gradient(180deg,#25e75f,#079d31)!important;color:#fff!important;box-shadow:0 0 25px rgba(21,225,91,.48),inset 0 1px rgba(255,255,255,.28)!important}
+.cleanTrust{max-width:1450px!important;margin:-23px auto 48px!important;padding:0 24px!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:18px!important;position:relative!important;z-index:5!important}.cleanTrust article{min-height:105px!important;padding:20px 24px!important;border-radius:9px!important;background:linear-gradient(145deg,rgba(5,17,35,.96),rgba(7,6,24,.96))!important;border:1px solid rgba(28,132,255,.7)!important;box-shadow:0 14px 35px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.06),0 0 20px rgba(0,96,255,.12)!important}.cleanTrust article:nth-child(2){border-color:rgba(137,68,255,.75)!important}.cleanTrust article:nth-child(3){border-color:rgba(255,39,134,.7)!important}.cleanTrust article:nth-child(4){border-color:rgba(255,41,72,.75)!important}.cleanTrust article>span{font-size:35px!important;filter:drop-shadow(0 0 12px #168aff)}.cleanTrust article:nth-child(2)>span{filter:drop-shadow(0 0 12px #8c4dff)}.cleanTrust article:nth-child(3)>span{filter:drop-shadow(0 0 12px #25e868)}.cleanTrust article:nth-child(4)>span{filter:drop-shadow(0 0 12px #ff3158)}.cleanTrust b{font-size:13px!important}.cleanTrust small{font-size:11px!important;color:#c7d5eb!important;margin-top:4px!important}
+#catalogo{max-width:1540px;margin:auto;padding:0 25px 60px}.sectionTitle{margin:0 auto 20px!important}.sectionTitle h3{font-size:31px!important;letter-spacing:3px!important;background:linear-gradient(90deg,#24a0ff,#9b54ff,#ff438c)!important;-webkit-background-clip:text!important;color:transparent!important;text-shadow:0 0 22px rgba(124,66,255,.35)!important}.sectionTitle h3:before,.sectionTitle h3:after{content:""!important;display:inline-block!important;width:120px!important;height:2px!important;vertical-align:middle!important;margin:0 18px!important;background:linear-gradient(90deg,transparent,#178cff,#a047ff)!important;box-shadow:0 0 10px #2b84ff!important}.sectionTitle h3:after{background:linear-gradient(90deg,#a047ff,#ff376e,transparent)!important}
+.catalogTools{padding:0 0 28px!important}.gameSearch{width:min(760px,100%)!important;height:50px!important;border-radius:7px!important;background:rgba(4,13,30,.92)!important;border:1px solid rgba(85,69,255,.75)!important;box-shadow:0 0 20px rgba(78,45,255,.15),inset 0 1px rgba(255,255,255,.04)!important}.gameSearchInfo{color:#b8c9ee!important}
+.catalogo{padding:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:start!important;gap:25px!important}.gameCard{--card-accent:#087cff;--card-accent-2:#2c49ff;height:680px!important;min-height:680px!important;border-radius:10px!important;background:linear-gradient(180deg,rgba(7,20,40,.98),rgba(5,7,22,.99))!important;border:1px solid var(--card-accent)!important;box-shadow:0 15px 35px rgba(0,0,0,.5),0 0 18px color-mix(in srgb,var(--card-accent) 30%,transparent),inset 0 1px rgba(255,255,255,.06)!important;overflow:hidden!important;transition:transform .25s ease,box-shadow .25s ease!important}.gameCard:nth-child(4n+2){--card-accent:#744bff;--card-accent-2:#a53fff}.gameCard:nth-child(4n+3){--card-accent:#f02675;--card-accent-2:#ff3c90}.gameCard:nth-child(4n+4){--card-accent:#ff284b;--card-accent-2:#ff6635}.gameCard:hover{transform:translateY(-8px) scale(1.012)!important;box-shadow:0 22px 50px rgba(0,0,0,.56),0 0 28px color-mix(in srgb,var(--card-accent) 48%,transparent)!important}.gameCard:before{background:linear-gradient(135deg,color-mix(in srgb,var(--card-accent) 24%,transparent),transparent 28%,transparent 70%,color-mix(in srgb,var(--card-accent-2) 15%,transparent))!important}
+.gameImgWrap{height:245px!important;min-height:245px!important;border-bottom:1px solid var(--card-accent)!important;background:#07101e!important}.gameImgWrap:before{content:"MODS-T-N";position:absolute;z-index:3;left:10px;top:10px;padding:5px 10px;border-radius:5px;background:rgba(1,6,16,.85);border:1px solid var(--card-accent);font-family:Orbitron,sans-serif;font-size:8px;font-weight:900;letter-spacing:.6px;box-shadow:0 0 12px color-mix(in srgb,var(--card-accent) 55%,transparent)}.gameImg{filter:saturate(1.18) contrast(1.08) brightness(1.05)!important}.gameImgWrap:after{content:""!important;inset:0!important;opacity:1!important;background:linear-gradient(180deg,transparent 55%,rgba(2,5,15,.72))!important}
+.gameBody{height:calc(100% - 245px)!important;padding:15px!important;display:flex!important;flex-direction:column!important}.gameTitle{font-family:Orbitron,sans-serif!important;font-size:15px!important;line-height:1.25!important;min-height:38px!important;text-align:left!important;letter-spacing:.2px!important}.gameMeta{text-align:left!important;margin:2px 0 8px!important;font-size:11px!important;color:#24a8ff!important}.gameIntroBox{padding:9px!important;margin:0 0 7px!important;border-radius:7px!important}.gameIntroBox .introLabel{display:none!important}.gameIntroBox .introText{display:none!important}.trailerButtons{gap:0!important}.trailerBtn{min-height:34px!important;padding:8px!important;font-size:10px!important;border-radius:6px!important}.gameplayVideoBox{display:none!important}.tags{justify-content:flex-start!important;margin:0 0 5px!important}.tag{font-size:9px!important;padding:3px 8px!important}.gameScroll{flex:1!important;min-height:0!important;max-height:none!important;padding-right:6px!important;margin-top:3px!important}.gameScroll>div,.modItem{border-radius:8px!important;padding:11px!important;margin-top:8px!important;background:linear-gradient(145deg,rgba(10,21,42,.9),rgba(12,7,29,.92))!important}.newPrice,.js-newPrice{font-size:22px!important}.buyButtons{gap:7px!important}.buyButtons .btn,.gameCard .buyButtons .btn{height:38px!important;min-height:38px!important;border-radius:5px!important;font-size:9.5px!important;padding:6px!important}.gameCard .btn.primary{background:linear-gradient(180deg,#1c79ff,#143dd7)!important;color:#fff!important}.gameCard .btn:not(.primary){background:linear-gradient(180deg,#16e35b,#079c31)!important;color:#fff!important}
+.paymentSection{max-width:1490px!important;margin:30px auto!important}.contactsFooter{background:rgba(1,5,14,.95)!important;border-top:1px solid rgba(46,121,255,.35)!important}
+@media(min-width:2100px){#catalogo{max-width:2100px}.catalogo{grid-template-columns:repeat(5,minmax(0,1fr))!important}.gameCard{height:740px!important;min-height:740px!important}.gameImgWrap{height:285px!important;min-height:285px!important}.gameBody{height:calc(100% - 285px)!important}.cyberHero{height:700px!important}}
+@media(max-width:1250px){.catalogo{grid-template-columns:repeat(3,minmax(0,1fr))!important}.cleanTrust{grid-template-columns:repeat(2,1fr)!important}.cyberMenu{gap:20px!important}.cyberMenu a{font-size:10px!important}}
+@media(max-width:900px){.catalogo{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cyberHero{height:500px!important;min-height:500px!important}.cyberActions .btn{min-width:190px!important}.sectionTitle h3:before,.sectionTitle h3:after{width:45px!important;margin:0 8px!important}}
+@media(max-width:600px){.cyberTopbar{height:66px!important}.brandLogoImg{width:150px!important}.requestTop{font-size:8px!important;padding:10px!important}.cyberHero{height:390px!important;min-height:390px!important;background-position:center!important}.cyberHeroContent{bottom:25px!important}.cyberActions{gap:9px!important}.cyberActions .btn{min-width:0!important;flex:1!important;min-height:48px!important;font-size:10px!important}.cleanTrust{grid-template-columns:1fr!important;margin-top:-10px!important;padding:0 14px!important}.catalogo{grid-template-columns:1fr!important}.gameCard{height:680px!important;min-height:680px!important}.sectionTitle h3{font-size:22px!important}.sectionTitle h3:before,.sectionTitle h3:after{display:none!important}#catalogo{padding:0 14px 40px!important}}
+</style>
+
+
+<style id="estilo-fiel-final">
+/* Visual final baseado na referência escolhida */
+:root{--nblue:#087dff;--npurple:#8b4dff;--npink:#ff2d86;--nred:#ff3046;--ngreen:#13d957}
+html,body{background:#01040c!important}
+body{background:
+radial-gradient(circle at 8% 22%,rgba(0,91,255,.13),transparent 27%),
+radial-gradient(circle at 92% 20%,rgba(255,23,64,.12),transparent 28%),
+linear-gradient(180deg,#01040b,#07051a 55%,#01040b)!important}
+.cyberTopbar{height:76px!important;max-width:none!important;padding:0 max(28px,calc((100vw - 1500px)/2))!important;background:rgba(0,3,11,.96)!important;border-bottom:1px solid rgba(48,117,255,.42)!important;box-shadow:0 8px 28px rgba(0,0,0,.75)!important}
+.brandLogoImg{width:210px!important;height:64px!important;object-fit:contain!important}
+.cyberMenu{gap:34px!important}.cyberMenu a{font-size:11px!important;font-weight:900!important}
+.requestTop{background:linear-gradient(100deg,#184ee8,#da0a46)!important;border:1px solid #ff315b!important;box-shadow:0 0 18px rgba(0,112,255,.55),0 0 20px rgba(255,31,78,.42)!important}
+.cyberHero{height:540px!important;min-height:540px!important;background-image:url('img/banner-estilo-fiel.jpg')!important;background-size:cover!important;background-position:center center!important;box-shadow:inset 0 -50px 70px #01040c!important}
+.cyberHeroOverlay{background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.08) 65%,rgba(1,4,12,.72))!important}
+.cyberHeroContent{bottom:34px!important;width:min(660px,92%)!important}
+.cyberActions{display:flex!important;justify-content:center!important;gap:16px!important}
+.cyberActions .btn{min-width:235px!important;height:54px!important;border-radius:6px!important;font-size:13px!important}
+.cleanTrust{max-width:1450px!important;margin:-18px auto 42px!important;grid-template-columns:repeat(4,1fr)!important;gap:14px!important}
+.cleanTrust article{min-height:100px!important;border-radius:8px!important;padding:17px 22px!important;background:linear-gradient(145deg,rgba(4,14,30,.97),rgba(6,5,22,.98))!important}
+.cleanTrust article:nth-child(1){border-color:#087dff!important;box-shadow:0 0 22px rgba(8,125,255,.18)!important}
+.cleanTrust article:nth-child(2){border-color:#7b4dff!important;box-shadow:0 0 22px rgba(123,77,255,.18)!important}
+.cleanTrust article:nth-child(3){border-color:#ff2d86!important;box-shadow:0 0 22px rgba(255,45,134,.16)!important}
+.cleanTrust article:nth-child(4){border-color:#ff3046!important;box-shadow:0 0 22px rgba(255,48,70,.16)!important}
+#catalogo{max-width:1500px!important;padding:0 24px 70px!important}
+.sectionTitle h3{font-size:31px!important;letter-spacing:3px!important}
+.catalogTools{padding-bottom:24px!important}.gameSearch{max-width:760px!important;height:49px!important;border-radius:6px!important}
+.catalogo{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:20px!important;align-items:start!important}
+.gameCard{--accent:#087dff;--accent2:#1ec8ff;height:auto!important;min-height:0!important;border-radius:10px!important;border:1px solid var(--accent)!important;background:linear-gradient(180deg,#06152d 0%,#061020 52%,#040813 100%)!important;box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 18px color-mix(in srgb,var(--accent) 28%,transparent)!important;overflow:hidden!important}
+.gameCard:nth-child(4n+2){--accent:#7453ff;--accent2:#d24fff}.gameCard:nth-child(4n+3){--accent:#f12a7f;--accent2:#ff54c8}.gameCard:nth-child(4n+4){--accent:#ff3046;--accent2:#ff703d}
+.gameCard:hover{transform:translateY(-7px)!important;box-shadow:0 20px 42px rgba(0,0,0,.56),0 0 27px color-mix(in srgb,var(--accent) 48%,transparent)!important}
+.gameImgWrap{height:285px!important;min-height:285px!important;background:#061123!important;border-bottom:1px solid var(--accent)!important}
+.gameImg{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;display:block!important;filter:saturate(1.12) contrast(1.06) brightness(1.06)!important}
+.gameImgWrap:before{content:'MODS-T-N'!important;left:10px!important;top:10px!important;background:rgba(0,5,16,.88)!important;border:1px solid var(--accent)!important;color:#fff!important}
+.gameImgWrap:after{content:''!important;position:absolute!important;inset:0!important;background:linear-gradient(180deg,transparent 62%,rgba(2,6,17,.65))!important;opacity:1!important}
+.gameBody{height:auto!important;padding:13px 14px 14px!important;display:block!important}
+.gameTitle{font-family:Orbitron,sans-serif!important;font-size:15px!important;text-align:left!important;min-height:38px!important;line-height:1.22!important;margin:0!important;color:#fff!important}
+.gameMeta{text-align:left!important;margin:5px 0 8px!important;color:#22a9ff!important;font-size:10px!important}
+.gameIntroBox,.tags{display:none!important}
+.cardQuick{display:block;margin-top:4px}
+.cardQuickPrice{font-family:Orbitron,sans-serif;font-size:23px;font-weight:900;color:#fff;text-shadow:0 0 12px var(--accent);margin:7px 0 10px}
+.cardQuick .quickButtons{display:grid;gap:8px}
+.cardQuick .quickButtons a{width:100%;height:38px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;text-transform:uppercase}
+.cardQuick .quickButtons a:first-child{background:linear-gradient(180deg,#157cff,#073cd0);border:1px solid #2da1ff;box-shadow:0 0 12px rgba(0,111,255,.42)}
+.cardQuick .quickButtons a:nth-child(2){background:linear-gradient(180deg,#18df5b,#078c2b);border:1px solid #48f77d;color:#fff;box-shadow:0 0 12px rgba(20,220,82,.34)}
+.detailsToggle{width:100%;height:34px;margin-top:9px;border:1px solid color-mix(in srgb,var(--accent) 70%,#fff);border-radius:5px;background:rgba(7,14,31,.9);color:#dce8ff;font-size:9px;font-weight:900;cursor:pointer}
+.gameScroll{display:none!important;max-height:360px!important;margin-top:10px!important;overflow:auto!important;border-top:1px solid rgba(255,255,255,.08);padding-top:2px!important}
+.gameCard.details-open .gameScroll{display:block!important}
+.gameCard.details-open .cardQuick{display:none!important}
+.gameCard.details-open{height:auto!important}
+.gameCard.details-open .gameBody{padding-bottom:16px!important}
+.gameScroll>div,.modItem{background:linear-gradient(145deg,rgba(9,20,42,.95),rgba(11,7,28,.95))!important;border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)!important;border-radius:7px!important}
+.newPrice,.js-newPrice{color:#fff!important;text-shadow:0 0 10px var(--accent)!important}
+.buyButtons .btn{height:38px!important;min-height:38px!important}
+.paymentSection{max-width:1450px!important}
+@media(min-width:1900px){#catalogo{max-width:1780px!important}.catalogo{grid-template-columns:repeat(5,minmax(0,1fr))!important}.gameImgWrap{height:310px!important;min-height:310px!important}.cyberHero{height:620px!important;min-height:620px!important}}
+@media(max-width:1180px){.catalogo{grid-template-columns:repeat(3,minmax(0,1fr))!important}.cleanTrust{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:850px){.catalogo{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cyberHero{height:430px!important;min-height:430px!important}.cyberActions .btn{min-width:180px!important}}
+@media(max-width:560px){.catalogo{grid-template-columns:1fr!important}.cleanTrust{grid-template-columns:1fr!important}.cyberHero{height:360px!important;min-height:360px!important}.cyberActions .btn{min-width:0!important;font-size:9px!important}.gameImgWrap{height:330px!important;min-height:330px!important}}
+</style>
+
+
+<style id="remover-formato-redondo">
+/* Correção solicitada: cards e capas totalmente retangulares */
+.gameCard{border-radius:8px!important;}
+.gameCard::before,.gameCard:before{
+  content:none!important;
+  display:none!important;
+  border-radius:0!important;
+  background:none!important;
+}
+.gameImgWrap{
+  border-radius:0!important;
+  overflow:hidden!important;
+}
+.gameImgWrap::after,.gameImgWrap:after{
+  border-radius:0!important;
+}
+.gameImg{
+  border-radius:0!important;
+  clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
+}
+.gameBody{border-radius:0!important;}
+</style>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="#"><div class="brandIcon">🎮</div><div><h1>MODS-TN</h1><span>MODS PREMIUM PS4 &amp; PS5</span></div></a><nav class="menu"><a href="#">INÍCIO</a><a href="#catalogo">CATÁLOGO</a><a href="#pagamento">PAGAMENTO</a><a href="#contato">CONTATO</a></nav></header>
-<section class="hero"><div class="heroText"><div class="platforms"><span class="pill">PS4</span><span class="pill">PS5</span></div><h2>MODS PREMIUM <b>PS4 &amp; PS5</b></h2><p>Desbloqueie o máximo do seu jogo com nossos mods exclusivos. Segurança, qualidade e suporte que você pode confiar!</p><div class="actions"><a class="btn primary" href="#catalogo">🛒 VER CATÁLOGO</a><a class="btn btnGreen" href="https://wa.me/5581994706810" target="_blank">💬 CHAMAR NO WHATSAPP</a></div><div class="whatsTitle">ATENDIMENTO VIA WHATSAPP</div><div class="contacts"><a class="contact" href="https://wa.me/5581994706810" target="_blank"><i>💬</i><div><strong>Naildo</strong><br/>(81) 99470-6810</div></a><a class="contact" href="https://wa.me/5511966633925" target="_blank"><i>💬</i><div><strong>Geovane</strong><br/>(11) 96663-3925</div></a></div></div><div class="heroVisual"><img alt="PS4 e PS5" class="heroPsImg" src="img/ps4-ps5-banner.png"/></div><div class="features"><div class="feat">🛡️<div><b>100% SEGURO</b><span>Mods testados e seguros</span></div></div><div class="feat">⚡<div><b>ENTREGA RÁPIDA</b><span>Entrega no mesmo dia</span></div></div><div class="feat">🎧<div><b>SUPORTE TOTAL</b><span>Atendimento dedicado</span></div></div><div class="feat">🏆<div><b>QUALIDADE PREMIUM</b><span>Melhores mods do mercado</span></div></div></div></section>
+<header class="topbar cyberTopbar">
+<a class="brand cyberBrand" href="#"><img alt="MODS-TN" class="brandLogoImg" src="img/logo-mods-tn.png"/></a>
+<nav class="menu cyberMenu"><a href="#">INÍCIO</a><a href="#catalogo">JOGOS</a><a href="#pagamento">PAGAMENTO</a><a href="#contato">CONTATO</a></nav>
+<a class="requestTop" href="https://wa.me/5581994706810" target="_blank">SOLICITAR MODIFICAÇÃO</a>
+</header>
+<section class="hero cyberHero">
+<div class="cyberHeroOverlay"></div>
+<div class="cyberHeroContent">
+<span class="heroEyebrow">MODIFICAÇÕES DE JOGOS</span>
+<h2><span>MODS</span><b>-T-N</b></h2>
+<p>MODIFICAÇÕES DE JOGOS</p>
+<div class="heroPlatforms"><strong>PS4</strong><i>|</i><strong>PS5</strong></div>
+<div class="actions cyberActions"><a class="btn primary" href="#catalogo">🎮 VER JOGOS</a><a class="btn btnGreen" href="https://wa.me/5581994706810" target="_blank">💬 SOLICITAR MODIFICAÇÃO</a></div>
+</div>
+</section><section class="cleanTrust"><article><span>⚡</span><div><b>ENTREGA RÁPIDA</b><small>Atendimento no mesmo dia</small></div></article><article><span>🛡️</span><div><b>SERVIÇO SEGURO</b><small>Processo testado e acompanhado</small></div></article><article><span>💬</span><div><b>SUPORTE DIRETO</b><small>Atendimento pelo WhatsApp</small></div></article><article><span>☆</span><div><b>+500 CLIENTES</b><small>Clientes atendidos e satisfeitos</small></div></article></section>
+
+
 <section id="catalogo"><div class="sectionTitle"><h3>CATÁLOGO DE JOGOS</h3></div><div class="catalogTools">
 <input aria-label="Pesquisar jogos" autocomplete="off" class="gameSearch" id="gameSearch" placeholder="🔎 Pesquisar jogos..." type="search"/>
 <div class="gameSearchInfo" id="gameSearchInfo">Digite para encontrar um jogo</div>
@@ -397,7 +816,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Resident Evil Village (RE8) ===== -->
-
 <!-- ===== INÍCIO DO JOGO: Dragon Ball Xenoverse 2 ===== --><div class="gameCard" data-cat="rpg">
 <div class="gameImgWrap"><img alt="Dragon Ball Xenoverse 2" class="gameImg" loading="lazy" src="img/dragon-ball-xenoverse-2.png"/></div>
 <div class="gameBody">
@@ -409,7 +827,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 <span class="tag">Offline</span>
 </div>
 <div class="gameScroll needsScroll">
-
 <!-- MISSÕES PARALELAS Z + PONTUAÇÃO -->
 <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
@@ -457,9 +874,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
-
-
 <!-- QQBANG FULL -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
@@ -477,7 +891,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- 1 TRILHÃO MEDALHAS + DINHEIRO -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
@@ -497,7 +910,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- LIBERAR TODAS AS TECNICAS -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
@@ -515,7 +927,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- LIBERAR TODAS AS ROUPAS -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
@@ -535,7 +946,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- TITULO -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
@@ -553,7 +963,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- TODAS SUPER ALMAS -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
@@ -571,9 +980,7 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- ACESSORIOS -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
 <div style="font-weight:900;">ADICIONAR ACESSÓRIOS</div>
@@ -590,9 +997,7 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- 99 ESFERAS -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
 <div style="font-weight:900;">ADICIONAR 99 ESFERAS DO DRAGÃO</div>
@@ -610,7 +1015,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 </div>
 </div>
 <!-- AURAS E MASCOTES -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
 <div>
@@ -629,9 +1033,7 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- 100% ARTES -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
 <div style="font-weight:900;">ADICIONAR 100% DAS ARTES</div>
@@ -648,9 +1050,7 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- PICCOLO GIGANTE -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
 <div style="font-weight:900;">PICCOLO GIGANTE LEVEL 180</div>
@@ -667,7 +1067,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- SUBIR LEVEL 180 -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
@@ -691,7 +1090,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
 <!-- CABELO SSJ3 -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
@@ -715,9 +1113,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
-
-
 <!-- PERSONAGEM LEVEL 180 + ATRIBUTOS 200 -->
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
@@ -738,7 +1133,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 </div>
 </div>
 <!-- PERSONAGEM LEVEL 199 + ATRIBUTOS 200 + QQBANG + STATUS MODS -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
 <div>
@@ -763,10 +1157,7 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
           </a>
 </div>
 </div>
-
-
 <!-- STATUS MODS -->
-
 <div style="margin-top:12px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
 <div>
@@ -797,20 +1188,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Dragon Ball Xenoverse 2 ===== -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- ===== INÍCIO DO JOGO: Dark Souls III ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Dark Souls III" class="gameImg" loading="lazy" src="img/dark-souls-iii.png"/></div>
 <div class="gameBody">
@@ -2262,8 +2639,6 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Assassin's Creed Unity ===== -->
-
-
 <!-- ===== INÍCIO DO JOGO: Resident Evil 4 Remake ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Resident Evil 4 Remake" class="gameImg" loading="lazy" src="img/resident-evil-4-remake.png"/></div>
 <div class="gameBody">
@@ -2303,55 +2678,38 @@ window.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('img')
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Resident Evil 4 Remake ===== -->
-
-
-
-
 <!-- ===== INÍCIO DO JOGO: Mortal Shell ===== -->
 <div class="gameCard" data-cat="acao">
 <div class="gameImgWrap">
 <img alt="Mortal Shell" class="gameImg" loading="lazy" src="img/mortal-shell.png"/>
 </div>
-
 <div class="gameBody">
 <h3 class="gameTitle">Mortal Shell</h3>
-
 <div class="gameMeta">PS4 • PS5</div>
-
 <div class="gameIntroBox" data-game-title="Mortal Shell">
 <div class="introLabel">🎬 Introdução do jogo</div>
 <p class="introText">
 Explore um mundo sombrio e brutal, enfrentando inimigos implacáveis em um RPG de ação desafiador.
 </p>
-
 <div class="trailerButtons">
 <button class="previewBtn" data-preview="Mortal Shell" type="button">
 Gameplay em breve
 </button>
-
-<a class="trailerBtn"
-href="https://www.youtube.com/results?search_query=Mortal+Shell+trailer+gameplay+PS4+PS5"
-rel="noopener"
-target="_blank">
+<a class="trailerBtn" href="https://www.youtube.com/results?search_query=Mortal+Shell+trailer+gameplay+PS4+PS5" rel="noopener" target="_blank">
 Assistir trailer/gameplay
 </a>
 </div>
 </div>
-
 <div class="tags">
 <span class="tag">RPG</span>
 <span class="tag">Ação</span>
 <span class="tag">Offline</span>
 </div>
-
 <div class="gameScroll">
 <div style="margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background: rgba(255,255,255,.03);">
-
 <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-
 <div>
 <div style="font-weight:900;">MODIFICAÇÃO COMPLETA</div>
-
 <div style="font-size:12px; color:rgba(169,183,208,.95); margin-top:6px; line-height:1.45;">
 • Dinheiro: 9.999.999<br/>
 • Todos os itens: 99.999<br/>
@@ -2359,37 +2717,23 @@ Assistir trailer/gameplay
 • Inventário completo
 </div>
 </div>
-
 <div class="priceRow">
 <span class="newPrice js-newPrice" data-preco="70"></span>
 </div>
-
 </div>
-
 <div class="buyButtons">
-<a class="btn primary"
-href="https://wa.me/5581994706810?text=Quero%20comprar%20MORTAL%20SHELL%20-%20DINHEIRO%209.999.999%20+%20ITENS%2099.999%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2470)."
-target="_blank">
+<a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20MORTAL%20SHELL%20-%20DINHEIRO%209.999.999%20+%20ITENS%2099.999%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2470)." target="_blank">
 Comprar com Naildo
 </a>
-
-<a class="btn"
-href="https://wa.me/5511966633925?text=Quero%20comprar%20MORTAL%20SHELL%20-%20DINHEIRO%209.999.999%20+%20ITENS%2099.999%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2470)."
-target="_blank">
+<a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20MORTAL%20SHELL%20-%20DINHEIRO%209.999.999%20+%20ITENS%2099.999%20+%20RECURSOS%20M%C3%81XIMOS%20(R%2470)." target="_blank">
 Comprar com Geovane
 </a>
 </div>
-
 </div>
 </div>
 </div>
 </div>
 <!-- ===== FIM DO JOGO: Mortal Shell ===== -->
-
-
-
-
-
 <!-- ===== INÍCIO DO JOGO: Assassin's Creed Mirage ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Assassin's Creed Mirage" class="gameImg" loading="lazy" src="img/assassin-s-creed-mirage.png"/></div>
 <div class="gameBody">
@@ -2651,21 +2995,15 @@ Comprar com Geovane
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Days Gone ===== -->
-
-
 <!-- ===== INÍCIO DO JOGO: Ghost of Tsushima ===== -->
 <div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Ghost of Tsushima" class="gameImg" loading="lazy" src="img/ghost-of-tsushima.png"/></div>
 <div class="gameBody">
-
 <h3 class="gameTitle">Ghost of Tsushima</h3>
-
 <div class="gameMeta">PS4 • PS5</div>
-
 <div class="gameIntroBox" data-game-title="Ghost of Tsushima">
 <div class="introLabel">🎬 Introdução do jogo</div>
 <p class="introText">Aventura samurai cinematográfica com duelos, exploração e batalhas no Japão feudal.</p>
-
 <div class="trailerButtons">
 <button class="previewBtn" data-preview="Ghost of Tsushima" type="button">Gameplay em breve</button>
 <a class="trailerBtn" href="COLE_O_LINK_DO_YOUTUBE_AQUI" rel="noopener" target="_blank">
@@ -2673,15 +3011,12 @@ Assistir trailer/gameplay
 </a>
 </div>
 </div>
-
 <div class="tags">
 <span class="tag">Ação</span>
 <span class="tag">Aventura</span>
 <span class="tag">Offline</span>
 </div>
-
 <div class="gameScroll">
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -2691,33 +3026,27 @@ Assistir trailer/gameplay
 • Desbloquear posturas<br/>
 • Redefinir pontos de habilidade<br/>
 • Sem névoa de guerra<br/><br/>
-
 <b>Materiais:</b><br/>
 • Pano • Couro • Linho • Seda<br/><br/>
-
 <b>Recursos:</b><br/>
 • Flores • Flores Fantasma<br/>
 • Metal • Ouro • Ferro • Aço<br/>
 • Madeira • Bambu • Madeira encerada
 </div>
 </div>
-
 <div class="priceRow">
 <span class="newPrice js-newPrice" data-preco="80"></span>
 </div>
 </div>
-
 <div class="buyButtons">
 <a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20Ghost%20of%20Tsushima%20-%20Pacote%20Completo%20(R%2480)" target="_blank">
 Comprar com Naildo
 </a>
-
 <a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20Ghost%20of%20Tsushima%20-%20Pacote%20Completo%20(R%2480)" target="_blank">
 Comprar com Geovane
 </a>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -2732,29 +3061,23 @@ Comprar com Geovane
 • Conteúdo praticamente completo
 </div>
 </div>
-
 <div class="priceRow">
 <span class="newPrice js-newPrice" data-preco="250"></span>
 </div>
 </div>
-
 <div class="buyButtons">
 <a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20Ghost%20of%20Tsushima%20-%20Modo%20Lenda%20Completo%20(R%24250)" target="_blank">
 Comprar com Naildo
 </a>
-
 <a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20Ghost%20of%20Tsushima%20-%20Modo%20Lenda%20Completo%20(R%24250)" target="_blank">
 Comprar com Geovane
 </a>
 </div>
 </div>
-
 </div>
 </div>
 </div>
 <!-- ===== FIM DO JOGO: Ghost of Tsushima ===== -->
-
-
 <!-- ===== INÍCIO DO JOGO: God of War ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="God of War" class="gameImg" loading="lazy" src="img/god-of-war.png"/></div>
 <div class="gameBody">
@@ -3340,53 +3663,33 @@ Comprar com Geovane
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Devil May Cry 4: Edição Especial ===== -->
-
-
-
 <!-- ===== INÍCIO DO JOGO: Wo Long: Fallen Dynasty ===== -->
-
 <div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Wo Long: Fallen Dynasty" class="gameImg" loading="lazy" src="img/wo-long-fallen-dynasty.png"/></div>
-
 <div class="gameBody">
-
 <h3 class="gameTitle">Wo Long: Fallen Dynasty</h3>
-
 <div class="gameMeta">PS4 • PS5 • Xbox • PC</div>
-
 <div class="gameIntroBox" data-game-title="Wo Long: Fallen Dynasty">
 <div class="introLabel">🎬 Introdução do jogo</div>
-
 <p class="introText">
 RPG de ação inspirado na fantasia sombria dos Três Reinos da China, com combates intensos, magias elementais e batalhas contra criaturas demoníacas.
 </p>
-
 <div class="trailerButtons">
 <button class="previewBtn" data-preview="Wo Long: Fallen Dynasty" type="button">Gameplay em breve</button>
-
-<a class="trailerBtn"
-href="COLE_O_LINK_DO_YOUTUBE_AQUI"
-rel="noopener"
-target="_blank">
+<a class="trailerBtn" href="COLE_O_LINK_DO_YOUTUBE_AQUI" rel="noopener" target="_blank">
 Assistir trailer/gameplay </a>
-
 </div>
 </div>
-
 <div class="tags">
 <span class="tag">Ação</span>
 <span class="tag">RPG</span>
 <span class="tag">Offline</span>
 </div>
-
 <div class="gameScroll needsScroll">
-
 <div class="modItem">
 <div class="modHead">
 <div>
-
 <div class="modName">MODIFICAÇÕES DISPONÍVEIS</div>
-
 <div class="modDesc">
 • Level 150<br/>
 • Pontos de Apex Máximos<br/>
@@ -3408,43 +3711,25 @@ Assistir trailer/gameplay </a>
 • Magia de Metal Máxima<br/>
 • Magia de Água Máxima<br/>
 • Magia de Madeira Máxima<br/><br/>
-
 <b>OBS:</b> Esse jogo não foi testado no modo online. Pode haver restrições online.
 
 </div>
-
 </div>
-
 <div class="priceRow">
 <span class="newPrice js-newPrice" data-preco="150"></span>
 </div>
-
 </div>
-
 <div class="buyButtons">
-
-<a class="btn primary"
-href="https://wa.me/5581994706810?text=Quero%20comprar%20WO%20LONG%20FALLEN%20DYNASTY%20-%20MODIFICA%C3%87%C3%95ES%20DISPON%C3%8DVEIS%20(R%24150)"
-target="_blank">
+<a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20WO%20LONG%20FALLEN%20DYNASTY%20-%20MODIFICA%C3%87%C3%95ES%20DISPON%C3%8DVEIS%20(R%24150)" target="_blank">
 Comprar com Naildo </a>
-
-<a class="btn"
-href="https://wa.me/5511966633925?text=Quero%20comprar%20WO%20LONG%20FALLEN%20DYNASTY%20-%20MODIFICA%C3%87%C3%95ES%20DISPON%C3%8DVEIS%20(R%24150)"
-target="_blank">
+<a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20WO%20LONG%20FALLEN%20DYNASTY%20-%20MODIFICA%C3%87%C3%95ES%20DISPON%C3%8DVEIS%20(R%24150)" target="_blank">
 Comprar com Geovane </a>
-
 </div>
 </div>
-
 </div>
 </div>
 </div>
 <!-- ===== FIM DO JOGO: Wo Long: Fallen Dynasty ===== -->
-
-
-
-
-
 <!-- ===== INÍCIO DO JOGO: Far Cry 5 ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Far Cry 5" class="gameImg" loading="lazy" src="img/far-cry-5.png"/></div>
 <div class="gameBody">
@@ -3901,38 +4186,27 @@ Comprar com Geovane </a>
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Sword Art Online: Last Recollection ===== -->
-
-
-
 <!-- ===== INÍCIO DO JOGO: The Witcher 3 Complete Edition ===== -->
 <div class="gameCard" data-cat="rpg">
 <div class="gameImgWrap"><img alt="The Witcher 3 Complete Edition" class="gameImg" loading="lazy" src="img/the-witcher-3-complete-edition.png"/></div>
-
 <div class="gameBody">
-
 <h3 class="gameTitle">The Witcher 3 Complete Edition</h3>
-
 <div class="gameMeta">PS4 • PS5</div>
-
 <div class="gameIntroBox" data-game-title="The Witcher 3 Complete Edition">
 <div class="introLabel">🎬 Introdução do jogo</div>
 <p class="introText">
 RPG de mundo aberto com caçadas a monstros, magia, escolhas importantes e uma grande aventura com Geralt de Rívia.
 </p>
-
 <div class="trailerButtons">
 <button class="previewBtn" data-preview="The Witcher 3 Complete Edition" type="button">Gameplay em breve</button>
 <a class="trailerBtn" href="COLE_O_LINK_DO_YOUTUBE_AQUI" rel="noopener" target="_blank">Assistir trailer/gameplay</a>
 </div>
 </div>
-
 <div class="tags">
 <span class="tag">RPG</span>
 <span class="tag">Offline</span>
 </div>
-
 <div class="gameScroll needsScroll">
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -3946,36 +4220,23 @@ RPG de mundo aberto com caçadas a monstros, magia, escolhas importantes e uma g
 • Magia infinita
 </div>
 </div>
-
 <div class="priceRow">
 <span class="newPrice js-newPrice" data-preco="150"></span>
 </div>
 </div>
-
 <div class="buyButtons">
 <a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20THE%20WITCHER%203%20COMPLETE%20EDITION%20-%20MODIFICA%C3%87%C3%95ES%20DISPON%C3%8DVEIS%20(R%24150)" target="_blank">
 Comprar com Naildo
 </a>
-
 <a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20THE%20WITCHER%203%20COMPLETE%20EDITION%20-%20MODIFICA%C3%87%C3%95ES%20DISPON%C3%8DVEIS%20(R%24150)" target="_blank">
 Comprar com Geovane
 </a>
 </div>
 </div>
-
 </div>
 </div>
 </div>
 <!-- ===== FIM DO JOGO: The Witcher 3 Complete Edition ===== -->
-
-
-
-
-
-
-
-
-
 <!-- ===== INÍCIO DO JOGO: Uncharted 4: A Thief's End ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Uncharted 4 A Thief's End" class="gameImg" loading="lazy" src="img/uncharted-4-a-thief-s-end.png"/></div>
 <div class="gameBody">
@@ -4020,44 +4281,29 @@ Comprar com Geovane
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Uncharted 4: A Thief's End ===== -->
-
-
-
 <!-- ===== INÍCIO DO JOGO: Remnant 2 ===================== -->
 <div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Remnant 2" class="gameImg" loading="lazy" src="img/remnant-2.png"/></div>
 <div class="gameBody">
-
 <h3 class="gameTitle">Remnant 2</h3>
-
 <div class="gameMeta">PC • PS5 • Xbox</div>
-
 <div class="gameIntroBox" data-game-title="Remnant 2">
 <div class="introLabel">🎬 Introdução do jogo</div>
-
 <p class="introText">
 RPG de ação e tiro em terceira pessoa, com mundos sombrios, chefes difíceis, equipamentos especiais e combate cooperativo.
 </p>
-
 <div class="trailerButtons">
 <button class="previewBtn" data-preview="Remnant 2" type="button">Gameplay em breve</button>
-
-<a class="trailerBtn"
-href="COLE_O_LINK_DO_YOUTUBE_AQUI"
-rel="noopener"
-target="_blank">
+<a class="trailerBtn" href="COLE_O_LINK_DO_YOUTUBE_AQUI" rel="noopener" target="_blank">
 Assistir trailer/gameplay
 </a>
 </div>
 </div>
-
 <div class="tags">
 <span class="tag">Ação</span>
 <span class="tag">Online</span>
 </div>
-
 <div class="gameScroll needsScroll">
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4067,7 +4313,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$150</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4077,7 +4322,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$150</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4086,7 +4330,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4095,7 +4338,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4104,7 +4346,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4113,7 +4354,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4122,7 +4362,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4135,7 +4374,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$300</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4145,7 +4383,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4155,7 +4392,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4165,7 +4401,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4175,7 +4410,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4185,7 +4419,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$150</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4195,7 +4428,6 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$100</span></div>
 </div>
 </div>
-
 <div class="modItem">
 <div class="modHead">
 <div>
@@ -4205,23 +4437,10 @@ Assistir trailer/gameplay
 <div class="priceRow"><span class="newPrice">R$80</span></div>
 </div>
 </div>
-
 </div>
 </div>
 </div>
 <!-- ===== FIM DO JOGO: Remnant 2 ===== -->
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- ===== INÍCIO DO JOGO: Yasha: Legends Of The Demon Blade ===== --><div class="gameCard" data-cat="acao">
 <div class="gameImgWrap"><img alt="Yasha Legends Of The Demon Blade" class="gameImg" loading="lazy" src="img/yasha-legends-of-the-demon-blade.png"/></div>
 <div class="gameBody">
@@ -4490,23 +4709,19 @@ Assistir trailer/gameplay
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Shin Megami Tensei V: Vengeance ===== -->
-
-
-
 <!-- ===== INÍCIO DO JOGO: Dragon Age Inquisition ===== -->
 <div class="gameCard" data-cat="rpg">
 <div class="gameImgWrap"><img alt="Dragon Age Inquisition" class="gameImg" loading="lazy" src="img/dragon-age-inquisition.png"/></div>
 <div class="gameBody">
 <h3 class="gameTitle">Dragon Age Inquisition</h3>
 <div class="gameMeta">PS4 • PS5</div>
-<div class="gameIntroBox" data-game-title="Dragon Age Inquisition"><div class="introLabel">🎬 Introdução do jogo</div><p class="introText">Assuma o papel do Inquisidor e enfrente ameaças épicas em um vasto mundo de fantasia repleto de dragões, magia e batalhas intensas.</p><div class="trailerButtons"><button class="previewBtn" data-preview="Dragon Age Inquisition" type="button">Gameplay em breve</button><a class="trailerBtn" href="https://www.youtube.com/watch?v=_HLK4wl2RKY&t=1s" rel="noopener" target="_blank">Assistir trailer/gameplay</a></div></div>
+<div class="gameIntroBox" data-game-title="Dragon Age Inquisition"><div class="introLabel">🎬 Introdução do jogo</div><p class="introText">Assuma o papel do Inquisidor e enfrente ameaças épicas em um vasto mundo de fantasia repleto de dragões, magia e batalhas intensas.</p><div class="trailerButtons"><button class="previewBtn" data-preview="Dragon Age Inquisition" type="button">Gameplay em breve</button><a class="trailerBtn" href="https://www.youtube.com/watch?v=_HLK4wl2RKY&amp;t=1s" rel="noopener" target="_blank">Assistir trailer/gameplay</a></div></div>
 <div class="tags"><span class="tag">RPG</span><span class="tag">Offline</span></div>
 <div class="gameScroll needsScroll">
 <div class="modItem"><div class="modHead"><div><div class="modName">MODIFICAÇÃO COMPLETA</div><div class="modDesc">• Poderes 9999999<br/>• Dinheiro 999999<br/>• Vida 500551<br/>• Astúcia 10000<br/>• Determinação 10000<br/>• Constituição 10000<br/>• Ataque 500109<br/>• Cura ao matar 999</div></div><div class="priceRow"><span class="newPrice js-newPrice" data-preco="150"></span></div></div><div class="buyButtons"><a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20DRAGON%20AGE%20INQUISITION%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%24150)" target="_blank">Comprar com Naildo</a><a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20DRAGON%20AGE%20INQUISITION%20-%20MODIFICA%C3%87%C3%83O%20COMPLETA%20(R%24150)" target="_blank">Comprar com Geovane</a></div></div>
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Dragon Age Inquisition ===== -->
-
 <!-- ===== INÍCIO DO JOGO: Bloodborne ===== --><div class="gameCard" data-cat="souls">
 <div class="gameImgWrap"><img alt="Bloodborne" class="gameImg" loading="lazy" src="img/bloodborne.png"/></div>
 <div class="gameBody">
@@ -4630,63 +4845,52 @@ Assistir trailer/gameplay
 </div>
 </div>
 </div><!-- ===== FIM DO JOGO: Bloodborne ===== -->
-
-
 <!-- ===================================================== -->
 <!-- ===== INÍCIO DO JOGO: Sombra da Guerra ===================== -->
 <div class="gameCard" data-cat="acao">
-  <div class="gameImgWrap">
-    <img alt="Sombra da Guerra" class="gameImg" loading="lazy" src="img/sombra-da-guerra.png"/>
-  </div>
-
-  <div class="gameBody">
-    <h3 class="gameTitle">Sombra da Guerra</h3>
-    <div class="gameMeta">PS4 • PS5</div>
-
-    <div class="gameIntroBox" data-game-title="Sombra da Guerra">
-      <div class="introLabel">🎬 Introdução do jogo</div>
-      <p class="introText">Ação e aventura em mundo aberto no universo de O Senhor dos Anéis, com batalhas contra Orcs, conquistas de fortalezas e evolução do personagem.</p>
-      <div class="trailerButtons">
-        <button class="previewBtn" data-preview="Sombra da Guerra" type="button">Gameplay em breve</button>
-        <a class="trailerBtn" href="https://www.youtube.com/results?search_query=Middle+Earth+Shadow+of+War+trailer+gameplay+PS4+PS5" rel="noopener" target="_blank">Assistir trailer/gameplay</a>
-      </div>
-    </div>
-
-    <div class="tags">
-      <span class="tag">Ação</span>
-      <span class="tag">Offline</span>
-    </div>
-
-    <div class="gameScroll needsScroll">
-      <div class="modItem">
-        <div class="modHead">
-          <div>
-            <div class="modName">PACOTE COMPLETO</div>
-            <div class="modDesc">
+<div class="gameImgWrap">
+<img alt="Sombra da Guerra" class="gameImg" loading="lazy" src="img/sombra-da-guerra.png"/>
+</div>
+<div class="gameBody">
+<h3 class="gameTitle">Sombra da Guerra</h3>
+<div class="gameMeta">PS4 • PS5</div>
+<div class="gameIntroBox" data-game-title="Sombra da Guerra">
+<div class="introLabel">🎬 Introdução do jogo</div>
+<p class="introText">Ação e aventura em mundo aberto no universo de O Senhor dos Anéis, com batalhas contra Orcs, conquistas de fortalezas e evolução do personagem.</p>
+<div class="trailerButtons">
+<button class="previewBtn" data-preview="Sombra da Guerra" type="button">Gameplay em breve</button>
+<a class="trailerBtn" href="https://www.youtube.com/results?search_query=Middle+Earth+Shadow+of+War+trailer+gameplay+PS4+PS5" rel="noopener" target="_blank">Assistir trailer/gameplay</a>
+</div>
+</div>
+<div class="tags">
+<span class="tag">Ação</span>
+<span class="tag">Offline</span>
+</div>
+<div class="gameScroll needsScroll">
+<div class="modItem">
+<div class="modHead">
+<div>
+<div class="modName">PACOTE COMPLETO</div>
+<div class="modDesc">
               • Joias 9999<br/>
               • Pontos de habilidades máximos<br/>
               • Dinheiro 9999999<br/>
               • Build modificada para Hit Kill
             </div>
-          </div>
-
-          <div class="priceRow">
-            <span class="newPrice js-newPrice" data-preco="150"></span>
-          </div>
-        </div>
-
-        <div class="buyButtons">
-          <a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20SOMBRA%20DA%20GUERRA%20-%20PACOTE%20COMPLETO%20(R%24150)" target="_blank">Comprar com Naildo</a>
-          <a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20SOMBRA%20DA%20GUERRA%20-%20PACOTE%20COMPLETO%20(R%24150)" target="_blank">Comprar com Geovane</a>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
+<div class="priceRow">
+<span class="newPrice js-newPrice" data-preco="150"></span>
+</div>
+</div>
+<div class="buyButtons">
+<a class="btn primary" href="https://wa.me/5581994706810?text=Quero%20comprar%20SOMBRA%20DA%20GUERRA%20-%20PACOTE%20COMPLETO%20(R%24150)" target="_blank">Comprar com Naildo</a>
+<a class="btn" href="https://wa.me/5511966633925?text=Quero%20comprar%20SOMBRA%20DA%20GUERRA%20-%20PACOTE%20COMPLETO%20(R%24150)" target="_blank">Comprar com Geovane</a>
+</div>
+</div>
+</div>
+</div>
 </div>
 <!-- ===== FIM DO JOGO: Sombra da Guerra ===== -->
-
-
-
 <!-- ===== INÍCIO DO JOGO: Outriders ===================== -->
 <!-- ===================================================== -->
 <div class="gameCard" data-cat="acao">
@@ -5005,4 +5209,38 @@ const GAMEPLAY_LINKS = {
       botao.addEventListener('click', function(e){ e.preventDefault(); });
     }
   });
-})();</script></body></html>
+})();</script>
+<script id="compact-cards-script">
+window.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.gameCard').forEach(card=>{
+    if(card.querySelector('.cardQuick')) return;
+    const scroll=card.querySelector('.gameScroll');
+    const body=card.querySelector('.gameBody');
+    if(!scroll||!body) return;
+    const firstPrice=scroll.querySelector('.newPrice,.js-newPrice');
+    const firstButtons=scroll.querySelector('.buyButtons');
+    const quick=document.createElement('div');
+    quick.className='cardQuick';
+    const priceText=(firstPrice?.textContent|| (firstPrice?.dataset?.preco ? 'R$ '+firstPrice.dataset.preco : 'CONSULTE')).trim();
+    quick.innerHTML='<div class="cardQuickPrice">'+priceText+'</div><div class="quickButtons"></div><button class="detailsToggle" type="button">VER TODAS AS MODIFICAÇÕES</button>';
+    const qb=quick.querySelector('.quickButtons');
+    if(firstButtons){
+      [...firstButtons.querySelectorAll('a')].slice(0,2).forEach(a=>qb.appendChild(a.cloneNode(true)));
+    }
+    if(!qb.children.length){
+      qb.innerHTML='<a href="https://wa.me/5581994706810" target="_blank">COMPRAR COM NAILDO</a><a href="https://wa.me/5511966633925" target="_blank">COMPRAR COM GEOVANE</a>';
+    }
+    body.insertBefore(quick,scroll);
+    quick.querySelector('.detailsToggle').addEventListener('click',()=>{
+      card.classList.add('details-open');
+      card.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+    const close=document.createElement('button');
+    close.type='button'; close.className='detailsToggle'; close.textContent='FECHAR MODIFICAÇÕES';
+    close.addEventListener('click',()=>card.classList.remove('details-open'));
+    scroll.appendChild(close);
+  });
+});
+</script>
+
+</body></html>
