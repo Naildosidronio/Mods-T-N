@@ -1,0 +1,58 @@
+MODS-TN - layout refeito para ficar visualmente próximo ao print enviado.
+Abra index.html.
+Clique na foto de qualquer jogo para abrir os cheats.
+
+
+ATUALIZAÇÃO V2
+- Cards do topo passam mais devagar.
+- Clique em um jogo do carrossel ou do catálogo abre os cheats em outra aba (cheat.html).
+- Mantido o visual do exemplo atual.
+
+
+ATUALIZAÇÃO V3
+- Banner superior ajustado para ficar mais igual ao print enviado.
+- Cabeçalho, título, ícones, caixa de jogos e arte da direita refinados.
+
+
+ATUALIZAÇÃO V4
+- O cabeçalho/banner montado em HTML foi removido.
+- A imagem exata enviada pelo usuário foi colocada como banner superior.
+- Áreas do menu e WhatsApp continuam clicáveis por cima da imagem.
+- Cards continuam lentos e os cheats abrem em outra aba.
+
+
+ATUALIZAÇÃO V5
+- Faixa de jogos agora passa continuamente e devagar, sem parar ao passar o mouse.
+- Ao chegar ao fim, continua do início de forma infinita.
+- Clique em qualquer card continua abrindo os cheats em outra aba.
+
+
+ATUALIZAÇÃO V6
+- Seção Como Funciona ampliada com explicação PS4/PS5, envio via QR Code, envio via pendrive e link do Discord.
+
+
+ATUALIZAÇÃO V7
+- Carrossel automático contínuo por CSS, passando sozinho sem parar.
+- Banner superior com imagem HD, mais brilho, contraste e saturação.
+- Botão flutuante do Discord com link: https://discord.gg/rhsBPDq6bs
+
+
+ATUALIZAÇÃO V8 — COMO FUNCIONA DETALHADO
+- Explicação completa PS4 → modificação → transferência para PS5.
+- Exemplo completo usando Nioh 2.
+- Método 1 detalhado: login via QR Code sem envio de senha.
+- Método 2 detalhado: pendrive → PC/OTG → zip da pasta PS4 → WhatsApp.
+- Discord detalhado: entrar → Tutorial de Arquivo → escolher PS4 ou PS5.
+
+
+ATUALIZAÇÃO V9
+- Adicionado Naruto to Boruto: Shinobi Striker (PC, PS4 e PS5).
+- Imagem original do Naruto colocada intacta dentro da pasta img e usada dentro da página do cheat.
+- Adicionados todos os serviços/preços enviados e aviso de risco de banimento.
+- God of War Ragnarök também usa a imagem do jogo dentro da página de cheat.
+
+ATUALIZAÇÃO V10
+- A seção "Como Funciona" fica escondida ao abrir o site.
+- As informações detalhadas aparecem somente ao clicar na aba "Como Funciona" do banner.
+- Clicar novamente em "Como Funciona" fecha a seção.
+- Ao ir para outra aba do banner, a seção é escondida novamente.
