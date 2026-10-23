@@ -102,7 +102,7 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
     savePlatform=btn.dataset.quickSave;renderStartSaves();saveBox.scrollIntoView({behavior:'smooth',block:'start'});
   }));
   function renderStartSaves(){
-    const list=az(games).flatMap(g=>starts(g,savePlatform).map(x=>({g,x}))).sort((a,b)=>String(a.g.nome).localeCompare(String(b.g.nome),'pt-BR'));
+    const list=az(games.filter(g=>g.publicado===true)).flatMap(g=>starts(g,savePlatform).map(x=>({g,x}))).sort((a,b)=>String(a.g.nome).localeCompare(String(b.g.nome),'pt-BR'));
     const wa=String(settings.whatsapp||initial.whatsapp).replace(/\D/g,'');
     const wa2=String(settings.whatsapp2||initial.whatsapp2).replace(/\D/g,'');
     saveBox.innerHTML=`<h2>💾 Start Saves PS4 e PS5</h2><p style="font-size:12px;color:#abc6e2">Imagens, valores, descrição e vídeos publicados pelo ADM.</p><div class="tn-save-switch">${['PS5','PS4'].map(p=>`<button data-save-platform="${p}" class="${savePlatform===p?'active':''}">Start Saves ${p}</button>`).join('')}</div><div class="tn-save-grid">${list.length?list.map(({g,x})=>{
@@ -114,10 +114,10 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
   }
 
   const oldContainer=searchOrig; // esconder apenas quando houver dados no catálogo sincronizado
-  function getVisible(){return az(games.filter(g=>g.publicado===true&&!g.somenteStartSaves).filter(g=>!query||norm(g.nome).includes(norm(query))||cats(g).some(c=>norm(c).includes(norm(query)))).filter(g=>platform==='Todos'||(platform==='Somente PS5'?onlyPS5(g):platforms(g).includes(platform))).filter(g=>category==='Todos'||cats(g).some(c=>norm(c)===norm(category)));}
+  function getVisible(){return az(games.filter(g=>g.publicado===true&&!g.somenteStartSaves).filter(g=>!query||norm(g.nome).includes(norm(query))||cats(g).some(c=>norm(c).includes(norm(query)))).filter(g=>platform==='Todos'||(platform==='PS5'?onlyPS5(g):platform==='PS4 e PS5'?platforms(g).includes('PS4')&&platforms(g).includes('PS5'):platforms(g).includes(platform))).filter(g=>category==='Todos'||cats(g).some(c=>norm(c)===norm(category)));}
   function render(){
     if(!hasError && receivedGames && receivedSettings){setStatus('● Firebase conectado — '+remoteGames.length+' jogos públicos no Firestore. Novos jogos, capas, preços, descontos e Start Saves do ADM são sincronizados automaticamente.');}
-    controls.innerHTML=`<input id="tn-search" value="${esc(query)}" placeholder="🔎 Pesquisar jogo ou gênero" aria-label="Pesquisar jogos">${['Todos','PS4','PS5','PC','Somente PS5'].map(p=>`<button data-tn-platform="${p}" class="${platform===p?'on':''}">${p}</button>`).join('')}<div class="tn-genres">${CATEGORIES.map(c=>`<button data-tn-genre="${esc(c)}" class="${category===c?'on':''}">${esc(c)}</button>`).join('')}</div>`;
+    controls.innerHTML=`<input id="tn-search" value="${esc(query)}" placeholder="🔎 Pesquisar jogo ou gênero" aria-label="Pesquisar jogos">${['Todos','PS5','PS4 e PS5','PC'].map(p=>`<button data-tn-platform="${p}" class="${platform===p?'on':''}">${p}</button>`).join('')}<div class="tn-genres">${CATEGORIES.map(c=>`<button data-tn-genre="${esc(c)}" class="${category===c?'on':''}">${esc(c)}</button>`).join('')}</div>`;
     let input=controls.querySelector('input');input.addEventListener('input',e=>{query=e.target.value;renderCards();});
     controls.querySelectorAll('[data-tn-platform]').forEach(b=>b.onclick=()=>{platform=b.dataset.tnPlatform;render();});
     controls.querySelectorAll('[data-tn-genre]').forEach(b=>b.onclick=()=>{category=b.dataset.tnGenre;render();});
@@ -161,13 +161,13 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
   function renderCards(){
     grid.innerHTML=getVisible().map(g=>{
       const src=cover(g),img=src?`<img src="${esc(src)}" data-fallback="${esc(g.imagemFallbackUrl||'')}" loading="lazy" alt="${esc(g.nome)}">`:`<div class="tn-gamepic">🎮 ${esc(g.nome)}</div>`;
-      return `<article class="tn-live-card">${img}<h3>${esc(g.nome)}${g.novo?'<span class="tn-pill">NOVO JOGO</span>':''}${hasHotCheat(g)?'<span class="tn-pill">CHEAT NOVO</span>':''}</h3><p>${esc(platforms(g).join(' • '))}</p><div class="tn-categories">${esc(cats(g).join(' · '))}</div>${cost(range(g))}<button data-tn-game="${esc(g.id)}">⚡ Ver cheats</button></article>`;
+      return `<article class="tn-live-card">${img}<h3>${esc(g.nome)}${g.novo?'<span class="tn-pill">NOVO JOGO</span>':''}${hasHotCheat(g)?'<span class="tn-pill">CHEAT NOVO</span>':''}</h3><p>${esc(platforms(g).join(' • '))}</p><div class="tn-categories">${esc(cats(g).join(' · '))}</div>${cost(range(g))}${safeUrl(g.videoUrl)?`<a class="tn-video-link" target="_blank" rel="noopener noreferrer" href="${esc(g.videoUrl)}">▶ Vídeo do jogo</a>`:''}<button data-tn-game="${esc(g.id)}">⚡ Ver cheats</button></article>`;
     }).join('');
     grid.querySelectorAll('img[data-fallback]').forEach(img=>{img.addEventListener('error',()=>{const back=img.dataset.fallback;if(back&&img.src!==back){img.src=back;}else{img.style.display='none';}});});
     grid.querySelectorAll('[data-tn-game]').forEach(b=>b.onclick=(e)=>{e.stopPropagation();openDetails(b.dataset.tnGame);});
   }
   function openDetails(id){const g=games.find(v=>v.id===id);if(!g)return;
-    const overlay=document.createElement('div');overlay.className='tn-modal';overlay.innerHTML=`<section><button class="tn-close">✕ Fechar</button><h2 style="font-size:22px">${esc(g.nome)}</h2><p style="color:#b2cced;margin:10px 0">${esc(platforms(g).join(' • '))}</p>${(g.cheats||[]).map(c=>{
+    const overlay=document.createElement('div');overlay.className='tn-modal';overlay.innerHTML=`<section><button class="tn-close">✕ Fechar</button><h2 style="font-size:22px">${esc(g.nome)}</h2><p style="color:#b2cced;margin:10px 0">${esc(platforms(g).join(' • '))}</p>${safeUrl(g.videoUrl)?`<p><a class="tn-video-link" href="${esc(g.videoUrl)}" rel="noopener noreferrer" target="_blank">▶ Assistir vídeo deste jogo</a></p>`:''}${(g.cheats||[]).map(c=>{
       const p=promo(g,c),msg=`Olá, quero ${g.nome} — ${c.titulo}, por ${fmt(p.final)}.`;
       return `<article class="tn-offer" style="border:${c.novo?'1px solid #ea3b69':'1px solid #315f94'};background:linear-gradient(125deg,#102b48,#1e1132)"><h3>${c.novo?'<span class="tn-pill">✨ NOVO CHEAT</span> ':''}${p.pct?`<span class="tn-pill">🔥 ${p.pct}% OFF</span> `:''}${esc(c.titulo)}</h3>${cost(p)}<p>${esc(c.descricao||'')}</p>${/^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)/.test(c.videoUrl||'')?`<a href="${esc(c.videoUrl)}" target="_blank" rel="noopener noreferrer" class="tn-video-link">▶ Ver video do cheat</a>`:''}<a href="https://wa.me/${String(settings.whatsapp||initial.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a href="https://wa.me/${String(settings.whatsapp2||initial.whatsapp2).replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">💬 Comprar com Geovane</a></article>`;}).join('')}</section>`;
     document.body.appendChild(overlay);overlay.querySelector('button').onclick=()=>overlay.remove();overlay.addEventListener('click',ev=>{if(ev.target===overlay)overlay.remove();});

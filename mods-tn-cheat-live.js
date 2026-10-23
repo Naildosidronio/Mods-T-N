@@ -92,6 +92,9 @@ function displayGame(game){
   const platforms=(game.plataformas||[]).filter(p=>['PS4','PS5','PC'].includes(p));
   document.getElementById('platform').textContent=platforms.join(' • ')||'Consulte plataformas';
   document.getElementById('intro').textContent=game.descricao||'';
+  let gameVideoLink=document.getElementById('tn-game-video-link');
+  if(!gameVideoLink){gameVideoLink=document.createElement('a');gameVideoLink.id='tn-game-video-link';gameVideoLink.target='_blank';gameVideoLink.rel='noopener noreferrer';gameVideoLink.textContent='▶ Assistir vídeo deste jogo';gameVideoLink.style.cssText='display:block;margin:12px 0;color:#8dd4ff;font-weight:bold';document.getElementById('intro').insertAdjacentElement('afterend',gameVideoLink);}
+  if(/^https:\/\//i.test(game.videoUrl||'')){gameVideoLink.href=game.videoUrl;gameVideoLink.style.display='block';}else{gameVideoLink.removeAttribute('href');gameVideoLink.style.display='none';}
   const phone=String(settings.whatsapp||initial.whatsapp);
   const phone2=String(settings.whatsapp2||initial.whatsapp2);
   const offers=Array.isArray(game.cheats)?game.cheats:[];
