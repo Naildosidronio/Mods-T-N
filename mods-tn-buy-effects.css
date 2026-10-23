@@ -1,0 +1,14 @@
+/* MODZ TN V26 — efeito de compra completo, apenas arte */
+.tn-v26-overlay{position:fixed;inset:0;z-index:2147483646;display:block;overflow:hidden;pointer-events:all}
+.tn-v26-crows{background:radial-gradient(ellipse at 50% 50%,#551023 0%,#150711 43%,#010208 85%)}
+.tn-v26-storm{background:radial-gradient(ellipse at 50% 50%,#173c91 0%,#080e32 44%,#01030d 85%)}
+.tn-v26-particles{position:absolute;inset:0;overflow:hidden}
+.tn-v26-crow{position:absolute;top:var(--top);left:-25%;width:clamp(48px,15vw,135px);height:clamp(36px,12vw,105px);opacity:0;filter:drop-shadow(0 0 10px #bd2c47);animation:tn-v26-siteflight 2.4s var(--delay) both linear}
+.tn-v26-crow svg{width:100%;height:100%;animation:tn-v26-sitewings .21s infinite alternate ease-in-out}
+@keyframes tn-v26-siteflight{0%{transform:translate(-35vw,40px) scale(var(--scale));opacity:0}10%{opacity:1}70%{opacity:1}100%{transform:translate(155vw,-70px) scale(var(--scale));opacity:0}}
+@keyframes tn-v26-sitewings{from{transform:scaleY(.6)}to{transform:scaleY(1.15)}}
+.tn-v26-bolt{position:absolute;left:var(--left);top:var(--top);height:clamp(90px,36vh,280px);width:clamp(6px,1.2vw,13px);background:#e8faff;filter:drop-shadow(0 0 12px #8bd2ff) drop-shadow(0 0 28px #367bff);clip-path:polygon(45% 0%,100% 38%,44% 46%,92% 75%,10% 100%,35% 54%,0 46%);opacity:0;transform:rotate(calc((var(--i) * 37deg) - 100deg));animation:tn-v26-siteelectric 1.05s var(--delay) 3 both}
+@keyframes tn-v26-siteelectric{0%,10%,35%,100%{opacity:0;scale:.55}17%,28%,50%{opacity:1;scale:1.15}65%{opacity:.12}}
+.tn-v26-storm:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#e2f7ff 0%,#6aa4ff 16%,transparent 70%);mix-blend-mode:screen;pointer-events:none;opacity:0;animation:tn-v26-siteflash .74s .12s 4 both}
+@keyframes tn-v26-siteflash{0%,17%,54%,100%{opacity:0}23%,37%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.tn-v26-overlay{display:none!important}}
