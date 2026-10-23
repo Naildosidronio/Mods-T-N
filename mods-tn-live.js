@@ -13,7 +13,7 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
   const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmt=(n)=> (Math.round(Number(n)||0)/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   const bounded=(v)=>Math.min(100,Math.max(0,Math.round(Number(v)||0)));
-  const initial={whatsapp:'5581994706810',whatsapp2:'5511966633925',pix:'',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoMensagem:'Ofertas especiais Mods-TN'};
+  const initial={whatsapp:'5581994706810',whatsapp2:'5511966633925',pix:'',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoEscopo:'loja',promoJogoIds:[],promoMensagem:'Ofertas especiais Mods-TN'};
   const siteSearchParam=new URLSearchParams(window.location.search).get('jogo');
   let settings={...initial},games=[],query=siteSearchParam?siteSearchParam.slice(0,180):'',platform='Todos',category='Todos',seed=[],imported=false,remoteGames=[],everRemote=false;
   const CATEGORIES=['Todos','Ação','Aventura','Mundo aberto','RPG','Soulslike','Tiro','Corrida','Luta','Terror','Sobrevivência','Plataforma','Estratégia','Esporte','Anime','Cooperativo','Indie','Outros'];
@@ -31,12 +31,13 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
   const starts=(g,p)=>Array.isArray(g.startSaves)?g.startSaves.filter(s=>s.publicado!==false&&String(s.plataforma||'').toUpperCase().trim()===p):[];
   const safeUrl=v=>/^https:\/\//i.test(String(v||''))?String(v):'';
   const safeImage=v=>{const x=String(v||'');return safeUrl(x)||(/^data:image\/jpeg;base64,[A-Za-z0-9+/=]{40,170000}$/.test(x)?x:'');};
+  const promoApplies=g=>settings.promoEscopo!=='jogos'||(Array.isArray(settings.promoJogoIds)&&settings.promoJogoIds.includes(String(g?.id||'')));
   const promo=(g,c)=>{
     const original=Math.max(0,Math.round(Number(c?.precoCentavos)||0));
     const pausada=settings.promocoesSuspensas===true||(settings.promoGlobalAtiva===true&&bounded(settings.promoGlobalPercent)===0);
     if(pausada)return {original,final:original,pct:0};
     if(!original)return {original,final:0,pct:0};
-    const active=settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0;
+    const active=settings.promoGlobalAtiva&&promoApplies(g)&&bounded(settings.promoGlobalPercent)>0;
     const override=active&&settings.promoGlobalForcar!==false;
     if(!override&&(g?.promocaoAtiva===false||c?.promocaoAtiva===false))return {original,final:original,pct:0};
     const pct=override?bounded(settings.promoGlobalPercent):bounded(c?.descontoPercent)||bounded(g?.descontoPercent)||(active?bounded(settings.promoGlobalPercent):0);
@@ -121,7 +122,7 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
     let input=controls.querySelector('input');input.addEventListener('input',e=>{query=e.target.value;renderCards();});
     controls.querySelectorAll('[data-tn-platform]').forEach(b=>b.onclick=()=>{platform=b.dataset.tnPlatform;render();});
     controls.querySelectorAll('[data-tn-genre]').forEach(b=>b.onclick=()=>{category=b.dataset.tnGenre;render();});
-    if(!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&Number(settings.promoGlobalPercent)>0){promoBox.innerHTML=`<div class="tn-promo-all">🔥 ${esc(settings.promoMensagem||'Ofertas Mods-TN')} — ${bounded(settings.promoGlobalPercent)}% OFF</div>`;}else promoBox.innerHTML='';
+    if(!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&Number(settings.promoGlobalPercent)>0){promoBox.innerHTML=`<div class="tn-promo-all">🔥 ${esc(settings.promoMensagem||'Ofertas Mods-TN')} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoEscopo==='jogos'?'EM JOGOS SELECIONADOS':'EM TODA A LOJA'}</div>`;}else promoBox.innerHTML='';
     renderCards();
     renderStartSaves();
     updateCarousel();
@@ -133,7 +134,7 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
     const picks=games.filter(spotlightEligible).sort(spotlightOrder).slice(0,8);
     const global=!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0;
     if(!picks.length&&!global){spotlight.innerHTML='';return;}
-    spotlight.innerHTML=`${global?`<div class="tn-home-banner">🔥 ${esc(settings.promoMensagem||'Ofertas Mods-TN')} — ${bounded(settings.promoGlobalPercent)}% OFF</div>`:''}
+    spotlight.innerHTML=`${global?`<div class="tn-home-banner">🔥 ${esc(settings.promoMensagem||'Ofertas Mods-TN')} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoEscopo==='jogos'?'NOS JOGOS SELECIONADOS':'EM TODA A LOJA'}</div>`:''}
     <h2 class="tn-home-title">✨ Novos jogos, cheats e promoções</h2><p class="tn-home-description">Tudo que o ADM publicar em destaque aparece automaticamente aqui.</p>
     <div class="tn-home-grid">${picks.map(g=>{const p=range(g),img=cover(g),hot=(g.cheats||[]).find(c=>c.novo);return `<article class="tn-home-card ${g.novo||hot?'tn-home-new':''}">${img?`<img src="${esc(img)}" loading="lazy" alt="${esc(g.nome)}">`:''}<div class="tn-home-badges">${g.novo?'<span>✨ JOGO NOVO</span>':''}${hot?'<span>⚡ CHEAT NOVO</span>':''}${g.destaque?'<span>⭐ DESTAQUE</span>':''}${p.final<p.original?`<span class="sale">🔥 ${p.pct}% OFF</span>`:''}</div><h3>${esc(g.nome)}</h3><p>${hot?'Novo cheat: '+esc(hot.titulo):esc((g.cheats||[]).slice(0,1).map(c=>c.titulo).join(' · ')||'Confira as ofertas')}</p>${cost(p)}<button data-tn-spot="${esc(g.id)}">Ver cheats e ofertas →</button></article>`;}).join('')}</div>`;
     spotlight.querySelectorAll('[data-tn-spot]').forEach(b=>b.onclick=()=>openDetails(b.dataset.tnSpot));
@@ -172,7 +173,18 @@ if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') &&
       return `<article class="tn-offer" style="border:${c.novo?'1px solid #ea3b69':'1px solid #315f94'};background:linear-gradient(125deg,#102b48,#1e1132)"><h3>${c.novo?'<span class="tn-pill">✨ NOVO CHEAT</span> ':''}${p.pct?`<span class="tn-pill">🔥 ${p.pct}% OFF</span> `:''}${esc(c.titulo)}</h3>${cost(p)}<p>${esc(c.descricao||'')}</p>${/^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)/.test(c.videoUrl||'')?`<a href="${esc(c.videoUrl)}" target="_blank" rel="noopener noreferrer" class="tn-video-link">▶ Ver video do cheat</a>`:''}<a href="https://wa.me/${String(settings.whatsapp||initial.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a href="https://wa.me/${String(settings.whatsapp2||initial.whatsapp2).replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">💬 Comprar com Geovane</a></article>`;}).join('')}</section>`;
     document.body.appendChild(overlay);overlay.querySelector('button').onclick=()=>overlay.remove();overlay.addEventListener('click',ev=>{if(ev.target===overlay)overlay.remove();});
   }
+  // Videos publicos somente: nunca expor chave da API nem comentarios do ADM.
+  const youtubeFeed=document.createElement('section');youtubeFeed.id='tn-v27-youtube-feed';
+  youtubeFeed.style.cssText='max-width:1200px;margin:28px auto;padding:16px;border:1px solid #224e86;background:#07192d;border-radius:12px;color:white';
+  (document.querySelector('main')||document.body).appendChild(youtubeFeed);
+  const videoIdOK=id=>/^[A-Za-z0-9_-]{11}$/.test(String(id||''));
+  function refreshYoutubeFeed(){
+   const videos=(Array.isArray(settings.youtubeVideosPublicos)?settings.youtubeVideosPublicos:[]).filter(v=>videoIdOK(v.id)).slice(0,12);
+   youtubeFeed.innerHTML=videos.length?`<h2 style="margin:0 0 15px">📺 Novos vídeos do canal MODZ TN</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:12px">${videos.map(v=>`<a href="https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}" target="_blank" rel="noopener noreferrer" style="background:#102b48;border:1px solid #20558a;border-radius:9px;padding:10px;color:#fff;text-decoration:none">${safeImage(v.thumb)?`<img alt="Capa do vídeo" loading="lazy" src="${esc(v.thumb)}" style="width:100%;height:118px;object-fit:cover;border-radius:7px">`:''}<strong style="display:block;margin-top:6px;font-size:12px">${esc(v.title||'Vídeo do canal')}</strong><small>▶ Assistir no YouTube</small></a>`).join('')}</div>`:'';
+   youtubeFeed.hidden=!videos.length;
+  }
+  refreshYoutubeFeed();
   const publicQuery=firestore.query(firestore.collection(db,'jogos'),firestore.where('publicado','==',true));
   firestore.onSnapshot(publicQuery,snapshot=>{receivedGames=true;hasError=false;remoteGames=az(snapshot.docs.map(d=>({...d.data(),id:d.id})));if(remoteGames.length)everRemote=true;refreshSource();if(games.length||imported){if(oldContainer)oldContainer.classList.add('tn-live-hidden');render();}},err=>{hasError=true;setStatus('ERRO Firestore jogos: '+err.message+'. O catálogo antigo permanece, mas descontos novos NÃO estão sincronizados.',true);console.error('Mods-TN Firestore jogos:',err)});
-  firestore.onSnapshot(firestore.doc(db,'configuracoes','publico'),snap=>{receivedSettings=true;if(snap.exists()){settings={...initial,...snap.data()};imported=!!snap.data().catalogoInicializado;}refreshSource();if(games.length||imported){if(oldContainer)oldContainer.classList.add('tn-live-hidden');render();}else if(!hasError){setStatus('Firebase conectado; aguardando jogos publicados pelo ADM.');}},err=>{hasError=true;setStatus('ERRO Firestore configurações: '+err.message+'. Promoções do ADM NÃO estão sincronizadas.',true);console.error('Mods-TN Firestore configuracoes:',err)});
+  firestore.onSnapshot(firestore.doc(db,'configuracoes','publico'),snap=>{receivedSettings=true;if(snap.exists()){settings={...initial,...snap.data()};imported=!!snap.data().catalogoInicializado;refreshYoutubeFeed();}refreshSource();if(games.length||imported){if(oldContainer)oldContainer.classList.add('tn-live-hidden');render();}else if(!hasError){setStatus('Firebase conectado; aguardando jogos publicados pelo ADM.');}},err=>{hasError=true;setStatus('ERRO Firestore configurações: '+err.message+'. Promoções do ADM NÃO estão sincronizadas.',true);console.error('Mods-TN Firestore configuracoes:',err)});
 }

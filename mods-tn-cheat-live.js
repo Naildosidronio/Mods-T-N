@@ -10,7 +10,7 @@ const norm = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u03
 const formatBRL = cents => (Math.round(Number(cents)||0)/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const bounded = v => Math.max(0,Math.min(100,Math.round(Number(v)||0)));
 const cents = v => Math.max(0,Math.round(Number(v)||0));
-const initial = {whatsapp:'5581994706810',whatsapp2:'5511966633925',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoMensagem:'Ofertas especiais Mods-TN'};
+const initial = {whatsapp:'5581994706810',whatsapp2:'5511966633925',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoEscopo:'loja',promoJogoIds:[],promoMensagem:'Ofertas especiais Mods-TN'};
 
 /** Concede prioridade: valor promocional do cheat > percentual do cheat > percentual do jogo > percentual global. */
 export function calcularPreco(jogo,cheat,config) {
@@ -18,7 +18,8 @@ export function calcularPreco(jogo,cheat,config) {
   const pausada=config?.promocoesSuspensas===true||(config?.promoGlobalAtiva===true&&bounded(config?.promoGlobalPercent)===0);
   if(pausada)return {original,final:original,pct:0};
   if (!original) return {original,final:original,pct:0};
-  const promoGlobal=config?.promoGlobalAtiva && bounded(config?.promoGlobalPercent)>0;
+  const eligibleGlobal=config?.promoEscopo!=='jogos'||(Array.isArray(config?.promoJogoIds)&&config.promoJogoIds.includes(String(jogo?.id||'')));
+  const promoGlobal=config?.promoGlobalAtiva && eligibleGlobal && bounded(config?.promoGlobalPercent)>0;
   const override=promoGlobal && config?.promoGlobalForcar!==false;
   if (!override && (jogo?.promocaoAtiva===false || cheat?.promocaoAtiva===false)) return {original,final:original,pct:0};
   const ofertaCentavos = override ? 0 : Number(cheat?.promoValorCentavos);
@@ -121,7 +122,7 @@ function update(){
   if(!gotGames||!gotSettings)return;
   const game=gameMatch();
   if(!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0){
-    banner.textContent=`🔥 ${settings.promoMensagem||'Promocao Mods-TN'} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoGlobalForcar!==false?'EM TODOS OS PRODUTOS':'NAS OFERTAS ELEGÍVEIS'}`;
+    banner.textContent=`🔥 ${settings.promoMensagem||'Promocao Mods-TN'} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoEscopo==='jogos'?'NOS JOGOS SELECIONADOS':(settings.promoGlobalForcar!==false?'EM TODOS OS PRODUTOS':'NAS OFERTAS ELEGÍVEIS')}`;
     banner.hidden=false;
   }else{banner.hidden=true;}
   if(game){displayGame(game);setStatus('✓ Firebase conectado. Precos e descontos sincronizados automaticamente com o ADM.');}
