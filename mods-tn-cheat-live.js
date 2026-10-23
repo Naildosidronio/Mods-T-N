@@ -10,11 +10,13 @@ const norm = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u03
 const formatBRL = cents => (Math.round(Number(cents)||0)/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const bounded = v => Math.max(0,Math.min(100,Math.round(Number(v)||0)));
 const cents = v => Math.max(0,Math.round(Number(v)||0));
-const initial = {whatsapp:'5581994706810',whatsapp2:'5511966633925',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promoMensagem:'Ofertas especiais Mods-TN'};
+const initial = {whatsapp:'5581994706810',whatsapp2:'5511966633925',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoMensagem:'Ofertas especiais Mods-TN'};
 
 /** Concede prioridade: valor promocional do cheat > percentual do cheat > percentual do jogo > percentual global. */
 export function calcularPreco(jogo,cheat,config) {
   const original = cents(cheat?.precoCentavos);
+  const pausada=config?.promocoesSuspensas===true||(config?.promoGlobalAtiva===true&&bounded(config?.promoGlobalPercent)===0);
+  if(pausada)return {original,final:original,pct:0};
   if (!original) return {original,final:original,pct:0};
   const promoGlobal=config?.promoGlobalAtiva && bounded(config?.promoGlobalPercent)>0;
   const override=promoGlobal && config?.promoGlobalForcar!==false;
@@ -115,7 +117,7 @@ function update(){
   if(dbError){setStatus('ERRO ao ler Firebase: '+dbError+' — esta pagina pode mostrar precos antigos.',true);banner.hidden=true;return;}
   if(!gotGames||!gotSettings)return;
   const game=gameMatch();
-  if(settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0){
+  if(!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0){
     banner.textContent=`🔥 ${settings.promoMensagem||'Promocao Mods-TN'} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoGlobalForcar!==false?'EM TODOS OS PRODUTOS':'NAS OFERTAS ELEGÍVEIS'}`;
     banner.hidden=false;
   }else{banner.hidden=true;}
@@ -124,7 +126,7 @@ function update(){
     setStatus('Firebase conectado, mas este jogo nao consta como publicado no ADM.',true);
     grid.innerHTML='<div>Jogo indisponivel no catalogo publico. Consulte a Mods-TN.</div>';
     banner.hidden=true;
-  }else{applyLegacyDiscount();setStatus('✓ Firebase conectado. Catalogo inicial: aplicando a promocao global aos precos originais.');}
+  }else{applyLegacyDiscount();setStatus(settings.promocoesSuspensas?'✓ Firebase conectado. Promoção 0%: preços originais, sem descontos.':'✓ Firebase conectado. Catálogo inicial sincronizado.');}
 }
 try {
   if(!firebaseConfig.apiKey||!firebaseConfig.appId||/PREENCHER|SUBSTITUIR/.test(firebaseConfig.apiKey+firebaseConfig.appId))throw Error('Configuração Firebase Web não preenchida');
