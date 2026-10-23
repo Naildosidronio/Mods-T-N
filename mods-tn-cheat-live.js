@@ -49,7 +49,7 @@ style.textContent=`
 #tn-cheat-firebase-status{border:1px solid #244e7d;border-radius:9px;padding:12px;margin:0 0 16px;background:#071d34;color:#baddff;font-size:13px;line-height:1.5}
 #tn-cheat-firebase-status.tn-error{border-color:#c54e4e;color:#ffd1d1}
 #tn-cheat-promo{margin-bottom:15px;padding:13px 15px;border:1px solid #e58129;border-radius:9px;color:#fff;background:linear-gradient(90deg,#602310,#172a4a);font-weight:900;font-size:17px}
-#cheatGrid .tn-live-offer{display:flex;flex-direction:column;gap:9px;min-width:0;border:1px solid #26476d;border-radius:9px;background:rgba(16,40,70,.55);padding:13px}
+#cheatGrid .tn-v15-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}#cheatGrid .tn-v15-badges span{padding:5px 8px;background:#c3194a;color:white;border-radius:5px;font-size:10px;font-weight:900}#cheatGrid .tn-v15-badges span+span{background:#d34c0f}#cheatGrid .tn-v15-new-cheat{border:1px solid #f73e6a!important;box-shadow:0 0 17px #e32c5547!important;background:linear-gradient(135deg,#1a1d48,#261027)!important}#cheatGrid .tn-live-offer{display:flex;flex-direction:column;gap:9px;min-width:0;border:1px solid #26476d;border-radius:9px;background:rgba(16,40,70,.55);padding:13px}
 #cheatGrid .tn-live-title{font-size:13px;font-weight:900;color:#f4f7ff;padding-right:100px}
 #cheatGrid .tn-live-desc{font-size:11px;line-height:1.55;color:#adc4dc;white-space:normal}
 #cheatGrid .tn-live-price{display:flex;align-items:center;flex-wrap:wrap;gap:5px 8px;margin:5px 0 0}
@@ -80,7 +80,7 @@ function gameMatch(){
 }
 function displayGame(game){
   if (!game) return;
-  const coverUrl = /^https:\/\//i.test(game.imagemUrl||'') ? game.imagemUrl :
+  const coverUrl = (/^https:\/\//i.test(game.imagemUrl||'') || /^data:image\/jpeg;base64,[A-Za-z0-9+/=]{40,170000}$/.test(game.imagemUrl||'')) ? game.imagemUrl :
     /^img\/[a-z0-9_.\/-]+\.(?:png|jpe?g|webp)$/i.test(game.imagemArquivo||'') ? game.imagemArquivo : '';
   if(coverUrl){const el=document.getElementById('cover');if(el){el.src=coverUrl;el.alt=game.nome||'';}}
   const name=game.nome||targetName;
@@ -91,12 +91,12 @@ function displayGame(game){
   document.getElementById('platform').textContent=platforms.join(' • ')||'Consulte plataformas';
   document.getElementById('intro').textContent=game.descricao||'';
   const phone=String(settings.whatsapp||initial.whatsapp);
-  const phone2=String(settings.whatsapp2||'');
+  const phone2=String(settings.whatsapp2||initial.whatsapp2);
   const offers=Array.isArray(game.cheats)?game.cheats:[];
   grid.innerHTML=offers.length?offers.map(c=>{
     const title=c.titulo||'Cheat';const p=calcularPreco(game,c,settings);
     const message=`Olá! Quero ${name} - ${title} (${formatBRL(p.final)}).`;
-    return `<article class="tn-live-offer"><div class="tn-live-title">${esc(title)}</div><div class="tn-live-desc">${esc(c.descricao||'').replace(/\r?\n/g,'<br>')}</div><div class="tn-live-price">${renderPreco(p)}</div><div class="tn-live-buttons"><a target="_blank" rel="noopener" href="${esc(waUrl(phone,message))}">Comprar com Naildo</a>${phone2?`<a target="_blank" rel="noopener" href="${esc(waUrl(phone2,message))}">Comprar com Geovane</a>`:''}</div></article>`;
+    return `<article class="tn-live-offer ${c.novo?'tn-v15-new-cheat':''}"><div class="tn-v15-badges">${c.novo?'<span>✨ NOVO CHEAT</span>':''}${p.pct?`<span>🔥 ${p.pct}% OFF</span>`:''}</div><div class="tn-live-title">⚡ ${esc(title)}</div><div class="tn-live-desc">${esc(c.descricao||'').replace(/\r?\n/g,'<br>')}</div><div class="tn-live-price">${renderPreco(p)}</div><div class="tn-live-buttons"><a target="_blank" rel="noopener" href="${esc(waUrl(phone,message))}">Comprar com Naildo</a>${phone2?`<a target="_blank" rel="noopener" href="${esc(waUrl(phone2,message))}">Comprar com Geovane</a>`:''}</div></article>`;
   }).join(''):'<div>Consulte a Mods-TN para saber quais cheats estao disponiveis.</div>';
   const buy=document.getElementById('buyNow');if(buy)buy.href=waUrl(phone,`Olá! Quero comprar cheats de ${name}.`);
 }
@@ -116,7 +116,7 @@ function update(){
   if(!gotGames||!gotSettings)return;
   const game=gameMatch();
   if(settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0){
-    banner.textContent=`🔥 ${settings.promoMensagem||'Promocao Mods-TN'} — ${bounded(settings.promoGlobalPercent)}% OFF (exceto jogos ou cheats com outras regras)`;
+    banner.textContent=`🔥 ${settings.promoMensagem||'Promocao Mods-TN'} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoGlobalForcar!==false?'EM TODOS OS PRODUTOS':'NAS OFERTAS ELEGÍVEIS'}`;
     banner.hidden=false;
   }else{banner.hidden=true;}
   if(game){displayGame(game);setStatus('✓ Firebase conectado. Precos e descontos sincronizados automaticamente com o ADM.');}
