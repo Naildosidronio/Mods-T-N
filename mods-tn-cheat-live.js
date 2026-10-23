@@ -52,7 +52,7 @@ style.textContent=`
 #tn-cheat-firebase-status.tn-error{border-color:#c54e4e;color:#ffd1d1}
 #tn-cheat-promo{margin-bottom:15px;padding:13px 15px;border:1px solid #e58129;border-radius:9px;color:#fff;background:linear-gradient(90deg,#602310,#172a4a);font-weight:900;font-size:17px}
 #cheatGrid .tn-v15-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}#cheatGrid .tn-v15-badges span{padding:5px 8px;background:#c3194a;color:white;border-radius:5px;font-size:10px;font-weight:900}#cheatGrid .tn-v15-badges span+span{background:#d34c0f}#cheatGrid .tn-v15-new-cheat{border:1px solid #f73e6a!important;box-shadow:0 0 17px #e32c5547!important;background:linear-gradient(135deg,#1a1d48,#261027)!important}#cheatGrid .tn-live-offer{display:flex;flex-direction:column;gap:9px;min-width:0;border:1px solid #26476d;border-radius:9px;background:rgba(16,40,70,.55);padding:13px}
-#cheatGrid .tn-live-title{font-size:13px;font-weight:900;color:#f4f7ff;padding-right:100px}
+#cheatGrid .tn-live-title{font-size:13px;font-weight:900;color:#f4f7ff;padding-right:0!important;overflow-wrap:anywhere;max-width:100%}
 #cheatGrid .tn-live-desc{font-size:11px;line-height:1.55;color:#adc4dc;white-space:normal}
 #cheatGrid .tn-live-price{display:flex;align-items:center;flex-wrap:wrap;gap:5px 8px;margin:5px 0 0}
 #cheatGrid .tn-price-old{text-decoration:line-through;color:#9eacc0;font-size:12px}
