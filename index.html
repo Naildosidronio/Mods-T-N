@@ -110,7 +110,7 @@
 <link rel="stylesheet" href="./mods-tn-buy-effects.css" />
 </head><body><div class="site">
 <section aria-label="Banner Mods-TN" class="banner-exato">
-<img alt="Mods-TN - Cheats para jogos PS4, PS5 e PC" class="banner-exato-img" src="img/banner-exato-modelo-hd.jpg"/>
+<img alt="Mods-TN - Cheats para jogos PS4, PS5 e PC" class="banner-exato-img" src="img/banner-exato-modelo-hd.png"/>
 <a aria-label="Início" class="banner-hit hit-inicio" href="#jogos"></a>
 <a aria-label="Catálogo" class="banner-hit hit-catalogo" href="#catalogo"></a>
 <a aria-label="Como Funciona" class="banner-hit hit-como" href="#como"></a>
@@ -3776,7 +3776,22 @@ body{background:#010611}
  const seeAll=document.getElementById('see-all');
  const minLabel=document.getElementById('detail-min-price');
  let activeCatalogCard=null;
+ let activeIndex=4;
  const isShown=el=>!!el && !el.classList.contains('hidden');
+ function clearSelected(){
+   document.querySelectorAll('.game-slide.selected').forEach(el=>el.classList.remove('selected'));
+ }
+ function resetExpand(){
+   panel.classList.remove('detail-expanded');
+   seeAll.textContent='☷   VER TODOS OS CHEATS';
+ }
+ function closePanel(){
+   panel.hidden=true;
+   resetExpand();
+   activeCatalogCard=null;
+   activeIndex=null;
+   clearSelected();
+ }
  function locatePanelBelowCard(card){
    const items=[...catalog.querySelectorAll(':scope > .catalog-card')].filter(isShown);
    const place=items.indexOf(card);
@@ -3796,14 +3811,18 @@ body{background:#010611}
  }
  function showNearCard(index,origin){
    if(!Number.isInteger(index)||index<0||index>=games.length) return;
+   if(activeIndex===index && !panel.hidden){
+     closePanel();
+     return;
+   }
    const fromCatalog=origin?.closest?.('.catalog-card')||null;
    activeCatalogCard=fromCatalog;
+   activeIndex=index;
    if(fromCatalog) locatePanelBelowCard(fromCatalog);
    else gamesZone.after(panel);
    panel.hidden=false;
-   panel.classList.remove('detail-expanded');
-   seeAll.textContent='☷   VER TODOS OS CHEATS';
-   openGame(index,false);  // Preserva toda a lógica original, incluindo 71 templates.
+   resetExpand();
+   openGame(index,false);
    refreshMinimum();
    requestAnimationFrame(()=>{
      const cover=document.getElementById('detail-img');
@@ -3812,13 +3831,8 @@ body{background:#010611}
      if(r.top>innerHeight-100||r.bottom<120) panel.scrollIntoView({behavior:'smooth',block:'nearest'});
    });
  }
- // Exposto só para os manipuladores originais, agora redirecionados a esta função.
  window.openGameInPlace=showNearCard;
- close.addEventListener('click',()=>{
-   panel.hidden=true;
-   activeCatalogCard=null;
-   document.querySelectorAll('.game-slide.selected').forEach(el=>el.classList.remove('selected'));
- });
+ close.addEventListener('click',closePanel);
  seeAll.addEventListener('click',e=>{
    e.stopPropagation();
    e.preventDefault();
@@ -3828,13 +3842,12 @@ body{background:#010611}
  const search=document.getElementById('search');
  search.addEventListener('input',()=>requestAnimationFrame(()=>{
    if(!activeCatalogCard) return;
-   if(!isShown(activeCatalogCard)) {panel.hidden=true;activeCatalogCard=null;return;}
+   if(!isShown(activeCatalogCard)) {closePanel(); return;}
    locatePanelBelowCard(activeCatalogCard);
  }));
  window.addEventListener('resize',()=>{
    if(activeCatalogCard&&!panel.hidden) locatePanelBelowCard(activeCatalogCard);
  });
- // Se a pasta img ainda não foi enviada, mostre uma capa provisória em vez de um ícone quebrado.
  document.addEventListener('error',function(e){
    const el=e.target;
    if(!el || el.tagName!=='IMG'||el.dataset.fallbackUsed==='1')return;
@@ -3844,7 +3857,6 @@ body{background:#010611}
    const svg='<svg xmlns="http://www.w3.org/2000/svg" width="400" height="560" viewBox="0 0 400 560"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#031023"/><stop offset="1" stop-color="#0969bf"/></linearGradient></defs><rect width="400" height="560" fill="url(#g)"/><rect x="16" y="16" width="368" height="528" fill="none" stroke="#27b5ff" stroke-opacity=".7" stroke-width="3"/><text x="200" y="205" text-anchor="middle" font-size="40" fill="#47c3ff">🎮</text><text x="200" y="268" text-anchor="middle" font-size="27" fill="white" font-family="Arial" font-weight="bold">MODS-TN</text><foreignObject x="35" y="304" width="330" height="165"><div xmlns="http://www.w3.org/1999/xhtml" style="color:#cbebff;text-align:center;font-family:Arial;font-size:22px;font-weight:bold;overflow-wrap:anywhere;">'+safe(title)+'</div></foreignObject></svg>';
    el.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
  },true);
- // A página abre com um painel ilustrativo imediatamente sob o carrossel.
  panel.hidden=false;
  refreshMinimum();
  requestAnimationFrame(()=>{const cover=document.getElementById('detail-img');if(cover.complete&&!cover.naturalWidth&&!cover.dataset.fallbackUsed) cover.dispatchEvent(new Event('error'));});
