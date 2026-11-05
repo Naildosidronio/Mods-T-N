@@ -1,202 +1,234 @@
-/** Mods-TN website: catalogo publico ao vivo, Firebase Firestore.
- * Sem credenciais validas, mantem a pagina HTML original intacta.
+/** Mods-TN website V21 (visual Arena neon).
+ * Mostra o catalogo local na hora e, quando o Firebase responde, troca pelos jogos
+ * publicados no app ADM (colecao "jogos" + documento "configuracoes/publico").
+ * Tudo que o ADM publicar aparece aqui sozinho, sem republicar o site.
  */
 import {firebaseConfig} from './mods-tn-firebase-config.js';
-if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('SUBSTITUIR_') && firebaseConfig.appId && !firebaseConfig.appId.startsWith('SUBSTITUIR_')) {
-  const [appModule,firestore] = await Promise.all([
-    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
-    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
-  ]);
-  const app=appModule.initializeApp(firebaseConfig,'mods-tn-site');
-  const db=firestore.getFirestore(app);
-  const norm=(v)=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-  const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const fmt=(n)=> (Math.round(Number(n)||0)/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-  const bounded=(v)=>Math.min(100,Math.max(0,Math.round(Number(v)||0)));
-  const initial={whatsapp:'5581994706810',whatsapp2:'5511966633925',pix:'',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoEscopo:'loja',promoJogoIds:[],promoMensagem:'Ofertas especiais Mods-TN'};
-  const siteSearchParam=new URLSearchParams(window.location.search).get('jogo');
-  let settings={...initial},games=[],query=siteSearchParam?siteSearchParam.slice(0,180):'',platform='Todos',category='Todos',seed=[],imported=false,remoteGames=[],everRemote=false;
-  const CATEGORIES=['Todos','Ação','Aventura','Mundo aberto','RPG','Soulslike','Tiro','Corrida','Luta','Terror','Sobrevivência','Plataforma','Estratégia','Esporte','Anime','Cooperativo','Indie','Outros'];
-  const inferCats=g=>{
- const t=norm((g.nome||'')+' '+(g.descricao||'')); const found=[];
- const rules=[['Mundo aberto',/mundo aberto|open world|elden ring|cyberpunk|gta|red dead|horizon|far cry|ghost of tsushima/],['RPG',/rpg|elden ring|witcher|skyrim|dragons dogma|dragon's dogma|final fantasy/],['Aventura',/aventura|adventure|god of war|uncharted|wolverine|tomb raider|pragmata/],['Ação',/acao|action|combate|wolverine|god of war|pragmata/],['Tiro',/tiro|shooter|division|call of duty|battlefield|far cry/],['Corrida',/corrida|racing|need for speed|forza|gran turismo/]];
- for(const [name,regex] of rules)if(regex.test(t))found.push(name);return found.length?found:['Outros'];
- };
- const cats=g=>{const m=Array.isArray(g.categorias)?g.categorias.filter(x=>CATEGORIES.some(c=>norm(c)===norm(x))&&norm(x)!=='outros'):[];return m.length?m:inferCats(g);};
-  const az=list=>[...list].sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR',{sensitivity:'base'}));
-  function refreshSource(){const unique=remoteGames.length?remoteGames:[];games=az(imported?unique:[...seed.filter(x=>!unique.some(r=>norm(r.nome)===norm(x.nome))),...unique]);}
-  try {const result=await fetch('./catalogo-inicial.json',{cache:'no-store'});if(result.ok){seed=await result.json();}}catch(e){console.warn('Catálogo local indisponível',e);}
-  const platforms=g=>{const raw=Array.isArray(g.plataformas)?g.plataformas.join(' '):String(g.plataformas||g.platform||'');return ['PS4','PS5','PC'].filter(p=>new RegExp('(?:^|[^A-Z0-9])'+p+'(?:$|[^A-Z0-9])','i').test(raw));};
-  const onlyPS5=g=>platforms(g).length===1&&platforms(g)[0]==='PS5';
-  const starts=(g,p)=>Array.isArray(g.startSaves)?g.startSaves.filter(s=>s.publicado!==false&&String(s.plataforma||'').toUpperCase().trim()===p):[];
-  const safeUrl=v=>/^https:\/\//i.test(String(v||''))?String(v):'';
-  const safeImage=v=>{const x=String(v||'');return safeUrl(x)||(/^data:image\/jpeg;base64,[A-Za-z0-9+/=]{40,170000}$/.test(x)?x:'');};
-  const promoApplies=g=>settings.promoEscopo!=='jogos'||(Array.isArray(settings.promoJogoIds)&&settings.promoJogoIds.includes(String(g?.id||'')));
-  const promo=(g,c)=>{
-    const original=Math.max(0,Math.round(Number(c?.precoCentavos)||0));
-    const pausada=settings.promocoesSuspensas===true||(settings.promoGlobalAtiva===true&&bounded(settings.promoGlobalPercent)===0);
-    if(pausada)return {original,final:original,pct:0};
-    if(!original)return {original,final:0,pct:0};
-    const active=settings.promoGlobalAtiva&&promoApplies(g)&&bounded(settings.promoGlobalPercent)>0;
-    const override=active&&settings.promoGlobalForcar!==false;
-    if(!override&&(g?.promocaoAtiva===false||c?.promocaoAtiva===false))return {original,final:original,pct:0};
-    const pct=override?bounded(settings.promoGlobalPercent):bounded(c?.descontoPercent)||bounded(g?.descontoPercent)||(active?bounded(settings.promoGlobalPercent):0);
-    const direct=override?0:Number(c?.promoValorCentavos);
-    const final=Number.isFinite(direct)&&direct>0&&direct<original?Math.round(direct):Math.round(original*(100-pct)/100);
-    return {original,final,pct:Math.round(100*(1-final/original))};
-  };
-  const range=g=>(g.cheats||[]).map(c=>promo(g,c)).filter(p=>p.original>0).sort((a,b)=>a.final-b.final)[0]||{original:0,final:0,pct:0};
-  const cost=p=>`<span class="tn-sale">${p.original>0?(p.final<p.original?`<del>${fmt(p.original)}</del><b class="tn-discount">-${p.pct}%</b>`:'')+`<strong>${fmt(p.final)}</strong>`:'<strong>Valor sob consulta</strong>'}</span>`;
-    const cover=g=>{
-    const direct=safeImage(g.imagemUrl);
-    const fallback=/^img\/[a-zA-Z0-9._/-]+\.(png|jpg|jpeg|webp)$/.test(g.imagemArquivo||'')?g.imagemArquivo:'';
-    return direct||fallback;
-  };
-  const hasHotCheat=g=>(g.cheats||[]).some(c=>c.novo===true);
-  const spotlightEligible=g=>g.publicado===true&&!g.somenteStartSaves&&(g.novo||g.destaque||hasHotCheat(g)||range(g).pct>0);
-  const spotlightOrder=(a,b)=>Number(!!b.novo)-Number(!!a.novo)||Number(hasHotCheat(b))-Number(hasHotCheat(a))||Number(!!b.destaque)-Number(!!a.destaque)||String(a.nome).localeCompare(String(b.nome),'pt-BR');
-  const color='#177af6';
-  const status=document.createElement('div');status.id='tn-firebase-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
-  status.style.cssText='max-width:1100px;margin:12px auto;padding:10px 14px;background:#102034;border:1px solid #2d527c;border-radius:10px;color:#e3f3ff;font-size:12px;text-align:center';
-  let receivedGames=false,receivedSettings=false,hasError=false;
-  function setStatus(message,bad=false){status.textContent=message;status.style.borderColor=bad?'#c54646':'#2d527c';}
-  setStatus('Firebase: conectando ao catálogo Mods-TN... Novos jogos publicados no ADM aparecem aqui automaticamente.');
 
-  const style=document.createElement('style');style.textContent=`
-    .tn-site-cheat-photos{border:1px solid #6936cb;border-radius:12px;background:#1d1538;padding:10px;margin:12px 0;color:#f4d5ff}.tn-site-cheat-gallery-launch{display:block;width:100%;border:1px solid #8852d2;background:linear-gradient(90deg,#5a25b4,#7d39eb);color:#fff;font-weight:900;border-radius:10px;padding:11px 12px;cursor:pointer}.tn-site-cheat-photos-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.tn-site-cheat-photos-grid button{display:block!important;background:none!important;padding:0!important;border:0;cursor:zoom-in}.tn-site-cheat-photos-grid img{width:100%;height:115px;object-fit:cover;border-radius:8px;border:1px solid #8852d2}.tn-site-cheat-open-hint{display:block;margin-top:8px;color:#d2bee9;font-size:11px}.tn-site-photo-modal{background:#03020be8!important}.tn-site-photo-shell{background:#07142a!important;border:1px solid #7b3fe0!important;border-radius:18px!important;width:min(980px,100%)!important;max-height:95vh!important;overflow:auto!important;padding:14px!important;color:#fff}.tn-site-photo-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.tn-site-photo-counter{font-size:13px;font-weight:800;color:#f1e9ff}.tn-site-photo-stage{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;background:linear-gradient(180deg,#0c1324,#09101c);border:1px solid #6a35cb;border-radius:16px;padding:10px}.tn-site-photo-stage img{width:100%;max-height:80vh;object-fit:contain;border-radius:12px;background:#050812}.tn-site-photo-nav{width:50px;height:50px;border-radius:12px;border:0;background:linear-gradient(90deg,#6726c8,#8c3df2);color:#fff;font-size:28px;font-weight:900;cursor:pointer}.tn-site-photo-hint{text-align:center;color:#d6c3ef;font-size:12px;margin:10px 0 2px}@media(max-width:700px){.tn-site-photo-shell{padding:10px!important}.tn-site-photo-stage{grid-template-columns:42px minmax(0,1fr) 42px;gap:6px;padding:8px}.tn-site-photo-nav{width:42px;height:42px;font-size:24px}}
-    .tn-controls{max-width:1100px;margin:14px auto 22px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.tn-controls input{background:#061628;color:white;border:1px solid #2663a4;padding:10px 13px;border-radius:8px;min-width:240px;flex:1;max-width:480px}.tn-controls button{background:#0b2c50;border:1px solid #2463a0;color:white;border-radius:8px;padding:9px 13px;cursor:pointer}.tn-controls button.on{background:#0e7bec}.tn-live-card{padding:10px;background:#061426;border:1px solid #124a87;border-radius:10px;overflow:hidden;color:white}.tn-live-card img{width:100%;height:160px;object-fit:cover;background:#102b46;border-radius:7px}.tn-live-card h3{font-size:13px;line-height:1.25;min-height:38px;margin:10px 0 6px}.tn-live-card .tn-gamepic{height:160px;display:grid;place-items:center;text-align:center;background:#11294a;border-radius:7px}.tn-live-card p{color:#9eb9d3;font-size:11px;min-height:19px}.tn-live-card button{background:#086ce7;border-radius:7px;color:#fff;padding:9px;width:100%;margin-top:10px;border:0;font-weight:800;cursor:pointer}.tn-sale{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}.tn-sale del{color:#91a4b7;font-size:11px}.tn-sale strong{color:#ff9241;font-size:15px}.tn-discount{background:#b92229;border-radius:4px;padding:2px 5px;font-size:10px}.tn-promo-all{padding:16px;margin:12px auto;max-width:1100px;background:linear-gradient(90deg,#74200e,#141d50);border:1px solid #ff8429;border-radius:12px;color:white;font-size:19px;text-align:center}.tn-modal{position:fixed;inset:0;background:#000d;z-index:12000;display:grid;place-items:center;padding:16px}.tn-modal>section{background:#061528;border:1px solid #2c70c0;border-radius:15px;width:min(560px,100%);max-height:90vh;overflow:auto;padding:20px;color:#fff}.tn-close{float:right;color:#fff;background:#224165;border:0;padding:7px 12px;border-radius:7px;cursor:pointer}.tn-offer{margin-top:11px;padding:12px;background:#0a2544;border:1px solid #235588;border-radius:10px}.tn-offer p{font-size:11px;color:#acc6df;margin:8px 0}.tn-offer a{display:inline-block;background:#059948;border-radius:8px;color:white;padding:10px 13px;font-weight:800;text-decoration:none}.tn-pill{display:inline-block;background:#9a2315;color:#fff;font-size:10px;padding:3px 7px;border-radius:5px;margin-left:6px}.catalog-section .catalog-grid:empty::after{content:'Nenhum jogo encontrado';color:#abc}.tn-slide{flex:0 0 129px;height:119px;border:1px solid #32547d;border-radius:7px;overflow:hidden;background:#071827;position:relative;color:white;cursor:pointer}.tn-slide img{width:100%;height:100%;object-fit:cover}.tn-slide b{position:absolute;left:2px;right:2px;bottom:0;padding:7px 4px;background:#000a;font-size:10px;line-height:1.15}.tn-slide small{position:absolute;right:4px;top:4px;background:#a52119;font-size:10px;font-weight:900;border-radius:5px;padding:2px 4px}.tn-new-banner{max-width:1380px;margin:9px auto 15px;background:#231a20;border:1px solid #b42c28;border-radius:8px;padding:10px 13px;display:flex;gap:10px;align-items:center;justify-content:space-between;color:white;font-size:12px}.tn-new-banner button{background:#187aef;border:0;color:white;border-radius:7px;padding:8px 12px;font-weight:800;cursor:pointer}.tn-live-hidden{display:none!important}.tn-genres{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:3px auto 14px;max-width:1100px}.tn-genres button{background:#0b2849;color:#c0dcf9;border:1px solid #235b96;padding:7px 10px;border-radius:9px;cursor:pointer;font-size:11px}.tn-genres button.on{background:#176de5;color:#fff}.tn-categories{font-size:10px;color:#9dd0ff;margin-top:7px}.tn-feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px}.tn-feature{background:#0a1930;border:1px solid #2a5eaa;border-radius:10px;display:flex;gap:12px;overflow:hidden;padding:8px;color:#fff}.tn-feature-cover{width:80px;min-width:80px;background:#101e35}.tn-feature-cover img{width:80px;height:125px;object-fit:cover}.tn-feature h3{font-size:13px;margin:8px 0}.tn-feature button{padding:6px 9px;background:#127bf3;border:none;border-radius:6px;color:white;cursor:pointer}.tn-badges{font-size:10px;color:#ffb979}.tn-featured-section{max-width:1420px;margin:0 auto}
-    #tn-home-spotlight{padding:20px 28px 24px;background:linear-gradient(125deg,#040d1e,#0a1a35 50%,#170d20);border-bottom:1px solid #245688;color:#fff}#tn-home-spotlight .tn-home-title{font-size:25px;font-weight:1000;letter-spacing:.4px;margin:2px 0 9px}#tn-home-spotlight .tn-home-description{font-size:12px;color:#9fbedb;margin:0 0 16px}#tn-home-spotlight .tn-home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:11px;max-width:1450px;margin:auto}#tn-home-spotlight .tn-home-card{border:1px solid #295b97;background:linear-gradient(160deg,#112744,#090e25);padding:11px;border-radius:13px;box-shadow:0 8px 24px #0006;min-width:0}#tn-home-spotlight .tn-home-card.tn-home-new{border-color:#e33c66;box-shadow:0 0 15px #e5254440}#tn-home-spotlight .tn-home-card img{width:100%;height:135px;object-fit:cover;background:#123558;border-radius:9px}#tn-home-spotlight .tn-home-card h3{font-size:14px;line-height:1.3;min-height:28px;margin:8px 0 3px}#tn-home-spotlight .tn-home-card p{font-size:11px;color:#abc5e1;line-height:1.3;min-height:30px}#tn-home-spotlight .tn-home-card button{width:100%;padding:10px;border-radius:7px;background:linear-gradient(95deg,#e4244a,#be1747);color:#fff;font-weight:900;border:0;cursor:pointer;margin-top:9px}#tn-home-spotlight .tn-home-badges{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0}#tn-home-spotlight .tn-home-badges span{background:#c51b45;color:white;font-size:10px;padding:4px 6px;font-weight:900;border-radius:4px}#tn-home-spotlight .tn-home-badges span.sale{background:#df600b}#tn-home-spotlight .tn-home-banner{background:linear-gradient(90deg,#9d1e36,#461a56);border:1px solid #ff5b74;border-radius:11px;padding:13px 16px;font-size:18px;font-weight:900;text-align:center;margin:0 auto 14px;max-width:1450px;box-shadow:0 0 20px #cf234036}#tn-home-spotlight .tn-home-no-sale{display:none}@media(max-width:680px){#tn-home-spotlight{padding:16px 12px}#tn-home-spotlight .tn-home-title{font-size:20px}#tn-home-spotlight .tn-home-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}#tn-home-spotlight .tn-home-card{padding:7px}#tn-home-spotlight .tn-home-card img{height:100px}}
-    .tn-save-tabs{max-width:1420px;margin:22px auto 26px;padding:15px;border:1px solid #145389;border-radius:12px;background:#061529;color:#fff}.tn-save-tabs h2{font-size:24px;text-align:left;margin:0 0 10px}.tn-save-switch{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 15px}.tn-save-switch button{background:#0a5598;color:white;border:1px solid #2d7cda;padding:9px 13px;border-radius:7px;cursor:pointer}.tn-save-switch button.active{background:#197cff}.tn-save-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:11px}.tn-save-card{background:#06101f;border:1px solid #195183;border-radius:9px;overflow:hidden;padding:10px;color:white}.tn-save-card img{width:100%;height:160px;object-fit:cover;border-radius:6px}.tn-save-card strong{display:block;margin:7px 0}.tn-save-card small{color:#a7c9e6}.tn-save-card p{margin:10px 0;font-size:12px;line-height:1.4;white-space:pre-wrap}.tn-save-card a{display:inline-block;background:#09834a;color:white;border-radius:7px;padding:8px 12px;font-size:11px;text-decoration:none;margin-top:7px}.tn-save-card a.tn-video-link{background:#1168bb}.tn-save-card .tn-sale{margin-top:13px}
-  
-    /* V19: capa inteira, proporcao ajustada e navegação de Start Saves visível. */
-    .tn-save-shortcuts{background:linear-gradient(95deg,#071b39,#1d1740);border:1px solid #265da4;border-radius:11px;max-width:1420px;margin:16px auto 4px;padding:12px;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;color:#fff}
-    .tn-save-shortcuts strong{font-size:14px;margin-right:8px}.tn-save-shortcuts button{background:#1269df;color:#fff;border:1px solid #479aff;border-radius:8px;padding:10px 14px;font-weight:800;cursor:pointer}
-    #tn-start-saves{scroll-margin-top:82px;scroll-snap-margin-top:82px}
-    .tn-live-card img,.tn-save-card img,.tn-slide img,.tn-home-card img,.tn-feature-cover img{object-fit:contain!important;object-position:center center!important;background:#071629!important}
-    @media(max-width:700px){.tn-save-shortcuts{margin:10px 12px;padding:10px}.tn-save-shortcuts strong{width:100%;text-align:center}.tn-save-shortcuts button{flex:1;min-width:135px}}
-  `;document.head.appendChild(style);
+const $=s=>document.querySelector(s);
+const norm=v=>String(v||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>(Math.round(Number(n)||0)/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const bounded=v=>Math.min(100,Math.max(0,Math.round(Number(v)||0)));
+const digits=v=>String(v||'').replace(/\D/g,'');
+const initial={whatsapp:'5581994706810',whatsapp2:'5511966633925',pix:'',promoGlobalAtiva:false,promoGlobalPercent:0,promoGlobalForcar:true,promocoesSuspensas:false,promoEscopo:'loja',promoJogoIds:[],promoMensagem:'Ofertas especiais Mods-TN'};
+const CATEGORIES=['Todos','Ação','Aventura','Mundo aberto','RPG','Soulslike','Tiro','Corrida','Luta','Terror','Sobrevivência','Plataforma','Estratégia','Esporte','Anime','Cooperativo','Indie','Outros'];
+const PLATFORMS=['Todos','PS5','PS4 e PS5','PC'];
+const PAGE=24;
 
-  const galleryPayload=photos=>encodeURIComponent(JSON.stringify((Array.isArray(photos)?photos:[]).filter(f=>safeImage(f)).slice(0,4)));
-  const parseGalleryPayload=raw=>{try{return JSON.parse(decodeURIComponent(String(raw||''))).filter(f=>safeImage(f)).slice(0,4)}catch(e){return [];}};
-  let sitePhotoViewer=null;
-  function closeSitePhotoModal(){document.getElementById('tn-site-photo-modal')?.remove();sitePhotoViewer=null;}
-  function renderSitePhotoModal(){if(!sitePhotoViewer?.photos?.length)return;const photos=sitePhotoViewer.photos;const total=photos.length;const index=((Number(sitePhotoViewer.index)||0)%total+total)%total;sitePhotoViewer.index=index;const src=safeImage(photos[index]);if(!src)return;const existing=document.getElementById('tn-site-photo-modal');existing?.remove();const overlay=document.createElement('div');overlay.id='tn-site-photo-modal';overlay.className='tn-modal tn-site-photo-modal';overlay.innerHTML=`<section class="tn-site-photo-shell"><div class="tn-site-photo-top"><span class="tn-site-photo-counter">Foto ${index+1} de ${total}</span><button class="tn-close" type="button" data-tn-photo-close>✕ Fechar</button></div><div class="tn-site-photo-stage">${total>1?`<button type="button" class="tn-site-photo-nav" data-tn-photo-prev aria-label="Foto anterior">‹</button>`:''}<img src="${esc(src)}" alt="Foto ${index+1} do cheat em tela cheia">${total>1?`<button type="button" class="tn-site-photo-nav" data-tn-photo-next aria-label="Próxima foto">›</button>`:''}</div><p class="tn-site-photo-hint">${total>1?'Use as setas para navegar pelas fotos.':'Toque fora da foto para fechar.'}</p></section>`;document.body.appendChild(overlay);}
-  function openSitePhotoGallery(photos,index=0){const list=(Array.isArray(photos)?photos:[]).filter(f=>safeImage(f)).slice(0,4);if(!list.length)return;sitePhotoViewer={photos:list,index:Math.max(0,Math.min(Number(index)||0,list.length-1))};renderSitePhotoModal();}
-  function moveSitePhoto(step){if(!sitePhotoViewer?.photos?.length)return;const total=sitePhotoViewer.photos.length;sitePhotoViewer.index=(sitePhotoViewer.index+step+total)%total;renderSitePhotoModal();}
-  document.addEventListener('click',ev=>{const btn=ev.target.closest('[data-tn-photo-close],[data-tn-photo-prev],[data-tn-photo-next]');if(btn?.hasAttribute('data-tn-photo-close')){closeSitePhotoModal();return;}if(btn?.hasAttribute('data-tn-photo-prev')){moveSitePhoto(-1);return;}if(btn?.hasAttribute('data-tn-photo-next')){moveSitePhoto(1);return;}if(ev.target?.id==='tn-site-photo-modal')closeSitePhotoModal();});
-  document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeSitePhotoModal();if(!document.getElementById('tn-site-photo-modal'))return;if(ev.key==='ArrowLeft')moveSitePhoto(-1);if(ev.key==='ArrowRight')moveSitePhoto(1);});
+const params=new URLSearchParams(location.search);
+const askedGame=(params.get('jogo')||'').slice(0,180);
+let settings={...initial},seed=[],remoteGames=[],games=[],imported=false;
+let query=askedGame,platform='Todos',category='Todos',limit=PAGE,savePlatform='PS5';
+let swiped=false;
+let receivedGames=false,receivedSettings=false,hasError=false,askedOpened=false;
 
-  const section=document.querySelector('.catalog-section');
-  const grid=section?.querySelector('.catalog-grid');
-  const searchOrig=section?.querySelector('#search');
-  if(!grid)throw Error('Nao achei .catalog-grid no HTML do site original.');
-  section.insertBefore(status,section.firstChild);
-  const carousel=document.getElementById('carousel');
-  const detailStatic=document.querySelector('.detail');
-  const oldCount=document.querySelector('.games-title');
-  const newBanner=document.createElement('div');newBanner.id='tn-new-banner';
-  const gamesZone=document.querySelector('.games-zone');if(gamesZone)gamesZone.parentNode.insertBefore(newBanner,gamesZone);
-  const spotlight=document.createElement('section');spotlight.id='tn-home-spotlight';spotlight.setAttribute('aria-label','Novidades e promoções da Mods-TN');
-  if(gamesZone)gamesZone.parentNode.insertBefore(spotlight,gamesZone);else section.parentNode.insertBefore(spotlight,section);
-  // Preserva layout original, e troca os cards apenas quando o Firebase responder.
-  let controls=document.createElement('div');controls.className='tn-controls';
-  let promoBox=document.createElement('div');promoBox.id='tn-promo-box';
-  section.insertBefore(promoBox,grid);
-  section.insertBefore(controls,grid);
-  const featureBox=document.createElement('section');featureBox.className='tn-featured-section';
-  section.insertBefore(featureBox,controls);
-  const saveBox=document.createElement('section');saveBox.className='tn-save-tabs';saveBox.id='tn-start-saves';section.insertBefore(saveBox,controls);
-  const saveNav=document.createElement('div');saveNav.id='tn-save-shortcuts';saveNav.className='tn-save-shortcuts';
-  saveNav.innerHTML='<strong>💾 Start Saves no site</strong><button type="button" data-quick-save="PS5">🎮 Start Saves PS5</button><button type="button" data-quick-save="PS4">🎮 Start Saves PS4</button>';
-  // Acesso antes do carrossel e dos jogos; o cliente nao precisa descobrir a secao no rodape.
-  if(gamesZone)gamesZone.parentNode.insertBefore(saveNav,gamesZone);else section.parentNode.insertBefore(saveNav,section);
-  let savePlatform='PS5';
-  saveNav.querySelectorAll('[data-quick-save]').forEach(btn=>btn.addEventListener('click',()=>{
-    savePlatform=btn.dataset.quickSave;renderStartSaves();saveBox.scrollIntoView({behavior:'smooth',block:'start'});
-  }));
-  function renderStartSaves(){
-    const list=az(games.filter(g=>g.publicado===true)).flatMap(g=>starts(g,savePlatform).map(x=>({g,x}))).sort((a,b)=>String(a.g.nome).localeCompare(String(b.g.nome),'pt-BR'));
-    const wa=String(settings.whatsapp||initial.whatsapp).replace(/\D/g,'');
-    const wa2=String(settings.whatsapp2||initial.whatsapp2).replace(/\D/g,'');
-    saveBox.innerHTML=`<h2>💾 Start Saves PS4 e PS5</h2><p style="font-size:12px;color:#abc6e2">Imagens, valores, descrição e vídeos publicados pelo ADM.</p><div class="tn-save-switch">${['PS5','PS4'].map(p=>`<button data-save-platform="${p}" class="${savePlatform===p?'active':''}">Start Saves ${p}</button>`).join('')}</div><div class="tn-save-grid">${list.length?list.map(({g,x})=>{
-      const image=safeImage(x.imagemUrl)||cover(g),p=promo(g,x),name=g.nome+' — '+x.titulo;
-      const msg='Olá! Quero o Start Save '+name+' por '+fmt(p.final)+'.';
-      return `<article class="tn-save-card">${image?`<img src="${esc(image)}" alt="${esc(name)}">`:''}<strong>${esc(x.titulo||'Start Save')}</strong><small>${esc(g.nome)} · ${esc(x.plataforma)}</small><p>${esc(x.descricao||'')}</p>${cost(p)}<a target="_blank" rel="noopener noreferrer" href="https://wa.me/${wa}?text=${encodeURIComponent(msg)}">💬 Comprar com Naildo</a>${wa2?` <a target="_blank" rel="noopener noreferrer" href="https://wa.me/${wa2}?text=${encodeURIComponent(msg)}">💬 Comprar com Geovane</a>`:''}${safeUrl(x.videoUrl)?` <a class="tn-video-link" href="${esc(x.videoUrl)}" rel="noopener noreferrer" target="_blank">▶ Ver vídeo</a>`:''}</article>`;
-    }).join(''):'<p style="color:#abc6df;font-size:12px">Nenhum Start Save publicado nesta aba.</p>'}</div>`;
-    saveBox.querySelectorAll('[data-save-platform]').forEach(b=>b.onclick=()=>{savePlatform=b.dataset.savePlatform;renderStartSaves();});
-  }
+/* ---------- Regras de dados (iguais as do app) ---------- */
+const inferCats=g=>{
+  const t=norm((g.nome||'')+' '+(g.descricao||''));const found=[];
+  const rules=[['Mundo aberto',/mundo aberto|open world|elden ring|cyberpunk|gta|red dead|horizon|far cry|ghost of tsushima/],['RPG',/rpg|elden ring|witcher|skyrim|dragons dogma|dragon's dogma|final fantasy/],['Aventura',/aventura|adventure|god of war|uncharted|wolverine|tomb raider|pragmata/],['Ação',/acao|action|combate|wolverine|god of war|pragmata/],['Tiro',/tiro|shooter|division|call of duty|battlefield|far cry/],['Corrida',/corrida|racing|need for speed|forza|gran turismo/]];
+  for(const [name,regex] of rules)if(regex.test(t))found.push(name);return found.length?found:['Outros'];
+};
+const cats=g=>{const m=Array.isArray(g.categorias)?g.categorias.filter(x=>CATEGORIES.some(c=>norm(c)===norm(x))&&norm(x)!=='outros'):[];return m.length?m:inferCats(g);};
+const az=list=>[...list].sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR',{sensitivity:'base'}));
+const platforms=g=>{const raw=Array.isArray(g.plataformas)?g.plataformas.join(' '):String(g.plataformas||g.platform||'');return ['PS4','PS5','PC'].filter(p=>new RegExp('(?:^|[^A-Z0-9])'+p+'(?:$|[^A-Z0-9])','i').test(raw));};
+const onlyPS5=g=>platforms(g).length===1&&platforms(g)[0]==='PS5';
+const starts=(g,p)=>Array.isArray(g.startSaves)?g.startSaves.filter(s=>s.publicado!==false&&String(s.plataforma||'').toUpperCase().trim()===p):[];
+const safeUrl=v=>/^https:\/\//i.test(String(v||''))?String(v):'';
+const safeImage=v=>{const x=String(v||'');return safeUrl(x)||(/^data:image\/jpeg;base64,[A-Za-z0-9+/=]{40,170000}$/.test(x)?x:'');};
+const localImage=g=>/^img\/[a-zA-Z0-9._/-]+\.(png|jpg|jpeg|webp)$/.test(g?.imagemArquivo||'')?g.imagemArquivo:'';
+const cover=g=>safeImage(g.imagemUrl)||localImage(g);
+const coverFallback=g=>[safeUrl(g.imagemFallbackUrl),localImage(g)].filter((v,i,a)=>v&&v!==cover(g)&&a.indexOf(v)===i).join('|');
+const isYoutube=u=>/^https:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)/.test(String(u||''));
+const promoApplies=g=>settings.promoEscopo!=='jogos'||(Array.isArray(settings.promoJogoIds)&&settings.promoJogoIds.includes(String(g?.id||'')));
+const promo=(g,c)=>{
+  const original=Math.max(0,Math.round(Number(c?.precoCentavos)||0));
+  const pausada=settings.promocoesSuspensas===true||(settings.promoGlobalAtiva===true&&bounded(settings.promoGlobalPercent)===0);
+  if(pausada)return {original,final:original,pct:0};
+  if(!original)return {original,final:0,pct:0};
+  const active=settings.promoGlobalAtiva&&promoApplies(g)&&bounded(settings.promoGlobalPercent)>0;
+  const override=active&&settings.promoGlobalForcar!==false;
+  if(!override&&(g?.promocaoAtiva===false||c?.promocaoAtiva===false))return {original,final:original,pct:0};
+  const pct=override?bounded(settings.promoGlobalPercent):bounded(c?.descontoPercent)||bounded(g?.descontoPercent)||(active?bounded(settings.promoGlobalPercent):0);
+  const direct=override?0:Number(c?.promoValorCentavos);
+  const final=Number.isFinite(direct)&&direct>0&&direct<original?Math.round(direct):Math.round(original*(100-pct)/100);
+  return {original,final,pct:Math.round(100*(1-final/original))};
+};
+const range=g=>(g.cheats||[]).map(c=>promo(g,c)).filter(p=>p.original>0).sort((a,b)=>a.final-b.final)[0]||{original:0,final:0,pct:0};
+const hasHotCheat=g=>(g.cheats||[]).some(c=>c.novo===true);
+const spotlightEligible=g=>g.publicado===true&&!g.somenteStartSaves&&(g.novo||g.destaque||hasHotCheat(g)||range(g).pct>0);
+const spotlightOrder=(a,b)=>Number(!!b.novo)-Number(!!a.novo)||Number(hasHotCheat(b))-Number(hasHotCheat(a))||Number(!!b.destaque)-Number(!!a.destaque)||String(a.nome).localeCompare(String(b.nome),'pt-BR');
+const visibleGames=()=>games.filter(g=>g.publicado===true&&!g.somenteStartSaves);
+function refreshSource(){const remote=remoteGames.length?remoteGames:[];games=az(imported?remote:[...seed.filter(x=>!remote.some(r=>norm(r.nome)===norm(x.nome))),...remote]);}
+const wa=(n,msg)=>{const num=digits(n===2?settings.whatsapp2||initial.whatsapp2:settings.whatsapp||initial.whatsapp);return `https://wa.me/${num}${msg?`?text=${encodeURIComponent(msg)}`:''}`;};
+const phoneLabel=raw=>{let n=digits(raw);if(n.startsWith('55'))n=n.slice(2);return n.length===11?`(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`:n.length===10?`(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`:n;};
 
-  const oldContainer=searchOrig; // esconder apenas quando houver dados no catálogo sincronizado
-  function getVisible(){return az(games.filter(g=>g.publicado===true&&!g.somenteStartSaves).filter(g=>!query||norm(g.nome).includes(norm(query))||cats(g).some(c=>norm(c).includes(norm(query)))).filter(g=>platform==='Todos'||(platform==='PS5'?onlyPS5(g):platform==='PS4 e PS5'?platforms(g).includes('PS4')&&platforms(g).includes('PS5'):platforms(g).includes(platform))).filter(g=>category==='Todos'||cats(g).some(c=>norm(c)===norm(category)));}
-  function render(){
-    if(!hasError && receivedGames && receivedSettings){setStatus('● Firebase conectado — '+remoteGames.length+' jogos públicos no Firestore. Novos jogos, capas, preços, descontos e Start Saves do ADM são sincronizados automaticamente.');}
-    controls.innerHTML=`<input id="tn-search" value="${esc(query)}" placeholder="🔎 Pesquisar jogo ou gênero" aria-label="Pesquisar jogos">${['Todos','PS5','PS4 e PS5','PC'].map(p=>`<button data-tn-platform="${p}" class="${platform===p?'on':''}">${p}</button>`).join('')}<div class="tn-genres">${CATEGORIES.map(c=>`<button data-tn-genre="${esc(c)}" class="${category===c?'on':''}">${esc(c)}</button>`).join('')}</div>`;
-    let input=controls.querySelector('input');input.addEventListener('input',e=>{query=e.target.value;renderCards();});
-    controls.querySelectorAll('[data-tn-platform]').forEach(b=>b.onclick=()=>{platform=b.dataset.tnPlatform;render();});
-    controls.querySelectorAll('[data-tn-genre]').forEach(b=>b.onclick=()=>{category=b.dataset.tnGenre;render();});
-    if(!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&Number(settings.promoGlobalPercent)>0){promoBox.innerHTML=`<div class="tn-promo-all">🔥 ${esc(settings.promoMensagem||'Ofertas Mods-TN')} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoEscopo==='jogos'?'EM JOGOS SELECIONADOS':'EM TODA A LOJA'}</div>`;}else promoBox.innerHTML='';
-    renderCards();
-    renderStartSaves();
-    updateCarousel();
-    renderFeatured();
-    renderTopSpotlight();
-  }
-  // Secao acima do carrossel: novas publicacoes e ofertas visiveis SEM abrir o jogo.
-  function renderTopSpotlight(){
-    const picks=games.filter(spotlightEligible).sort(spotlightOrder).slice(0,8);
-    const global=!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0;
-    if(!picks.length&&!global){spotlight.innerHTML='';return;}
-    spotlight.innerHTML=`${global?`<div class="tn-home-banner">🔥 ${esc(settings.promoMensagem||'Ofertas Mods-TN')} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoEscopo==='jogos'?'NOS JOGOS SELECIONADOS':'EM TODA A LOJA'}</div>`:''}
-    <h2 class="tn-home-title">✨ Novos jogos, cheats e promoções</h2><p class="tn-home-description">Tudo que o ADM publicar em destaque aparece automaticamente aqui.</p>
-    <div class="tn-home-grid">${picks.map(g=>{const p=range(g),img=cover(g),hot=(g.cheats||[]).find(c=>c.novo);return `<article class="tn-home-card ${g.novo||hot?'tn-home-new':''}">${img?`<img src="${esc(img)}" loading="lazy" alt="${esc(g.nome)}">`:''}<div class="tn-home-badges">${g.novo?'<span>✨ JOGO NOVO</span>':''}${hot?'<span>⚡ CHEAT NOVO</span>':''}${g.destaque?'<span>⭐ DESTAQUE</span>':''}${p.final<p.original?`<span class="sale">🔥 ${p.pct}% OFF</span>`:''}</div><h3>${esc(g.nome)}</h3><p>${hot?'Novo cheat: '+esc(hot.titulo):esc((g.cheats||[]).slice(0,1).map(c=>c.titulo).join(' · ')||'Confira as ofertas')}</p>${cost(p)}<button data-tn-spot="${esc(g.id)}">Ver cheats e ofertas →</button></article>`;}).join('')}</div>`;
-    spotlight.querySelectorAll('[data-tn-spot]').forEach(b=>b.onclick=()=>openDetails(b.dataset.tnSpot));
-    spotlight.querySelectorAll('img').forEach(img=>img.onerror=()=>{img.style.display='none'});
-  }
-  function renderFeatured(){
-    const picks=games.filter(spotlightEligible).sort(spotlightOrder).slice(0,8);
-    featureBox.innerHTML=picks.length?`<h2 style="margin:20px 0 12px;text-align:left;font-size:24px">🔥 Novidades e destaques</h2><div class="tn-feature-grid">${picks.map(g=>{let p=range(g),src=cover(g),hot=hasHotCheat(g);return `<article class="tn-feature"><div class="tn-feature-cover">${src?`<img src="${esc(src)}" alt="${esc(g.nome)}">`:''}</div><div><span class="tn-badges">${g.novo?'JOGO NOVO · ':''}${hot?'⚡ CHEAT NOVO · ':''}${p.pct?'🔥 OFERTA · ':''}${g.destaque?'⭐ DESTAQUE':''}</span><h3>${esc(g.nome)}</h3>${cost(p)}<button data-tn-feature="${esc(g.id)}">Ver ofertas →</button></div></article>`;}).join('')}</div>`:'';
-    featureBox.querySelectorAll('[data-tn-feature]').forEach(b=>b.onclick=()=>openDetails(b.dataset.tnFeature));
-    featureBox.querySelectorAll('img').forEach(i=>i.onerror=()=>{i.style.display='none'});
-  }
-  function updateCarousel(){
-    if(detailStatic)detailStatic.classList.add('tn-live-hidden');
-    if(oldCount)oldCount.textContent=`🎮 JOGOS DISPONÍVEIS • ${games.filter(g=>!g.somenteStartSaves).length} JOGOS`;
-    if(!carousel)return;
-    let list=az(games.filter(g=>!g.somenteStartSaves)).slice(0,100);
-    const inner=list.map(g=>{let coverSrc=cover(g);return `<button class="tn-slide" data-tn-slide="${esc(g.id)}">${coverSrc?`<img src="${esc(coverSrc)}" loading="lazy" alt="${esc(g.nome)}">`:"🎮"}<b>${esc(g.nome)}</b>${g.novo?"<small>NOVO</small>":""}</button>`;}).join('');
-    const track=carousel.querySelector('.carousel-track-v7')||carousel;
-    track.innerHTML=inner;
-    track.querySelectorAll('[data-tn-slide]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();openDetails(b.dataset.tnSlide);});
-    const firstNew=games.find(g=>g.novo&&!g.somenteStartSaves);
-    newBanner.innerHTML=firstNew?`<div class="tn-new-banner"><strong>🔥 NOVO JOGO: ${esc(firstNew.nome)}</strong><button data-tn-new="${esc(firstNew.id)}">Ver cheats →</button></div>`:'';
-    const btn=newBanner.querySelector('button');if(btn)btn.onclick=()=>openDetails(btn.dataset.tnNew);
-  }
-  function renderCards(){
-    grid.innerHTML=getVisible().map(g=>{
-      const src=cover(g),img=src?`<img src="${esc(src)}" data-fallback="${esc(g.imagemFallbackUrl||'')}" loading="lazy" alt="${esc(g.nome)}">`:`<div class="tn-gamepic">🎮 ${esc(g.nome)}</div>`;
-      return `<article class="tn-live-card">${img}<h3>${esc(g.nome)}${g.novo?'<span class="tn-pill">NOVO JOGO</span>':''}${hasHotCheat(g)?'<span class="tn-pill">CHEAT NOVO</span>':''}</h3><p>${esc(platforms(g).join(' • '))}</p><div class="tn-categories">${esc(cats(g).join(' · '))}</div>${cost(range(g))}${safeUrl(g.videoUrl)?`<a class="tn-video-link" target="_blank" rel="noopener noreferrer" href="${esc(g.videoUrl)}">▶ Vídeo do jogo</a>`:''}<button data-tn-game="${esc(g.id)}">⚡ Ver cheats</button></article>`;
-    }).join('');
-    grid.querySelectorAll('img[data-fallback]').forEach(img=>{img.addEventListener('error',()=>{const back=img.dataset.fallback;if(back&&img.src!==back){img.src=back;}else{img.style.display='none';}});});
-    grid.querySelectorAll('[data-tn-game]').forEach(b=>b.onclick=(e)=>{e.stopPropagation();openDetails(b.dataset.tnGame);});
-  }
-  function openDetails(id){const g=games.find(v=>v.id===id);if(!g)return;
-    const overlay=document.createElement('div');overlay.className='tn-modal';overlay.innerHTML=`<section><button class="tn-close">✕ Fechar</button><h2 style="font-size:22px">${esc(g.nome)}</h2><p style="color:#b2cced;margin:10px 0">${esc(platforms(g).join(' • '))}</p>${safeUrl(g.videoUrl)?`<p><a class="tn-video-link" href="${esc(g.videoUrl)}" rel="noopener noreferrer" target="_blank">▶ Assistir vídeo deste jogo</a></p>`:''}${(g.cheats||[]).map(c=>{
-      const p=promo(g,c),msg=`Olá, quero ${g.nome} — ${c.titulo}, por ${fmt(p.final)}.`;
-      return `<article class="tn-offer" style="border:${c.novo?'1px solid #ea3b69':'1px solid #315f94'};background:linear-gradient(125deg,#102b48,#1e1132)"><h3>${c.novo?'<span class="tn-pill">✨ NOVO CHEAT</span> ':''}${p.pct?`<span class="tn-pill">🔥 ${p.pct}% OFF</span> `:''}${esc(c.titulo)}</h3>${cost(p)}<p>${esc(c.descricao||'')}</p>${(Array.isArray(c.fotos)?c.fotos:[]).filter(f=>safeImage(f)).slice(0,4).length?`<div class="tn-site-cheat-photos"><button type="button" class="tn-site-cheat-gallery-launch" data-tn-cheat-gallery="${galleryPayload(c.fotos)}" data-tn-cheat-index="0">📸 Ver fotos do cheat (${c.fotos.filter(f=>safeImage(f)).slice(0,4).length})</button><div class="tn-site-cheat-photos-grid">${c.fotos.filter(f=>safeImage(f)).slice(0,4).map((f,i)=>`<button type="button" data-tn-cheat-gallery="${galleryPayload(c.fotos)}" data-tn-cheat-index="${i}" aria-label="Abrir foto ${i+1}"><img loading="lazy" src="${esc(f)}" alt="Foto ${i+1} do cheat"></button>`).join('')}</div><small class="tn-site-cheat-open-hint">Toque na miniatura para abrir grande.</small></div>`:''}${/^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)/.test(c.videoUrl||'')?`<a href="${esc(c.videoUrl)}" target="_blank" rel="noopener noreferrer" class="tn-video-link">▶ Ver video do cheat</a>`:''}<a href="https://wa.me/${String(settings.whatsapp||initial.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a href="https://wa.me/${String(settings.whatsapp2||initial.whatsapp2).replace(/\D/g,'')}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">💬 Comprar com Geovane</a></article>`;}).join('')}</section>`;
-    document.body.appendChild(overlay);overlay.querySelector('button').onclick=()=>overlay.remove();overlay.querySelectorAll('[data-tn-cheat-gallery]').forEach(b=>b.onclick=(ev)=>{ev.preventDefault();ev.stopPropagation();openSitePhotoGallery(parseGalleryPayload(b.dataset.tnCheatGallery),Number(b.dataset.tnCheatIndex||0));});overlay.addEventListener('click',ev=>{if(ev.target===overlay)overlay.remove();});
-  }
-  // Videos publicos somente: nunca expor chave da API nem comentarios do ADM.
-  const youtubeFeed=document.createElement('section');youtubeFeed.id='tn-v27-youtube-feed';
-  youtubeFeed.style.cssText='max-width:1200px;margin:28px auto;padding:16px;border:1px solid #224e86;background:#07192d;border-radius:12px;color:white';
-  (document.querySelector('main')||document.body).appendChild(youtubeFeed);
-  const videoIdOK=id=>/^[A-Za-z0-9_-]{11}$/.test(String(id||''));
-  function refreshYoutubeFeed(){
-   const videos=(Array.isArray(settings.youtubeVideosPublicos)?settings.youtubeVideosPublicos:[]).filter(v=>videoIdOK(v.id)).slice(0,12);
-   youtubeFeed.innerHTML=videos.length?`<h2 style="margin:0 0 15px">📺 Novos vídeos do canal MODZ TN</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:12px">${videos.map(v=>`<a href="https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}" target="_blank" rel="noopener noreferrer" style="background:#102b48;border:1px solid #20558a;border-radius:9px;padding:10px;color:#fff;text-decoration:none">${safeImage(v.thumb)?`<img alt="Capa do vídeo" loading="lazy" src="${esc(v.thumb)}" style="width:100%;height:118px;object-fit:cover;border-radius:7px">`:''}<strong style="display:block;margin-top:6px;font-size:12px">${esc(v.title||'Vídeo do canal')}</strong><small>▶ Assistir no YouTube</small></a>`).join('')}</div>`:'';
-   youtubeFeed.hidden=!videos.length;
-  }
-  refreshYoutubeFeed();
-  const publicQuery=firestore.query(firestore.collection(db,'jogos'),firestore.where('publicado','==',true));
-  firestore.onSnapshot(publicQuery,snapshot=>{receivedGames=true;hasError=false;remoteGames=az(snapshot.docs.map(d=>({...d.data(),id:d.id})));if(remoteGames.length)everRemote=true;refreshSource();if(games.length||imported){if(oldContainer)oldContainer.classList.add('tn-live-hidden');render();}},err=>{hasError=true;setStatus('ERRO Firestore jogos: '+err.message+'. O catálogo antigo permanece, mas descontos novos NÃO estão sincronizados.',true);console.error('Mods-TN Firestore jogos:',err)});
-  firestore.onSnapshot(firestore.doc(db,'configuracoes','publico'),snap=>{receivedSettings=true;if(snap.exists()){settings={...initial,...snap.data()};imported=!!snap.data().catalogoInicializado;refreshYoutubeFeed();}refreshSource();if(games.length||imported){if(oldContainer)oldContainer.classList.add('tn-live-hidden');render();}else if(!hasError){setStatus('Firebase conectado; aguardando jogos publicados pelo ADM.');}},err=>{hasError=true;setStatus('ERRO Firestore configurações: '+err.message+'. Promoções do ADM NÃO estão sincronizadas.',true);console.error('Mods-TN Firestore configuracoes:',err)});
+/* ---------- Pecas de interface ---------- */
+const priceHtml=(p,label=true)=>p.original>0?`<span class="price">${label&&p.final>=p.original?'<small>a partir de</small>':''}${p.final<p.original?`<del>${fmt(p.original)}</del>`:''}<strong>${fmt(p.final)}</strong></span>`:'<span class="price"><span class="ask">Valor sob consulta</span></span>';
+const imgTag=(src,fb,alt,cls)=>src?`<img class="${cls}" src="${esc(src)}" data-fb="${esc(fb||'')}" alt="${esc(alt)}" loading="lazy" decoding="async">`:'';
+function coverBox(g,alt){const src=cover(g),fb=coverFallback(g);return `<div class="cv">${src?`<img class="bgb" src="${esc(src)}" data-fb="${esc(fb)}" alt="" aria-hidden="true" loading="lazy">${imgTag(src,fb,alt||'Capa de '+g.nome,'fg')}`:''}<div class="nocover" ${src?'hidden':''}>🎮 ${esc(g.nome)}</div>`;}
+function badgesFor(g){const p=range(g),out=[];if(g.novo)out.push('<span class="bd">NOVO</span>');if(hasHotCheat(g))out.push('<span class="bd hot">⚡ CHEAT NOVO</span>');if(p.pct>0)out.push(`<span class="bd sale">-${p.pct}%</span>`);if(g.destaque&&!g.novo)out.push('<span class="bd feat">★ DESTAQUE</span>');return out.length?`<div class="badges">${out.join('')}</div>`:'';}
+function gameCard(g){
+  return `<article class="card" data-open="${esc(g.id)}" tabindex="0" role="button" aria-label="Ver cheats de ${esc(g.nome)}">${coverBox(g)}${badgesFor(g)}</div><div class="cb"><h3>${esc(g.nome)}</h3><div class="pl">🎮 ${esc(platforms(g).join(' · ')||'PS4 · PS5')}</div><div class="cat">${esc(cats(g).slice(0,3).join(' · '))}</div><div class="row">${priceHtml(range(g))}<span class="vbtn">Ver cheats</span></div></div></article>`;
+}
+
+/* ---------- Destaque em slide ---------- */
+let heroList=[],heroIndex=0,heroTimer=null,heroPaused=false;
+function heroPicks(){
+  const list=visibleGames();
+  const picks=list.filter(spotlightEligible).sort(spotlightOrder);
+  const extra=list.filter(g=>!picks.includes(g)&&cover(g)).sort((a,b)=>(b.cheats||[]).length-(a.cheats||[]).length);
+  return [...picks,...extra].slice(0,6);
+}
+function heroTag(g){const p=range(g);if(g.novo)return '<span class="htag">NOVO JOGO</span>';if(hasHotCheat(g))return '<span class="htag">⚡ CHEAT NOVO</span>';if(p.pct>0)return `<span class="htag sale">🔥 ${p.pct}% OFF</span>`;if(g.destaque)return '<span class="htag feat">★ DESTAQUE</span>';return '<span class="htag feat">EM ALTA</span>';}
+function renderHero(){
+  const text=$('#heroText'),art=$('#heroArt');
+  heroList=heroPicks();
+  if(!heroList.length){text.innerHTML='<span class="htag">MODS-TN</span><h1 class="htitle">Cheats para PS4, PS5 e PC</h1><p class="hdesc">Fale com a gente no WhatsApp para consultar os jogos disponíveis.</p>';art.innerHTML='';return;}
+  heroIndex=Math.min(heroIndex,heroList.length-1);
+  art.innerHTML=heroList.map((g,i)=>`<div class="hc" data-hero="${i}">${imgTag(cover(g),coverFallback(g),'Capa de '+g.nome,'')}</div>`).join('');
+  paintHero(false);startHeroTimer();
+}
+function paintHero(animate=true){
+  const g=heroList[heroIndex];if(!g)return;const n=heroList.length,text=$('#heroText');
+  document.querySelectorAll('#heroArt .hc').forEach(el=>{const i=Number(el.dataset.hero);let d=(i-heroIndex+n)%n;if(d>n/2)d-=n;el.className='hc '+(d===0?'c0':d===1?'c1':d===-1?'c-1':'cx');});
+  const p=range(g),cheats=(g.cheats||[]).length;
+  const html=`${heroTag(g)}<h1 class="htitle${String(g.nome||'').length>22?' long':''}">${esc(g.nome)}</h1><p class="hdesc">${esc(g.descricao||(g.cheats||[]).slice(0,3).map(c=>c.titulo).join(' · ')||'Confira todos os cheats e modificações disponíveis.')}</p><div class="hmeta"><span>🎮 ${esc(platforms(g).join(' · ')||'PS4 · PS5')}</span>${cheats?`<span>⚡ ${cheats} ${cheats===1?'opção':'opções'} de cheat</span>`:''}</div><div class="hbtns"><a class="b1" href="#catalogo" data-open="${esc(g.id)}">Ver cheats${p.original>0?' · a partir de '+fmt(p.final):''}</a><a class="b2" href="${esc(wa(1,'Olá! Quero saber dos cheats de '+g.nome+'.'))}" target="_blank" rel="noopener">Falar no WhatsApp</a></div>${n>1?`<div class="hnav"><button class="harrow" type="button" data-hero-step="-1" aria-label="Jogo anterior">‹</button><div class="hdots">${heroList.map((x,i)=>`<button type="button" data-hero-dot="${i}" class="${i===heroIndex?'on':''}" aria-label="Mostrar ${esc(x.nome)}"></button>`).join('')}</div><button class="harrow" type="button" data-hero-step="1" aria-label="Próximo jogo">›</button></div>`:''}`;
+  if(!animate){text.innerHTML=html;return;}
+  text.classList.add('fade');setTimeout(()=>{text.innerHTML=html;text.classList.remove('fade');},180);
+}
+function heroGo(i){if(!heroList.length)return;heroIndex=(i+heroList.length)%heroList.length;paintHero();startHeroTimer();}
+function startHeroTimer(){clearInterval(heroTimer);if(heroList.length<2||matchMedia('(prefers-reduced-motion: reduce)').matches)return;heroTimer=setInterval(()=>{if(!heroPaused&&!document.hidden&&!document.querySelector('.modal'))heroGo(heroIndex+1);},5500);}
+
+/* ---------- Catalogo ---------- */
+function filtered(){
+  const q=norm(query);
+  return visibleGames().filter(g=>!q||norm(g.nome).includes(q)||cats(g).some(c=>norm(c).includes(q)))
+    .filter(g=>platform==='Todos'||(platform==='PS5'?onlyPS5(g):platform==='PS4 e PS5'?platforms(g).includes('PS4')&&platforms(g).includes('PS5'):platforms(g).includes(platform)))
+    .filter(g=>category==='Todos'||cats(g).some(c=>norm(c)===norm(category)));
+}
+function renderChips(){
+  $('#platformChips').innerHTML=PLATFORMS.map(p=>`<button type="button" class="chip ${platform===p?'on':''}" data-platform="${esc(p)}" aria-pressed="${platform===p}">${p==='Todos'?'Todos':'🎮 '+esc(p)}</button>`).join('');
+  const used=new Set(visibleGames().flatMap(cats).map(norm));
+  $('#genreChips').innerHTML=CATEGORIES.filter(c=>c==='Todos'||used.has(norm(c))).map(c=>`<button type="button" class="chip ${category===c?'on':''}" data-genre="${esc(c)}" aria-pressed="${category===c}">${esc(c)}</button>`).join('');
+}
+function renderCatalog(){
+  const list=filtered(),total=visibleGames().length;
+  const show=query?list:list.slice(0,limit);
+  $('#catalogGrid').innerHTML=show.length?show.map(gameCard).join(''):`<div class="empty">Nenhum jogo encontrado${query?` para “${esc(query)}”`:''}.<br><br><a class="b2" href="${esc(wa(1,query?'Olá! Vocês têm cheats para '+query+'?':''))}" target="_blank" rel="noopener">Perguntar no WhatsApp</a></div>`;
+  $('#moreBox').hidden=show.length>=list.length;
+  $('#catCount').textContent=`${total} jogos disponíveis${list.length!==total?` · ${list.length} no filtro`:''} · toque no jogo para ver os cheats e preços.`;
+  $('#trustCount').textContent=`${total} jogos`;
+}
+
+/* ---------- Start Saves ---------- */
+function renderSaves(){
+  document.querySelectorAll('[data-save]').forEach(b=>{const on=b.dataset.save===savePlatform;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);});
+  const list=az(games.filter(g=>g.publicado===true)).flatMap(g=>starts(g,savePlatform).map(x=>({g,x})));
+  const grid=$('#savesGrid');
+  if(!list.length){grid.innerHTML=`<div class="saves-empty" style="grid-column:1/-1"><h3>💾 Start Saves ${savePlatform}</h3><p>Consulte no WhatsApp os jogos e a disponibilidade de Start Saves para ${savePlatform}. Os saves publicados no app aparecem aqui automaticamente.</p><a class="b1" href="${esc(wa(1,'Olá! Quero consultar os Start Saves de '+savePlatform+'.'))}" target="_blank" rel="noopener">💬 Consultar Start Saves ${savePlatform}</a></div>`;return;}
+  grid.innerHTML=list.map(({g,x})=>{
+    const image=safeImage(x.imagemUrl)||cover(g),p=promo(g,x),name=g.nome+' — '+(x.titulo||'Start Save');
+    const msg='Olá! Quero o Start Save '+name+(p.original>0?' por '+fmt(p.final):'')+'.';
+    return `<article class="card save"><div class="cv">${image?`<img class="bgb" src="${esc(image)}" alt="" aria-hidden="true" loading="lazy">${imgTag(image,localImage(g),name,'fg')}`:''}<div class="nocover" ${image?'hidden':''}>💾 ${esc(g.nome)}</div>${p.pct>0?`<div class="badges"><span class="bd sale">-${p.pct}%</span></div>`:''}</div><div class="cb"><h3>${esc(x.titulo||'Start Save')}</h3><div class="pl">${esc(g.nome)} · ${esc(x.plataforma||savePlatform)}</div>${x.descricao?`<p>${esc(x.descricao)}</p>`:''}<div class="row">${priceHtml(p,false)}</div><div class="buy"><a class="n" href="${esc(wa(1,msg))}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a class="g" href="${esc(wa(2,msg))}" target="_blank" rel="noopener">💬 Comprar com Geovane</a>${safeUrl(x.videoUrl)?`<a class="v" href="${esc(x.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo</a>`:''}</div></div></article>`;
+  }).join('');
+}
+
+/* ---------- Videos do YouTube (publicos) ---------- */
+function renderVideos(){
+  const videos=(Array.isArray(settings.youtubeVideosPublicos)?settings.youtubeVideosPublicos:[]).filter(v=>/^[A-Za-z0-9_-]{11}$/.test(String(v.id||''))).slice(0,8);
+  $('#videos').hidden=!videos.length;
+  $('#videoGrid').innerHTML=videos.map(v=>`<a class="vcard" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}" target="_blank" rel="noopener noreferrer"><img loading="lazy" alt="" src="${esc(safeImage(v.thumb)||`https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/hqdefault.jpg`)}"><div><strong>${esc(v.title||'Vídeo do canal')}</strong><small>▶ Assistir no YouTube</small></div></a>`).join('');
+}
+
+/* ---------- Janela do jogo com os cheats ---------- */
+let lastFocus=null;
+function openGame(id){
+  const g=games.find(v=>String(v.id)===String(id));if(!g)return;
+  closeGame(false);lastFocus=document.activeElement;
+  const src=cover(g),fb=coverFallback(g);
+  const offers=(g.cheats||[]).map(c=>{
+    const p=promo(g,c),msg=p.original>0?`Olá, quero ${g.nome} — ${c.titulo}, por ${fmt(p.final)}.`:`Olá, quero ${g.nome} — ${c.titulo}. Qual o valor?`;
+    const photos=(Array.isArray(c.fotos)?c.fotos:[]).filter(f=>safeImage(f)).slice(0,4);
+    return `<article class="offer ${c.novo?'new':''}"><header><div>${c.novo||p.pct?`<div class="ob">${c.novo?'<span class="bd">✨ CHEAT NOVO</span>':''}${p.pct?`<span class="bd sale">🔥 ${p.pct}% OFF</span>`:''}</div>`:''}<h4>⚡ ${esc(c.titulo||'Cheat')}</h4></div>${priceHtml(p,false)}</header>${c.descricao?`<p class="od">${esc(c.descricao)}</p>`:''}${photos.length?`<div class="photos"><div class="pg">${photos.map((f,i)=>`<button type="button" data-photos="${esc(encodeURIComponent(JSON.stringify(photos)))}" data-photo-index="${i}" aria-label="Abrir foto ${i+1}"><img loading="lazy" src="${esc(f)}" alt="Foto ${i+1} do cheat"></button>`).join('')}</div><small>📸 Toque na foto para ver grande.</small></div>`:''}${isYoutube(c.videoUrl)?`<a class="vlink" href="${esc(c.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo do cheat</a>`:''}<div class="buy"><a class="n" href="${esc(wa(1,msg))}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a class="g" href="${esc(wa(2,msg))}" target="_blank" rel="noopener">💬 Comprar com Geovane</a></div></article>`;
+  }).join('')||`<div class="empty">Os cheats deste jogo aparecem aqui assim que forem publicados.<br><br><a class="b2" href="${esc(wa(1,'Olá! Quais cheats vocês têm para '+g.nome+'?'))}" target="_blank" rel="noopener">Perguntar no WhatsApp</a></div>`;
+  const modal=document.createElement('div');modal.className='modal';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Cheats de '+g.nome);
+  modal.innerHTML=`<div class="mbox"><button class="mclose" type="button" data-close aria-label="Fechar">✕</button><div class="mhead">${src?`<img class="mbg" src="${esc(src)}" alt="" aria-hidden="true">`:''}<div class="mcv">${src?imgTag(src,fb,'Capa de '+g.nome,''):'<div class="nocover">🎮</div>'}</div><div class="mi">${badgesFor(g).replace('class="badges"','class="ob" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"')}<h2>${esc(g.nome)}</h2><div class="mtags"><span>🎮 ${esc(platforms(g).join(' · ')||'PS4 · PS5')}</span>${cats(g).slice(0,4).map(c=>`<span>${esc(c)}</span>`).join('')}</div>${g.descricao?`<p>${esc(g.descricao)}</p>`:''}${isYoutube(g.videoUrl)?`<a class="vlink" href="${esc(g.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Assistir vídeo deste jogo</a>`:''}</div></div><div class="mbody"><h3>⚡ ESCOLHA O CHEAT · ${(g.cheats||[]).length} ${(g.cheats||[]).length===1?'OPÇÃO':'OPÇÕES'}</h3>${offers}</div></div>`;
+  document.body.appendChild(modal);document.body.classList.add('tn-lock');
+  modal.querySelector('[data-close]').focus({preventScroll:true});
+}
+function closeGame(restore=true){const m=document.querySelector('.modal');if(!m)return;m.remove();document.body.classList.remove('tn-lock');if(restore&&lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});}
+
+let viewer=null;
+function openViewer(photos,index){viewer={photos,index};paintViewer();}
+function paintViewer(){
+  document.querySelector('.viewer')?.remove();if(!viewer)return;
+  const {photos}=viewer,n=photos.length;viewer.index=(viewer.index+n)%n;
+  const v=document.createElement('div');v.className='viewer';v.setAttribute('role','dialog');v.setAttribute('aria-label','Fotos do cheat');
+  v.innerHTML=`<button class="vc" type="button" data-viewer-close>✕ Fechar</button>${n>1?'<button class="vn p" type="button" data-viewer-step="-1" aria-label="Foto anterior">‹</button>':''}<img src="${esc(photos[viewer.index])}" alt="Foto ${viewer.index+1} de ${n}">${n>1?'<button class="vn n" type="button" data-viewer-step="1" aria-label="Próxima foto">›</button>':''}<p class="vt">Foto ${viewer.index+1} de ${n}</p>`;
+  document.body.appendChild(v);
+}
+function closeViewer(){viewer=null;document.querySelector('.viewer')?.remove();}
+
+/* ---------- Eventos ---------- */
+document.addEventListener('click',ev=>{
+  const t=ev.target;
+  if(t.closest('[data-viewer-close]')||t.classList?.contains('viewer')){closeViewer();return;}
+  const vs=t.closest('[data-viewer-step]');if(vs){viewer.index+=Number(vs.dataset.viewerStep);paintViewer();return;}
+  const ph=t.closest('[data-photos]');if(ph){ev.preventDefault();try{openViewer(JSON.parse(decodeURIComponent(ph.dataset.photos)).filter(f=>safeImage(f)),Number(ph.dataset.photoIndex)||0);}catch(e){}return;}
+  if(t.closest('[data-close]')||t.classList?.contains('modal')){closeGame();return;}
+  const op=t.closest('[data-open]');if(op&&!t.closest('a[target]')){ev.preventDefault();openGame(op.dataset.open);return;}
+  const hs=t.closest('[data-hero-step]');if(hs){heroGo(heroIndex+Number(hs.dataset.heroStep));return;}
+  const hd=t.closest('[data-hero-dot]');if(hd){heroGo(Number(hd.dataset.heroDot));return;}
+  const hc=t.closest('#heroArt .hc');if(hc){if(swiped)return;const i=Number(hc.dataset.hero);if(i===heroIndex)openGame(heroList[i]?.id);else heroGo(i);return;}
+  const pf=t.closest('[data-platform]');if(pf){platform=pf.dataset.platform;limit=PAGE;renderChips();renderCatalog();return;}
+  const gf=t.closest('[data-genre]');if(gf){category=gf.dataset.genre;limit=PAGE;renderChips();renderCatalog();return;}
+  const sv=t.closest('[data-save]');if(sv){savePlatform=sv.dataset.save;renderSaves();return;}
+});
+document.addEventListener('keydown',ev=>{
+  if(viewer){if(ev.key==='Escape')closeViewer();if(ev.key==='ArrowLeft'){viewer.index--;paintViewer();}if(ev.key==='ArrowRight'){viewer.index++;paintViewer();}return;}
+  if(ev.key==='Escape')closeGame();
+  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('.card[data-open]')){ev.preventDefault();openGame(ev.target.dataset.open);}
+});
+document.addEventListener('error',ev=>{const img=ev.target;if(!(img instanceof HTMLImageElement))return;const list=(img.dataset.fb||'').split('|').filter(Boolean);if(list.length){img.dataset.fb=list.slice(1).join('|');img.src=list[0];return;}img.style.display='none';const box=img.closest('.cv');if(box&&img.classList.contains('fg')){box.querySelector('.nocover')?.removeAttribute('hidden');box.querySelector('.bgb')?.remove();}},true);
+$('#moreBtn').addEventListener('click',()=>{limit+=PAGE;renderCatalog();});
+const searchInput=$('#search');searchInput.value=query;
+let searchTimer;searchInput.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{query=e.target.value;limit=PAGE;renderCatalog();},120);});
+const art=$('#heroArt');let sx=null;
+art.addEventListener('pointerdown',e=>{sx=e.clientX;heroPaused=true;});
+art.addEventListener('pointerup',e=>{if(sx!==null&&Math.abs(e.clientX-sx)>45){swiped=true;setTimeout(()=>swiped=false,350);heroGo(heroIndex+(e.clientX<sx?1:-1));}sx=null;setTimeout(()=>heroPaused=false,3000);});
+art.addEventListener('mouseenter',()=>heroPaused=true);art.addEventListener('mouseleave',()=>heroPaused=false);
+const navLinks=[...document.querySelectorAll('.nav a,.mnav a')];
+const sections=['inicio','catalogo','starte-saves-ps5','como','contato'].map(id=>document.getElementById(id)).filter(Boolean);
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));}});},{rootMargin:'-45% 0px -50% 0px'});sections.forEach(s=>io.observe(s));}
+
+/* ---------- Desenho geral ---------- */
+function applySettings(){
+  document.querySelectorAll('[data-wa]').forEach(a=>{const n=a.dataset.wa==='2'?2:1;a.href=wa(n);});
+  document.querySelectorAll('[data-wa-label]').forEach(s=>{s.textContent=phoneLabel(s.dataset.waLabel==='2'?settings.whatsapp2||initial.whatsapp2:settings.whatsapp||initial.whatsapp);});
+  const box=$('#promo');const global=!settings.promocoesSuspensas&&settings.promoGlobalAtiva&&bounded(settings.promoGlobalPercent)>0;
+  box.hidden=!global;if(global)box.textContent=`🔥 ${settings.promoMensagem||'Ofertas Mods-TN'} — ${bounded(settings.promoGlobalPercent)}% OFF ${settings.promoEscopo==='jogos'?'NOS JOGOS SELECIONADOS':'EM TODA A LOJA'}`;
+  $('#liveBadge').hidden=!(receivedGames&&!hasError);
+}
+function render(){
+  applySettings();renderHero();renderChips();renderCatalog();renderSaves();renderVideos();
+  if(askedGame&&!askedOpened){const g=visibleGames().find(x=>norm(x.nome)===norm(askedGame));if(g){askedOpened=true;document.getElementById('catalogo').scrollIntoView();openGame(g.id);}}
+}
+
+/* ---------- Dados: catalogo local primeiro, Firebase depois ---------- */
+try{const r=await fetch('./catalogo-inicial.json',{cache:'no-store'});if(r.ok)seed=await r.json();}catch(e){console.warn('Mods-TN: catálogo local indisponível',e);}
+if(!Array.isArray(seed))seed=[];
+refreshSource();render();
+if(askedGame&&!askedOpened)document.getElementById('catalogo').scrollIntoView();
+
+const configOk=firebaseConfig?.apiKey&&!String(firebaseConfig.apiKey).startsWith('SUBSTITUIR_')&&firebaseConfig.appId&&!String(firebaseConfig.appId).startsWith('SUBSTITUIR_');
+if(configOk){
+  try{
+    const [appModule,firestore]=await Promise.all([import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')]);
+    const app=appModule.initializeApp(firebaseConfig,'mods-tn-site');
+    const db=firestore.getFirestore(app);
+    const update=()=>{refreshSource();render();};
+    firestore.onSnapshot(firestore.query(firestore.collection(db,'jogos'),firestore.where('publicado','==',true)),snap=>{receivedGames=true;hasError=false;remoteGames=az(snap.docs.map(d=>({...d.data(),id:d.id})));update();},err=>{hasError=true;applySettings();console.error('Mods-TN Firestore jogos:',err);});
+    firestore.onSnapshot(firestore.doc(db,'configuracoes','publico'),snap=>{receivedSettings=true;if(snap.exists()){settings={...initial,...snap.data()};imported=!!snap.data().catalogoInicializado;}update();},err=>{hasError=true;applySettings();console.error('Mods-TN Firestore configuracoes:',err);});
+  }catch(e){hasError=true;applySettings();console.error('Mods-TN: Firebase indisponível, mostrando catálogo local.',e);}
 }
