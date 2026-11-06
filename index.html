@@ -357,6 +357,8 @@ body{background:radial-gradient(ellipse at 50% -5%,#18223a 0,#0b0f1a 42%,#07090f
 .cheat-tree summary small{font-size:11px;font-weight:700;color:#7fb0ff;background:#1f6bff26;border-radius:20px;padding:1px 7px}
 .cheat-tree li.grp{padding-left:6px}.cheat-tree li.grp:before{display:none}
 .cheat-tree details[open]>ul{animation:ctOpen .25s ease both}
+.offer:has(.cheat-tree>details.root:not([open])) .buy{display:none}
+.offer .buy{animation:ctOpen .25s ease both}
 @keyframes ctOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .ct-tools{display:flex;gap:8px;margin-top:6px}
 .ct-tools button{background:transparent;border:1px solid #5f7aa8;color:#cfe0ff;font-size:11px;padding:5px 9px;border-radius:6px;cursor:pointer}
