@@ -165,7 +165,7 @@ function openGame(id){
   const offers=(g.cheats||[]).map(c=>{
     const p=promo(g,c),msg=p.original>0?`Olá, quero ${g.nome} — ${c.titulo}, por ${fmt(p.final)}.`:`Olá, quero ${g.nome} — ${c.titulo}. Qual o valor?`;
     const photos=(Array.isArray(c.fotos)?c.fotos:[]).filter(f=>safeImage(f)).slice(0,4);
-    return `<article class="offer ${c.novo?'new':''}"><header><div>${c.novo||p.pct?`<div class="ob">${c.novo?'<span class="bd">✨ CHEAT NOVO</span>':''}${p.pct?`<span class="bd sale">🔥 ${p.pct}% OFF</span>`:''}</div>`:''}<h4>⚡ ${esc(c.titulo||'Cheat')}</h4></div>${priceHtml(p,false)}</header>${c.descricao?`<p class="od">${esc(c.descricao)}</p>`:''}${photos.length?`<div class="photos"><div class="pg">${photos.map((f,i)=>`<button type="button" data-photos="${esc(encodeURIComponent(JSON.stringify(photos)))}" data-photo-index="${i}" aria-label="Abrir foto ${i+1}"><img loading="lazy" src="${esc(f)}" alt="Foto ${i+1} do cheat"></button>`).join('')}</div><small>📸 Toque na foto para ver grande.</small></div>`:''}${isYoutube(c.videoUrl)?`<a class="vlink" href="${esc(c.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo do cheat</a>`:''}<div class="buy"><a class="n" href="${esc(wa(1,msg))}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a class="g" href="${esc(wa(2,msg))}" target="_blank" rel="noopener">💬 Comprar com Geovane</a></div></article>`;
+    return `<article class="offer ${c.novo?'new':''}"><header><div>${c.novo||p.pct?`<div class="ob">${c.novo?'<span class="bd">✨ CHEAT NOVO</span>':''}${p.pct?`<span class="bd sale">🔥 ${p.pct}% OFF</span>`:''}</div>`:''}<h4>⚡ ${esc(c.titulo||'Cheat')}</h4></div>${priceHtml(p,false)}</header>${c.descricao?cheatTree(c.descricao):''}${photos.length?`<div class="photos"><div class="pg">${photos.map((f,i)=>`<button type="button" data-photos="${esc(encodeURIComponent(JSON.stringify(photos)))}" data-photo-index="${i}" aria-label="Abrir foto ${i+1}"><img loading="lazy" src="${esc(f)}" alt="Foto ${i+1} do cheat"></button>`).join('')}</div><small>📸 Toque na foto para ver grande.</small></div>`:''}${isYoutube(c.videoUrl)?`<a class="vlink" href="${esc(c.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo do cheat</a>`:''}<div class="buy"><a class="n" href="${esc(wa(1,msg))}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a class="g" href="${esc(wa(2,msg))}" target="_blank" rel="noopener">💬 Comprar com Geovane</a></div></article>`;
   }).join('')||`<div class="empty">Os cheats deste jogo aparecem aqui assim que forem publicados.<br><br><a class="b2" href="${esc(wa(1,'Olá! Quais cheats vocês têm para '+g.nome+'?'))}" target="_blank" rel="noopener">Perguntar no WhatsApp</a></div>`;
   const modal=document.createElement('div');modal.className='modal';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Cheats de '+g.nome);
   modal.innerHTML=`<div class="mbox"><button class="mclose" type="button" data-close aria-label="Fechar">✕</button><div class="mhead">${src?`<img class="mbg" src="${esc(src)}" alt="" aria-hidden="true">`:''}<div class="mcv">${src?imgTag(src,fb,'Capa de '+g.nome,''):'<div class="nocover">🎮</div>'}</div><div class="mi">${badgesFor(g).replace('class="badges"','class="ob" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"')}<h2>${esc(g.nome)}</h2><div class="mtags"><span>🎮 ${esc(platforms(g).join(' · ')||'PS4 · PS5')}</span>${cats(g).slice(0,4).map(c=>`<span>${esc(c)}</span>`).join('')}</div>${g.descricao?`<p>${esc(g.descricao)}</p>`:''}${isYoutube(g.videoUrl)?`<a class="vlink" href="${esc(g.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Assistir vídeo deste jogo</a>`:''}</div></div><div class="mbody"><h3>⚡ ESCOLHA O CHEAT · ${(g.cheats||[]).length} ${(g.cheats||[]).length===1?'OPÇÃO':'OPÇÕES'}</h3>${offers}</div></div>`;
@@ -258,3 +258,65 @@ if(configOk){
     firestore.onSnapshot(firestore.doc(db,'configuracoes','publico'),snap=>{receivedSettings=true;if(snap.exists()){settings={...initial,...snap.data()};imported=!!snap.data().catalogoInicializado;}update();},err=>{hasError=true;applySettings();console.error('Mods-TN Firestore configuracoes:',err);});
   }catch(e){hasError=true;applySettings();console.error('Mods-TN: Firebase indisponível, mostrando catálogo local.',e);}
 }
+
+function cheatTree(desc){
+ const E=esc;const lines=String(desc||'').split('\n').map(x=>x.trim()).filter(Boolean);if(!lines.length)return '';
+ const isB=x=>/^[•\-\*]\s*/.test(x),warn=x=>/^(⚠|OBS|\()/i.test(x);
+ const root={t:'Inclui',items:[],notes:[],groups:[]};let cur=null;
+ const put=(o,item)=>{if(item.n){const last=o.items[o.items.length-1];if(last&&last.n&&last.noteOpen!==false){last.n+=' '+item.n;return;}}o.items.push(item);};
+ for(let i=0;i<lines.length;i++){const ln=lines[i];
+  if(isB(ln)){(cur||root).items.push({b:ln.replace(/^[•\-\*]\s*/,'')});continue;}
+  const next=lines[i+1];
+  if(!warn(ln)&&(ln.endsWith(':')||(next&&isB(next)))&&ln.length<48){cur={t:ln.replace(/:$/,''),items:[]};root.groups.push(cur);continue;}
+  const o=cur||root,last=o.items[o.items.length-1];
+  if(last&&last.n&&!/^(⚠|OBS|\()/i.test(ln)&&!/[.!)]$/.test(last.n))last.n+=' '+ln;else o.items.push({n:ln});
+ }
+ const cnt=o=>o.items.filter(x=>x.b).length;
+ const total=cnt(root)+root.groups.reduce((a,g)=>a+cnt(g),0);
+ const open=total<=8||root.groups.length<=1;
+ const li=it=>it.b!==undefined?`<li class="leaf">${E(it.b)}</li>`:`<li class="note">${E(it.n)}</li>`;
+ const grp=g=>`<li class="grp"><details class="tn-tree sub"${open?' open':''}><summary>${E(g.t)} <small>${cnt(g)}</small></summary><ul>${g.items.map(li).join('')}</ul></details></li>`;
+ const tools=root.groups.length>1?`<div class="ct-tools"><button type="button" onclick="this.closest('.cheat-tree').querySelectorAll('details').forEach(d=>d.open=true)">⊞ Expandir tudo</button><button type="button" onclick="this.closest('.cheat-tree').querySelectorAll('details.sub').forEach(d=>d.open=false)">⊟ Recolher</button></div>`:'';
+ return `<div class="cheat-tree"><details class="tn-tree root" open><summary>${E(root.groups.length?'Conteúdo':'Inclui')} <small>${total}</small></summary><ul>${root.items.map(li).join('')}${root.groups.map(grp).join('')}</ul></details>${tools}</div>`;
+}
+
+;(function(){
+ try{
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.06,rootMargin:'0px 0px -30px 0px'});
+ let t=null;
+ function scan(){clearTimeout(t);t=setTimeout(()=>{
+  document.querySelectorAll('.card:not([data-rv]),.sh:not([data-rv]),.hcard:not([data-rv]),.steps>*:not([data-rv]),.promo:not([data-rv]),.spot:not([data-rv]),.vgrid>*:not([data-rv])').forEach((el,i)=>{el.dataset.rv='1';el.style.setProperty('--d',((i%4)*80)+'ms');el.classList.add('rv');io.observe(el);});
+ },30);}
+ new MutationObserver(scan).observe(document.body,{childList:true,subtree:true});scan();
+ if(matchMedia('(hover:hover)').matches){
+  document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card .cv');if(!c)return;const r=c.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.setProperty('--ry',(x*8).toFixed(2)+'deg');c.style.setProperty('--rx',(-y*8).toFixed(2)+'deg');},{passive:true});
+  document.addEventListener('pointerout',e=>{const c=e.target.closest&&e.target.closest('.card .cv');if(c){c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg');}},{passive:true});
+ }
+ }catch(e){console.warn('animacoes',e);}
+})();
+
+;(function(){
+ try{
+  const el=document.getElementById('xmasBanner');if(!el)return;
+  const now=new Date(),y=now.getFullYear();
+  let xmas=new Date(y,11,25,23,59,59);
+  const endShow=new Date(y,11,27,0,0,0);
+  const start=new Date(y,10,1,0,0,0);              // aparece a partir de 1 de novembro
+  if(now<start||now>=endShow)return;                  // some sozinho depois do Natal
+  let closed=false;try{closed=sessionStorage.getItem('xmasClosed')==='1';}catch(e){}
+  if(closed)return;
+  el.hidden=false;
+  const sn=el.querySelector('.snow');
+  for(let i=0;i<26;i++){const f=document.createElement('i');f.textContent=Math.random()>.5?'❄':'•';f.style.left=(Math.random()*100)+'%';f.style.fontSize=(8+Math.random()*10)+'px';f.style.animationDuration=(5+Math.random()*7)+'s';f.style.animationDelay=(-Math.random()*10)+'s';f.style.setProperty('--sx',(Math.random()*60-30)+'px');sn.appendChild(f);}
+  const cnt=document.getElementById('xmasCount');
+  function tick(){
+   const d=xmas-new Date();
+   if(d<=0){cnt.innerHTML='<div class="msg">🎅 FELIZ NATAL!</div>';return;}
+   const dd=Math.floor(d/864e5),hh=Math.floor(d%864e5/36e5),mm=Math.floor(d%36e5/6e4),ss=Math.floor(d%6e4/1e3);
+   const u=(n,l)=>`<div class="u"><b>${String(n).padStart(2,'0')}</b><span>${l}</span></div>`;
+   cnt.innerHTML=u(dd,'dias')+u(hh,'horas')+u(mm,'min')+u(ss,'seg');
+  }
+  tick();setInterval(tick,1000);
+  document.getElementById('xmasClose').addEventListener('click',()=>{el.hidden=true;try{sessionStorage.setItem('xmasClosed','1');}catch(e){}});
+ }catch(e){console.warn('natal',e);}
+})();
