@@ -1,4 +1,4 @@
-/** Mods-TN website V21 (visual Arena neon).
+/** Mods-TN website V22 (visual Galeria de quadros).
  * Mostra o catalogo local na hora e, quando o Firebase responde, troca pelos jogos
  * publicados no app ADM (colecao "jogos" + documento "configuracoes/publico").
  * Tudo que o ADM publicar aparece aqui sozinho, sem republicar o site.
@@ -66,39 +66,32 @@ const phoneLabel=raw=>{let n=digits(raw);if(n.startsWith('55'))n=n.slice(2);retu
 /* ---------- Pecas de interface ---------- */
 const priceHtml=(p,label=true)=>p.original>0?`<span class="price">${label&&p.final>=p.original?'<small>a partir de</small>':''}${p.final<p.original?`<del>${fmt(p.original)}</del>`:''}<strong>${fmt(p.final)}</strong></span>`:'<span class="price"><span class="ask">Valor sob consulta</span></span>';
 const imgTag=(src,fb,alt,cls)=>src?`<img class="${cls}" src="${esc(src)}" data-fb="${esc(fb||'')}" alt="${esc(alt)}" loading="lazy" decoding="async">`:'';
-function coverBox(g,alt){const src=cover(g),fb=coverFallback(g);return `<div class="cv">${src?`<img class="bgb" src="${esc(src)}" data-fb="${esc(fb)}" alt="" aria-hidden="true" loading="lazy">${imgTag(src,fb,alt||'Capa de '+g.nome,'fg')}`:''}<div class="nocover" ${src?'hidden':''}>🎮 ${esc(g.nome)}</div>`;}
+function coverBox(g,alt,extra=''){const src=cover(g),fb=coverFallback(g);return `<div class="cv">${imgTag(src,fb,alt||'Capa de '+g.nome,'fg')}<div class="nocover" ${src?'hidden':''}>🎮 ${esc(g.nome)}</div>${extra}</div>`;}
 function badgesFor(g){const p=range(g),out=[];if(g.novo)out.push('<span class="bd">NOVO</span>');if(hasHotCheat(g))out.push('<span class="bd hot">⚡ CHEAT NOVO</span>');if(p.pct>0)out.push(`<span class="bd sale">-${p.pct}%</span>`);if(g.destaque&&!g.novo)out.push('<span class="bd feat">★ DESTAQUE</span>');return out.length?`<div class="badges">${out.join('')}</div>`:'';}
 function gameCard(g){
-  return `<article class="card" data-open="${esc(g.id)}" tabindex="0" role="button" aria-label="Ver cheats de ${esc(g.nome)}">${coverBox(g)}${badgesFor(g)}</div><div class="cb"><h3>${esc(g.nome)}</h3><div class="pl">🎮 ${esc(platforms(g).join(' · ')||'PS4 · PS5')}</div><div class="cat">${esc(cats(g).slice(0,3).join(' · '))}</div><div class="row">${priceHtml(range(g))}<span class="vbtn">Ver cheats</span></div></div></article>`;
+  return `<article class="card" data-open="${esc(g.id)}" tabindex="0" role="button" aria-label="Ver cheats de ${esc(g.nome)}">${coverBox(g,null,badgesFor(g))}<div class="plq"><b>${esc(g.nome)}</b><div class="meta">${esc(platforms(g).join(' · ')||'PS4 · PS5')}</div>${priceHtml(range(g))}<span class="go">Ver cheats</span></div></article>`;
 }
 
-/* ---------- Destaque em slide ---------- */
-let heroList=[],heroIndex=0,heroTimer=null,heroPaused=false;
+/* ---------- Destaque: quadros na parede ---------- */
 function heroPicks(){
   const list=visibleGames();
-  const picks=list.filter(spotlightEligible).sort(spotlightOrder);
+  const picks=list.filter(g=>spotlightEligible(g)&&cover(g)).sort(spotlightOrder);
   const extra=list.filter(g=>!picks.includes(g)&&cover(g)).sort((a,b)=>(b.cheats||[]).length-(a.cheats||[]).length);
-  return [...picks,...extra].slice(0,6);
+  return [...picks,...extra].slice(0,5);
 }
-function heroTag(g){const p=range(g);if(g.novo)return '<span class="htag">NOVO JOGO</span>';if(hasHotCheat(g))return '<span class="htag">⚡ CHEAT NOVO</span>';if(p.pct>0)return `<span class="htag sale">🔥 ${p.pct}% OFF</span>`;if(g.destaque)return '<span class="htag feat">★ DESTAQUE</span>';return '<span class="htag feat">EM ALTA</span>';}
+function frameHtml(g,k){
+  const p=range(g),tag=g.novo?'NOVO':hasHotCheat(g)?'CHEAT NOVO':p.pct>0?`-${p.pct}%`:g.destaque?'DESTAQUE':'';
+  return `<div class="fr w${k}" data-open="${esc(g.id)}" tabindex="0" role="button" aria-label="Ver cheats de ${esc(g.nome)}">${coverBox(g,null,tag?`<div class="badges"><span class="bd${p.pct>0&&!g.novo?' sale':''}">${tag}</span></div>`:'')}<div class="plq"><b>${esc(g.nome)}</b>${priceHtml(p)}</div></div>`;
+}
 function renderHero(){
-  const text=$('#heroText'),art=$('#heroArt');
-  heroList=heroPicks();
-  if(!heroList.length){text.innerHTML='<span class="htag">MODS-TN</span><h1 class="htitle">Cheats para PS4, PS5 e PC</h1><p class="hdesc">Fale com a gente no WhatsApp para consultar os jogos disponíveis.</p>';art.innerHTML='';return;}
-  heroIndex=Math.min(heroIndex,heroList.length-1);
-  art.innerHTML=heroList.map((g,i)=>`<div class="hc" data-hero="${i}">${imgTag(cover(g),coverFallback(g),'Capa de '+g.nome,'')}</div>`).join('');
-  paintHero(false);startHeroTimer();
+  const art=$('#heroArt'),list=heroPicks();
+  if(!list.length){art.innerHTML='';return;}
+  // centro = melhor jogo; os outros se alternam para a direita e a esquerda
+  const left=[],right=[];list.slice(1).forEach((g,i)=>(i%2===0?right:left).push(g));
+  const sz=d=>d===1?2:1;
+  const row=[...left.reverse().map((g,i,a)=>[g,sz(a.length-i)]),[list[0],3],...right.map((g,i)=>[g,sz(i+1)])];
+  art.innerHTML=row.map(([g,k])=>frameHtml(g,k)).join('');
 }
-function paintHero(animate=true){
-  const g=heroList[heroIndex];if(!g)return;const n=heroList.length,text=$('#heroText');
-  document.querySelectorAll('#heroArt .hc').forEach(el=>{const i=Number(el.dataset.hero);let d=(i-heroIndex+n)%n;if(d>n/2)d-=n;el.className='hc '+(d===0?'c0':d===1?'c1':d===-1?'c-1':'cx');});
-  const p=range(g),cheats=(g.cheats||[]).length;
-  const html=`${heroTag(g)}<h1 class="htitle${String(g.nome||'').length>22?' long':''}">${esc(g.nome)}</h1><p class="hdesc">${esc(g.descricao||(g.cheats||[]).slice(0,3).map(c=>c.titulo).join(' · ')||'Confira todos os cheats e modificações disponíveis.')}</p><div class="hmeta"><span>🎮 ${esc(platforms(g).join(' · ')||'PS4 · PS5')}</span>${cheats?`<span>⚡ ${cheats} ${cheats===1?'opção':'opções'} de cheat</span>`:''}</div><div class="hbtns"><a class="b1" href="#catalogo" data-open="${esc(g.id)}">Ver cheats${p.original>0?' · a partir de '+fmt(p.final):''}</a><a class="b2" href="${esc(wa(1,'Olá! Quero saber dos cheats de '+g.nome+'.'))}" target="_blank" rel="noopener">Falar no WhatsApp</a></div>${n>1?`<div class="hnav"><button class="harrow" type="button" data-hero-step="-1" aria-label="Jogo anterior">‹</button><div class="hdots">${heroList.map((x,i)=>`<button type="button" data-hero-dot="${i}" class="${i===heroIndex?'on':''}" aria-label="Mostrar ${esc(x.nome)}"></button>`).join('')}</div><button class="harrow" type="button" data-hero-step="1" aria-label="Próximo jogo">›</button></div>`:''}`;
-  if(!animate){text.innerHTML=html;return;}
-  text.classList.add('fade');setTimeout(()=>{text.innerHTML=html;text.classList.remove('fade');},180);
-}
-function heroGo(i){if(!heroList.length)return;heroIndex=(i+heroList.length)%heroList.length;paintHero();startHeroTimer();}
-function startHeroTimer(){clearInterval(heroTimer);if(heroList.length<2||matchMedia('(prefers-reduced-motion: reduce)').matches)return;heroTimer=setInterval(()=>{if(!heroPaused&&!document.hidden&&!document.querySelector('.modal'))heroGo(heroIndex+1);},5500);}
 
 /* ---------- Catalogo ---------- */
 function filtered(){
@@ -178,9 +171,6 @@ document.addEventListener('click',ev=>{
   const ph=t.closest('[data-photos]');if(ph){ev.preventDefault();try{openViewer(JSON.parse(decodeURIComponent(ph.dataset.photos)).filter(f=>safeImage(f)),Number(ph.dataset.photoIndex)||0);}catch(e){}return;}
   if(t.closest('[data-close]')||t.classList?.contains('modal')){closeGame();return;}
   const op=t.closest('[data-open]');if(op&&!t.closest('a[target]')){ev.preventDefault();openGame(op.dataset.open);return;}
-  const hs=t.closest('[data-hero-step]');if(hs){heroGo(heroIndex+Number(hs.dataset.heroStep));return;}
-  const hd=t.closest('[data-hero-dot]');if(hd){heroGo(Number(hd.dataset.heroDot));return;}
-  const hc=t.closest('#heroArt .hc');if(hc){if(swiped)return;const i=Number(hc.dataset.hero);if(i===heroIndex)openGame(heroList[i]?.id);else heroGo(i);return;}
   const pf=t.closest('[data-platform]');if(pf){platform=pf.dataset.platform;limit=PAGE;renderChips();renderCatalog();return;}
   const gf=t.closest('[data-genre]');if(gf){category=gf.dataset.genre;limit=PAGE;renderChips();renderCatalog();return;}
   const sv=t.closest('[data-save]');if(sv){savePlatform=sv.dataset.save;renderSaves();return;}
@@ -188,19 +178,31 @@ document.addEventListener('click',ev=>{
 document.addEventListener('keydown',ev=>{
   if(viewer){if(ev.key==='Escape')closeViewer();if(ev.key==='ArrowLeft'){viewer.index--;paintViewer();}if(ev.key==='ArrowRight'){viewer.index++;paintViewer();}return;}
   if(ev.key==='Escape')closeGame();
-  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('.card[data-open]')){ev.preventDefault();openGame(ev.target.dataset.open);}
+  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('.card[data-open],.fr[data-open]')){ev.preventDefault();openGame(ev.target.dataset.open);}
 });
 document.addEventListener('error',ev=>{const img=ev.target;if(!(img instanceof HTMLImageElement))return;const list=(img.dataset.fb||'').split('|').filter(Boolean);if(list.length){img.dataset.fb=list.slice(1).join('|');img.src=list[0];return;}img.style.display='none';const box=img.closest('.cv');if(box&&img.classList.contains('fg')){box.querySelector('.nocover')?.removeAttribute('hidden');box.querySelector('.bgb')?.remove();}},true);
 $('#moreBtn').addEventListener('click',()=>{limit+=PAGE;renderCatalog();});
 const searchInput=$('#search');searchInput.value=query;
 let searchTimer;searchInput.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{query=e.target.value;limit=PAGE;renderCatalog();},120);});
-const art=$('#heroArt');let sx=null;
-art.addEventListener('pointerdown',e=>{sx=e.clientX;heroPaused=true;});
-art.addEventListener('pointerup',e=>{if(sx!==null&&Math.abs(e.clientX-sx)>45){swiped=true;setTimeout(()=>swiped=false,350);heroGo(heroIndex+(e.clientX<sx?1:-1));}sx=null;setTimeout(()=>heroPaused=false,3000);});
-art.addEventListener('mouseenter',()=>heroPaused=true);art.addEventListener('mouseleave',()=>heroPaused=false);
 const navLinks=[...document.querySelectorAll('.nav a,.mnav a')];
-const sections=['inicio','catalogo','starte-saves-ps5','como','contato'].map(id=>document.getElementById(id)).filter(Boolean);
+const sections=['inicio','catalogo','starte-saves-ps5','app','como','contato'].map(id=>document.getElementById(id)).filter(Boolean);
 if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));}});},{rootMargin:'-45% 0px -50% 0px'});sections.forEach(s=>io.observe(s));}
+
+
+/* ---------- Baixe o app (link vem do ADM: configuracoes/publico.apkCliente) ---------- */
+function renderApp(){
+  const a=settings.apkCliente||{},url=String(a.url||'');
+  const ok=a.ativo===true&&/^https:\/\/[^\s]+$/i.test(url);
+  const btns=$('#appBtns'),ver=$('#appVer');if(!btns)return;
+  if(ok){
+    ver.hidden=!a.versaoNome;ver.textContent=a.versaoNome?'V'+String(a.versaoNome).replace(/^v/i,''):'';
+    btns.innerHTML=`<a class="p" href="${esc(url)}" target="_blank" rel="noopener noreferrer">⬇ Baixar o app</a><a class="o" href="${esc(wa(1,'Olá! Tive dúvida para instalar o app Mods-TN.'))}" target="_blank" rel="noopener">Ajuda na instalação</a>`;
+  }else{
+    ver.hidden=true;
+    btns.innerHTML=`<a class="o" href="${esc(wa(1,'Olá! Quero o link do app Mods-TN.'))}" target="_blank" rel="noopener">Pedir o link no WhatsApp</a>`;
+  }
+  const ph=$('#appPhone');if(ph&&!ph.dataset.done){const pics=[...heroPicks(),...visibleGames().filter(cover)].filter((g,i,a)=>a.indexOf(g)===i).slice(0,6);if(pics.length){ph.innerHTML=pics.map(g=>`<img src="${esc(cover(g))}" alt="" loading="lazy">`).join('');ph.dataset.done='1';}}
+}
 
 /* ---------- Desenho geral ---------- */
 function applySettings(){
@@ -211,7 +213,7 @@ function applySettings(){
   $('#liveBadge').hidden=!(receivedGames&&!hasError);
 }
 function render(){
-  applySettings();renderHero();renderChips();renderCatalog();renderSaves();renderVideos();
+  applySettings();renderApp();renderHero();renderChips();renderCatalog();renderSaves();renderVideos();
   if(askedGame&&!askedOpened){const g=visibleGames().find(x=>norm(x.nome)===norm(askedGame));if(g){askedOpened=true;document.getElementById('catalogo').scrollIntoView();openGame(g.id);}}
 }
 
