@@ -66,31 +66,50 @@ const phoneLabel=raw=>{let n=digits(raw);if(n.startsWith('55'))n=n.slice(2);retu
 /* ---------- Pecas de interface ---------- */
 const priceHtml=(p,label=true)=>p.original>0?`<span class="price">${label&&p.final>=p.original?'<small>a partir de</small>':''}${p.final<p.original?`<del>${fmt(p.original)}</del>`:''}<strong>${fmt(p.final)}</strong></span>`:'<span class="price"><span class="ask">Valor sob consulta</span></span>';
 const imgTag=(src,fb,alt,cls)=>src?`<img class="${cls}" src="${esc(src)}" data-fb="${esc(fb||'')}" alt="${esc(alt)}" loading="lazy" decoding="async">`:'';
-function coverBox(g,alt,extra=''){const src=cover(g),fb=coverFallback(g);return `<div class="cv">${imgTag(src,fb,alt||'Capa de '+g.nome,'fg')}<div class="nocover" ${src?'hidden':''}>🎮 ${esc(g.nome)}</div>${extra}</div>`;}
+function coverBox(g,alt,extra=''){const src=cover(g),fb=coverFallback(g);return `<div class="cv"><div class="box">${src?`<img class="bgb" src="${esc(src)}" data-fb="${esc(fb)}" alt="" aria-hidden="true" loading="lazy">`:''}${imgTag(src,fb,alt||'Capa de '+g.nome,'fg')}<div class="nocover" ${src?'hidden':''}>🎮 ${esc(g.nome)}</div></div>${extra}</div>`;}
 function badgesFor(g){const p=range(g),out=[];if(g.novo)out.push('<span class="bd">NOVO</span>');if(hasHotCheat(g))out.push('<span class="bd hot">⚡ CHEAT NOVO</span>');if(p.pct>0)out.push(`<span class="bd sale">-${p.pct}%</span>`);if(g.destaque&&!g.novo)out.push('<span class="bd feat">★ DESTAQUE</span>');return out.length?`<div class="badges">${out.join('')}</div>`:'';}
 function gameCard(g){
   return `<article class="card" data-open="${esc(g.id)}" tabindex="0" role="button" aria-label="Ver cheats de ${esc(g.nome)}">${coverBox(g,null,badgesFor(g))}<div class="plq"><b>${esc(g.nome)}</b><div class="meta">${esc(platforms(g).join(' · ')||'PS4 · PS5')}</div>${priceHtml(range(g))}<span class="go">Ver cheats</span></div></article>`;
 }
 
-/* ---------- Destaque: quadros na parede ---------- */
-function heroPicks(){
-  const list=visibleGames();
-  const picks=list.filter(g=>spotlightEligible(g)&&cover(g)).sort(spotlightOrder);
-  const extra=list.filter(g=>!picks.includes(g)&&cover(g)).sort((a,b)=>(b.cheats||[]).length-(a.cheats||[]).length);
-  return [...picks,...extra].slice(0,5);
+/* ---------- Destaque: quadros na parede (passam sozinhos por todos os jogos) ---------- */
+let wallPool=[],wallStart=0,wallTimer=null,wallPaused=false;
+function heroPool(){
+  const list=visibleGames().filter(g=>cover(g));
+  const picks=list.filter(spotlightEligible).sort(spotlightOrder);
+  const rest=list.filter(g=>!picks.includes(g)).sort((a,b)=>(b.cheats||[]).length-(a.cheats||[]).length||String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+  return [...picks,...rest].slice(0,30);
 }
 function frameHtml(g,k){
   const p=range(g),tag=g.novo?'NOVO':hasHotCheat(g)?'CHEAT NOVO':p.pct>0?`-${p.pct}%`:g.destaque?'DESTAQUE':'';
   return `<div class="fr w${k}" data-open="${esc(g.id)}" tabindex="0" role="button" aria-label="Ver cheats de ${esc(g.nome)}">${coverBox(g,null,tag?`<div class="badges"><span class="bd${p.pct>0&&!g.novo?' sale':''}">${tag}</span></div>`:'')}<div class="plq"><b>${esc(g.nome)}</b>${priceHtml(p)}</div></div>`;
 }
-function renderHero(){
-  const art=$('#heroArt'),list=heroPicks();
-  if(!list.length){art.innerHTML='';return;}
-  // centro = melhor jogo; os outros se alternam para a direita e a esquerda
-  const left=[],right=[];list.slice(1).forEach((g,i)=>(i%2===0?right:left).push(g));
-  const sz=d=>d===1?2:1;
-  const row=[...left.reverse().map((g,i,a)=>[g,sz(a.length-i)]),[list[0],3],...right.map((g,i)=>[g,sz(i+1)])];
+function paintWall(){
+  const art=$('#heroArt'),n=wallPool.length;
+  if(!n){art.innerHTML='';return;}
+  const span=Math.min(2,Math.floor((n-1)/2));
+  const row=[];
+  for(let d=-span;d<=span;d++)row.push([wallPool[((wallStart+d)%n+n)%n],d===0?3:Math.abs(d)===1?2:1]);
   art.innerHTML=row.map(([g,k])=>frameHtml(g,k)).join('');
+  const dots=$('#wallCount');if(dots)dots.textContent=`${(wallStart%n+n)%n+1} / ${n}`;
+}
+function wallGo(step,fade=true){
+  const art=$('#heroArt');if(!wallPool.length)return;
+  wallStart=(wallStart+step+wallPool.length)%wallPool.length;
+  if(!fade||matchMedia('(prefers-reduced-motion: reduce)').matches){paintWall();return;}
+  art.classList.add('swap');
+  setTimeout(()=>{paintWall();art.classList.remove('swap');},260);
+}
+function startWallTimer(){
+  clearInterval(wallTimer);
+  if(wallPool.length<3||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  wallTimer=setInterval(()=>{if(!wallPaused&&!document.hidden&&!document.querySelector('.modal,.viewer'))wallGo(1);},3800);
+}
+function renderHero(){
+  const old=wallPool[(wallStart%wallPool.length+wallPool.length)%wallPool.length||0]?.id;
+  wallPool=heroPool();
+  const keep=wallPool.findIndex(g=>g.id===old);wallStart=keep>=0?keep:0;
+  paintWall();startWallTimer();
 }
 
 /* ---------- Catalogo ---------- */
@@ -123,7 +142,7 @@ function renderSaves(){
   grid.innerHTML=list.map(({g,x})=>{
     const image=safeImage(x.imagemUrl)||cover(g),p=promo(g,x),name=g.nome+' — '+(x.titulo||'Start Save');
     const msg='Olá! Quero o Start Save '+name+(p.original>0?' por '+fmt(p.final):'')+'.';
-    return `<article class="card save"><div class="cv">${image?`<img class="bgb" src="${esc(image)}" alt="" aria-hidden="true" loading="lazy">${imgTag(image,localImage(g),name,'fg')}`:''}<div class="nocover" ${image?'hidden':''}>💾 ${esc(g.nome)}</div>${p.pct>0?`<div class="badges"><span class="bd sale">-${p.pct}%</span></div>`:''}</div><div class="cb"><h3>${esc(x.titulo||'Start Save')}</h3><div class="pl">${esc(g.nome)} · ${esc(x.plataforma||savePlatform)}</div>${x.descricao?`<p>${esc(x.descricao)}</p>`:''}<div class="row">${priceHtml(p,false)}</div><div class="buy"><a class="n" href="${esc(wa(1,msg))}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a class="g" href="${esc(wa(2,msg))}" target="_blank" rel="noopener">💬 Comprar com Geovane</a>${safeUrl(x.videoUrl)?`<a class="v" href="${esc(x.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo</a>`:''}</div></div></article>`;
+    return `<article class="card save"><div class="cv"><div class="box">${image?`<img class="bgb" src="${esc(image)}" alt="" aria-hidden="true" loading="lazy">${imgTag(image,localImage(g),name,'fg')}`:''}<div class="nocover" ${image?'hidden':''}>💾 ${esc(g.nome)}</div></div>${p.pct>0?`<div class="badges"><span class="bd sale">-${p.pct}%</span></div>`:''}</div><div class="cb"><h3>${esc(x.titulo||'Start Save')}</h3><div class="pl">${esc(g.nome)} · ${esc(x.plataforma||savePlatform)}</div>${x.descricao?`<p>${esc(x.descricao)}</p>`:''}<div class="row">${priceHtml(p,false)}</div><div class="buy"><a class="n" href="${esc(wa(1,msg))}" target="_blank" rel="noopener">💬 Comprar com Naildo</a><a class="g" href="${esc(wa(2,msg))}" target="_blank" rel="noopener">💬 Comprar com Geovane</a>${safeUrl(x.videoUrl)?`<a class="v" href="${esc(x.videoUrl)}" target="_blank" rel="noopener noreferrer">▶ Ver vídeo</a>`:''}</div></div></article>`;
   }).join('');
 }
 
@@ -170,6 +189,7 @@ document.addEventListener('click',ev=>{
   const vs=t.closest('[data-viewer-step]');if(vs){viewer.index+=Number(vs.dataset.viewerStep);paintViewer();return;}
   const ph=t.closest('[data-photos]');if(ph){ev.preventDefault();try{openViewer(JSON.parse(decodeURIComponent(ph.dataset.photos)).filter(f=>safeImage(f)),Number(ph.dataset.photoIndex)||0);}catch(e){}return;}
   if(t.closest('[data-close]')||t.classList?.contains('modal')){closeGame();return;}
+  const ws=t.closest('[data-wall-step]');if(ws){wallGo(Number(ws.dataset.wallStep));startWallTimer();return;}
   const op=t.closest('[data-open]');if(op&&!t.closest('a[target]')){ev.preventDefault();openGame(op.dataset.open);return;}
   const pf=t.closest('[data-platform]');if(pf){platform=pf.dataset.platform;limit=PAGE;renderChips();renderCatalog();return;}
   const gf=t.closest('[data-genre]');if(gf){category=gf.dataset.genre;limit=PAGE;renderChips();renderCatalog();return;}
@@ -181,6 +201,7 @@ document.addEventListener('keydown',ev=>{
   if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches?.('.card[data-open],.fr[data-open]')){ev.preventDefault();openGame(ev.target.dataset.open);}
 });
 document.addEventListener('error',ev=>{const img=ev.target;if(!(img instanceof HTMLImageElement))return;const list=(img.dataset.fb||'').split('|').filter(Boolean);if(list.length){img.dataset.fb=list.slice(1).join('|');img.src=list[0];return;}img.style.display='none';const box=img.closest('.cv');if(box&&img.classList.contains('fg')){box.querySelector('.nocover')?.removeAttribute('hidden');box.querySelector('.bgb')?.remove();}},true);
+const wallEl=$('#heroArt');if(wallEl){['mouseenter','focusin','touchstart'].forEach(e=>wallEl.addEventListener(e,()=>wallPaused=true,{passive:true}));['mouseleave','focusout'].forEach(e=>wallEl.addEventListener(e,()=>wallPaused=false));wallEl.addEventListener('touchend',()=>setTimeout(()=>wallPaused=false,4000),{passive:true});}
 $('#moreBtn').addEventListener('click',()=>{limit+=PAGE;renderCatalog();});
 const searchInput=$('#search');searchInput.value=query;
 let searchTimer;searchInput.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{query=e.target.value;limit=PAGE;renderCatalog();},120);});
@@ -201,7 +222,7 @@ function renderApp(){
     ver.hidden=true;
     btns.innerHTML=`<a class="o" href="${esc(wa(1,'Olá! Quero o link do app Mods-TN.'))}" target="_blank" rel="noopener">Pedir o link no WhatsApp</a>`;
   }
-  const ph=$('#appPhone');if(ph&&!ph.dataset.done){const pics=[...heroPicks(),...visibleGames().filter(cover)].filter((g,i,a)=>a.indexOf(g)===i).slice(0,6);if(pics.length){ph.innerHTML=pics.map(g=>`<img src="${esc(cover(g))}" alt="" loading="lazy">`).join('');ph.dataset.done='1';}}
+  const ph=$('#appPhone');if(ph&&!ph.dataset.done){const pics=[...heroPool().slice(0,6),...visibleGames().filter(cover)].filter((g,i,a)=>a.indexOf(g)===i).slice(0,6);if(pics.length){ph.innerHTML=pics.map(g=>`<img src="${esc(cover(g))}" alt="" loading="lazy">`).join('');ph.dataset.done='1';}}
 }
 
 /* ---------- Desenho geral ---------- */
