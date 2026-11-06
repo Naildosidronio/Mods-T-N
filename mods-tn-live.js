@@ -73,6 +73,8 @@ function gameCard(g){
 }
 
 /* ---------- Destaque: quadros na parede (passam sozinhos por todos os jogos) ---------- */
+function fitBox(im){try{const b=im.closest('.fr .box');if(!b||!im.naturalWidth)return;const r=Math.min(2.3,Math.max(1.2,im.naturalWidth/im.naturalHeight));b.style.aspectRatio=r.toFixed(3);}catch(e){}}
+document.addEventListener('load',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('fg'))fitBox(e.target);},true);
 let wallPool=[],wallStart=0,wallTimer=null,wallPaused=false;
 function heroPool(){
   const list=visibleGames().filter(g=>cover(g));
@@ -91,18 +93,19 @@ function paintWall(){
   const row=[];
   for(let d=-span;d<=span;d++)row.push([wallPool[((wallStart+d)%n+n)%n],d===0?3:Math.abs(d)===1?2:1]);
   art.innerHTML=row.map(([g,k])=>frameHtml(g,k)).join('');
-  const dots=$('#wallCount');if(dots)dots.textContent=`${(wallStart%n+n)%n+1} / ${n}`;
+  fitAll();const dots=$('#wallCount');if(dots)dots.textContent=`${(wallStart%n+n)%n+1} / ${n}`;
 }
 function wallGo(step,fade=true){
   const art=$('#heroArt');if(!wallPool.length)return;
   wallStart=(wallStart+step+wallPool.length)%wallPool.length;
-  if(!fade||matchMedia('(prefers-reduced-motion: reduce)').matches){paintWall();return;}
+  if(!fade){paintWall();return;}
   art.classList.add('swap');
   setTimeout(()=>{paintWall();art.classList.remove('swap');},260);
 }
+function fitAll(){document.querySelectorAll('.fr img.fg').forEach(i=>{if(i.complete)fitBox(i);});}
 function startWallTimer(){
   clearInterval(wallTimer);
-  if(wallPool.length<3||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(wallPool.length<3)return;
   wallTimer=setInterval(()=>{if(!wallPaused&&!document.hidden&&!document.querySelector('.modal,.viewer'))wallGo(1);},3800);
 }
 function renderHero(){
