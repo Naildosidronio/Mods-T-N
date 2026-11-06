@@ -73,7 +73,7 @@ function gameCard(g){
 }
 
 /* ---------- Destaque: quadros na parede (passam sozinhos por todos os jogos) ---------- */
-function fitBox(im){try{const b=im.closest('.fr .box');if(!b||!im.naturalWidth)return;const r=Math.min(2.3,Math.max(1.2,im.naturalWidth/im.naturalHeight));b.style.aspectRatio=r.toFixed(3);}catch(e){}}
+function fitBox(im){return;try{const b=im.closest('.box');if(!b||!im.naturalWidth)return;const r=Math.min(2.4,Math.max(1,im.naturalWidth/im.naturalHeight));b.style.aspectRatio=r.toFixed(3);}catch(e){}}
 document.addEventListener('load',e=>{if(e.target&&e.target.classList&&e.target.classList.contains('fg'))fitBox(e.target);},true);
 let wallPool=[],wallStart=0,wallTimer=null,wallPaused=false;
 function heroPool(){
@@ -102,7 +102,7 @@ function wallGo(step,fade=true){
   art.classList.add('swap');
   setTimeout(()=>{paintWall();art.classList.remove('swap');},260);
 }
-function fitAll(){document.querySelectorAll('.fr img.fg').forEach(i=>{if(i.complete)fitBox(i);});}
+function fitAll(){document.querySelectorAll('.box img.fg').forEach(i=>{if(i.complete)fitBox(i);});}
 function startWallTimer(){
   clearInterval(wallTimer);
   if(wallPool.length<3)return;
